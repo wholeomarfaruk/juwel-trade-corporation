@@ -1,0 +1,12 @@
+// =============================================================================
+// Juwel Trade Corporation — storefront styles
+// Build with: npm run dev / npm run build (Vite compiles SCSS automatically)
+// =============================================================================
+
+@use 'variables' as *;
+@use 'base';
+@use 'header';
+@use 'hero';
+@use 'product';
+@use 'footer';
+@use 'modals';

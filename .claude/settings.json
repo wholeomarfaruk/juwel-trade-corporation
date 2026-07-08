@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//f/projects/gramerdokan-laravel-ecommerce/resources/views/**)",
+      "Read(//f/projects/gramerdokan-laravel-ecommerce/resources/views/layouts/**)",
+      "Bash(php artisan *)",
+      "Bash(grep -n '$data\\\\|json_data\\\\|@php\\\\|php ' f:/projects/gramer-dokan/resources/views/templates/landingpages/page1.blade.php)",
+      "Bash(grep -rn 'protected $fillable\\\\|protected $table' app/Models/Products.php)",
+      "Bash(grep -n 'fillable\\\\|$table\\\\|function \\\\\\(media\\\\|category\\\\|segment\\\\|variants\\\\|brand\\\\\\)' app/Models/products.php)",
+      "Bash(cp resources/views/layouts/app.blade.php resources/views/layouts/app-legacy.blade.php)",
+      "Bash(mkdir -p resources/js/storefront resources/sass/storefront resources/views/storefront/partials/icons public/images/promos)",
+      "Bash(cp laravel-export/resources/sass/storefront.scss resources/sass/storefront/storefront.scss)",
+      "Bash(cp laravel-export/resources/sass/_variables.scss laravel-export/resources/sass/_base.scss laravel-export/resources/sass/_header.scss laravel-export/resources/sass/_hero.scss laravel-export/resources/sass/_product.scss laravel-export/resources/sass/_footer.scss laravel-export/resources/sass/_modals.scss resources/sass/storefront/)",
+      "Bash(cp laravel-export/resources/js/storefront-component.js resources/js/storefront/storefront-component.js)",
+      "Bash(npm -v)",
+      "Bash(ls -la public/images/promos/)",
+      "Bash(curl -s -o /tmp/jtc_home.html -w \"%{http_code}\\\\n\" http://127.0.0.1:8199/)",
+      "Bash(python -c ' *)",
+      "Bash(xargs -I{} sed -n '{}p' storage/logs/laravel.log)",
+      "Bash(curl -s -o /tmp/jtc_home.html -w \"HTTP %{http_code}\\\\n\" http://127.0.0.1:8199/)",
+      "Bash(grep -niE \"addEventListener\\\\\\('click'|\\\\\\\\\\\\$\\\\\\(document\\\\\\)\\\\.on\\\\\\('click'|preventDefault\\\\\\(\\\\\\)|location\\\\.href|window\\\\.Alpine|x-data\" public/frontend/js/script.js)",
+      "Bash(curl -s http://127.0.0.1:8199/ -o /tmp/home.html)",
+      "Bash(pkill -f \"serve --port=8199\")"
+    ]
+  }
+}
