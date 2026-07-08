@@ -20,7 +20,22 @@
       "Bash(curl -s -o /tmp/jtc_home.html -w \"HTTP %{http_code}\\\\n\" http://127.0.0.1:8199/)",
       "Bash(grep -niE \"addEventListener\\\\\\('click'|\\\\\\\\\\\\$\\\\\\(document\\\\\\)\\\\.on\\\\\\('click'|preventDefault\\\\\\(\\\\\\)|location\\\\.href|window\\\\.Alpine|x-data\" public/frontend/js/script.js)",
       "Bash(curl -s http://127.0.0.1:8199/ -o /tmp/home.html)",
-      "Bash(pkill -f \"serve --port=8199\")"
+      "Bash(pkill -f \"serve --port=8199\")",
+      "Bash(grep -oE '\\\\$this->img\\\\\\('\\\\''p-[a-z0-9]+'\\\\''\\\\\\)' app/Http/Controllers/HomeController.php)",
+      "Bash(grep -oE '\\\\$this->img\\\\\\('\\\\''\\(hero|promo\\)-[a-z0-9]+'\\\\'', [0-9]+\\\\\\)' app/Http/Controllers/HomeController.php)",
+      "Bash(sed -i -E 's/\\\\$this->img\\\\\\('\\\\''p-[a-z0-9]+'\\\\''\\\\\\)/asset\\('\\\\''images\\\\/product.webp'\\\\''\\)/g' app/Http/Controllers/HomeController.php)",
+      "Bash(sed -i -E 's/\\\\$this->img\\\\\\('\\\\''\\(hero|promo\\)-[a-z0-9]+'\\\\'', [0-9]+\\\\\\)/asset\\('\\\\''images\\\\/banner.avif'\\\\''\\)/g' app/Http/Controllers/HomeController.php)",
+      "Bash(grep -nE '\\\\$this->img\\\\\\(' app/Http/Controllers/HomeController.php)",
+      "Bash(curl -s -o /tmp/home.html -w \"%{http_code}\" http://127.0.0.1:8199/)",
+      "Bash(curl -s -o /dev/null -w \"product.webp -> %{http_code}\\\\n\" http://127.0.0.1:8199/images/product.webp)",
+      "Bash(curl -s -o /dev/null -w \"banner.avif  -> %{http_code}\\\\n\" http://127.0.0.1:8199/images/banner.avif)",
+      "Bash(grep -oc '$thisasset\\(' app/Http/Controllers/HomeController.php)",
+      "Bash(sed -i 's/$thisasset\\(/asset\\(/g' app/Http/Controllers/HomeController.php)",
+      "Bash(grep -nE 'picsum|\\\\$this->img\\\\\\(' app/Http/Controllers/HomeController.php)",
+      "Bash(curl -s -o /tmp/home.html -w '%{http_code}' http://127.0.0.1:8199/)",
+      "Bash(echo \"HTTP: $\\(curl -s -o /tmp/home.html -w '%{http_code}' http://127.0.0.1:8199/\\)\")",
+      "Bash(curl -s -o /dev/null -w \"category.avif -> %{http_code}\\\\n\" http://127.0.0.1:8199/images/category.avif)",
+      "Bash(grep -oE \"images[^\\\\\"]*category.avif|images\\\\\\\\\\\\\\\\/category.avif\" /tmp/home.html)"
     ]
   }
 }

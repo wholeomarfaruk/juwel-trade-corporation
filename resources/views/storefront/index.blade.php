@@ -27,7 +27,7 @@
     <section class="jtc-section jtc-section--strip">
         <div class="jtc-shell">
             <a href="#" class="jtc-promo" style="height:100px;min-height:0">
-                <img src="{{ asset('images/promos/deal-strip.jpg') }}" alt="Promotional banner">
+                <img src="{{ asset('images/banner.avif') }}" alt="Promotional banner">
             </a>
         </div>
     </section>

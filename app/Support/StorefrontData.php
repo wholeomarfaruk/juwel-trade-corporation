@@ -21,15 +21,15 @@ class StorefrontData
     public static function categories(): array
     {
         return [
-            ['name' => 'Orthopedic Supports', 'slug' => 'orthopedic',       'image' => self::img('cat-orthopedic'), 'children' => ['Knee Support', 'Back Support', 'Ankle & Foot', 'Wrist & Hand', 'Neck Support', 'Shoulder Support']],
-            ['name' => 'Medical Devices',     'slug' => 'medical-devices',   'image' => self::img('cat-meddevices'), 'children' => ['Blood Pressure Monitor', 'Nebulizer', 'Thermometer', 'Oximeter', 'Stethoscope', 'Hearing Aid']],
-            ['name' => 'Physiotherapy',       'slug' => 'physiotherapy',     'image' => self::img('cat-physio'),     'children' => ['TENS Machine', 'Infrared Items', 'Muscle Stimulator']],
-            ['name' => 'Body Massager',       'slug' => 'body-massager',     'image' => self::img('cat-massager'),   'children' => ['Massage Gun', 'Head Massager', 'Foot Spa']],
-            ['name' => 'Health Care',         'slug' => 'health-care',       'image' => self::img('cat-healthcare'), 'children' => ['Pain Relief Cream', 'Medicine Box', 'Diabetes Care']],
-            ['name' => 'Anatomical Models',   'slug' => 'anatomical-models', 'image' => self::img('cat-anatomy'),    'children' => ['Skeleton Models', 'Medical Charts']],
-            ['name' => 'Lifestyle',           'slug' => 'lifestyle',         'image' => self::img('cat-lifestyle'),  'children' => ['Weight Scale', 'Beauty Care', 'Personal Care', 'Baby & Mom Care']],
-            ['name' => 'Gym & Sports',        'slug' => 'gym-sports',        'image' => self::img('cat-gymsports'),  'children' => ['Belt & Brace', 'Kinesiology Tape', 'Resistance Bands']],
-            ['name' => 'Medical Disposal',    'slug' => 'medical-disposal',  'image' => self::img('cat-disposal'),   'children' => ['Gloves', 'Masks', 'Bandage', 'Alcohol Pad']],
+            ['name' => 'Orthopedic Supports', 'slug' => 'orthopedic',       'image' => asset('images/category.avif'), 'children' => ['Knee Support', 'Back Support', 'Ankle & Foot', 'Wrist & Hand', 'Neck Support', 'Shoulder Support']],
+            ['name' => 'Medical Devices',     'slug' => 'medical-devices',   'image' => asset('images/category.avif'), 'children' => ['Blood Pressure Monitor', 'Nebulizer', 'Thermometer', 'Oximeter', 'Stethoscope', 'Hearing Aid']],
+            ['name' => 'Physiotherapy',       'slug' => 'physiotherapy',     'image' => asset('images/category.avif'),     'children' => ['TENS Machine', 'Infrared Items', 'Muscle Stimulator']],
+            ['name' => 'Body Massager',       'slug' => 'body-massager',     'image' => asset('images/category.avif'),   'children' => ['Massage Gun', 'Head Massager', 'Foot Spa']],
+            ['name' => 'Health Care',         'slug' => 'health-care',       'image' => asset('images/category.avif'), 'children' => ['Pain Relief Cream', 'Medicine Box', 'Diabetes Care']],
+            ['name' => 'Anatomical Models',   'slug' => 'anatomical-models', 'image' => asset('images/category.avif'),    'children' => ['Skeleton Models', 'Medical Charts']],
+            ['name' => 'Lifestyle',           'slug' => 'lifestyle',         'image' => asset('images/category.avif'),  'children' => ['Weight Scale', 'Beauty Care', 'Personal Care', 'Baby & Mom Care']],
+            ['name' => 'Gym & Sports',        'slug' => 'gym-sports',        'image' => asset('images/category.avif'),  'children' => ['Belt & Brace', 'Kinesiology Tape', 'Resistance Bands']],
+            ['name' => 'Medical Disposal',    'slug' => 'medical-disposal',  'image' => asset('images/category.avif'),   'children' => ['Gloves', 'Masks', 'Bandage', 'Alcohol Pad']],
         ];
     }
 }
