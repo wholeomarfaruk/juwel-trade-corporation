@@ -8,11 +8,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Admin Login | ECOEATS') }}</title>
+    <title>{{ ($site['site_name'] ?? 'Hex Code IT') }} — Admin Login</title>
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('admin-resource/login/css/login.css') }}">
+    @php $adminFavicon = !empty($site['favicon']) ? asset('storage/' . $site['favicon']) : asset('admin-resource/images/favicon.ico'); @endphp
+    <link rel="shortcut icon" href="{{ $adminFavicon }}">
 </head>
 
 <body>
@@ -26,8 +28,13 @@
                     <div class="col-md-7">
                         <div class="card-body">
                             <div class="brand-wrapper">
-                                <img src="{{ asset('admin-resource/login/images/logo.svg') }}" alt="logo" class="logo">
+                                @if(!empty($site['header_logo']))
+                                    <img src="{{ asset('storage/' . $site['header_logo']) }}" alt="{{ $site['site_name'] ?? 'Hex Code IT' }}" class="logo">
+                                @else
+                                    <img src="{{ asset('admin-resource/login/images/logo.svg') }}" alt="{{ $site['site_name'] ?? 'Hex Code IT' }}" class="logo">
+                                @endif
                             </div>
+                            <h5 class="mb-2">{{ $site['site_name'] ?? 'Hex Code IT' }}</h5>
                             <p class="login-card-description">Sign into your account</p>
                             <form action="{{ route('login') }}" class="needs-validation" method="POST">
                                 @csrf

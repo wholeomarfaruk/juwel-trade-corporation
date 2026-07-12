@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ ($site['site_name'] ?? 'Admin') }} — Admin</title>
+    <title>{{ $site['site_name'] ?? 'Hex Code IT' }} — Admin</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/animate.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/animation.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/bootstrap.css') }}">
@@ -16,8 +16,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/style.css?v=1.0') }}">
     <link rel="stylesheet" href="{{ asset('admin-resource/font/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-resource/icon/style.css') }}">
-    <link rel="shortcut icon" href="{{ asset('admin-resource/images/favicon.ico') }}">
-    <link rel="apple-touch-icon-precomposed" href="{{ asset('admin-resource/images/favicon.ico') }}">
+    @php $adminFavicon = !empty($site['favicon']) ? asset('storage/' . $site['favicon']) : asset('admin-resource/images/favicon.ico'); @endphp
+    <link rel="shortcut icon" href="{{ $adminFavicon }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ $adminFavicon }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/sweetalert.min.css') }}">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css"
@@ -47,10 +48,10 @@
                     <div class="box-logo">
                         <a href="{{ route('admin.index') }}" id="site-logo-inner">
                             @if(!empty($site['header_logo']))
-                                <img class="" id="logo_header" alt="{{ $site['site_name'] ?? '' }}"
+                                <img class="" id="logo_header" alt="{{ $site['site_name'] ?? 'Hex Code IT' }}"
                                     src="{{ asset('storage/' . $site['header_logo']) }}" style="max-height:40px;">
                             @else
-                                <h4>{{ $site['site_name'] ?? 'Seldom Fashion' }}</h4>
+                                <h4>{{ $site['site_name'] ?? 'Hex Code IT' }}</h4>
                             @endif
                         </a>
                         <div class="button-show-hide">
@@ -314,11 +315,17 @@
                     <div class="header-dashboard">
                         <div class="wrap">
                             <div class="header-left">
-                                <a href="index-2.html">
-                                    <img class="" id="logo_header_mobile" alt=""
-                                        src="{{ asset('admin-resource/images/logo/logo.png') }}"
-                                        data-light="admin/images/logo/logo.png" data-dark="admin/images/logo/logo.png"
-                                        data-width="154px" data-height="52px" data-retina="images/logo/logo.png">
+                                <a href="{{ route('admin.index') }}">
+                                    @if(!empty($site['header_logo']))
+                                        <img class="" id="logo_header_mobile" alt="{{ $site['site_name'] ?? 'Hex Code IT' }}"
+                                            src="{{ asset('storage/' . $site['header_logo']) }}"
+                                            data-width="154px" data-height="52px">
+                                    @else
+                                        <img class="" id="logo_header_mobile" alt="{{ $site['site_name'] ?? 'Hex Code IT' }}"
+                                            src="{{ asset('admin-resource/images/logo/logo.png') }}"
+                                            data-light="admin/images/logo/logo.png" data-dark="admin/images/logo/logo.png"
+                                            data-width="154px" data-height="52px" data-retina="images/logo/logo.png">
+                                    @endif
                                 </a>
                                 <div class="button-show-hide">
                                     <i class="icon-menu-left"></i>
