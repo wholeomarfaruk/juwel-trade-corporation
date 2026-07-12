@@ -25,10 +25,10 @@
             <div class="wg-box">
                 <div class="flex items-center justify-between gap10 flex-wrap">
                     <div class="wg-filter flex-grow">
-                        <form class="form-search">
+                        <form class="form-search" method="GET" action="{{ route('admin.brands') }}">
                             <fieldset class="name">
                                 <input type="text" placeholder="Search here..." class="" name="name"
-                                    tabindex="2" value="" aria-required="true" required="">
+                                    tabindex="2" value="{{ request('name') }}">
                             </fieldset>
                             <div class="button-submit">
                                 <button class="" type="submit"><i class="icon-search"></i></button>
@@ -57,20 +57,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($brands as $brand )
+                                @forelse ($brands as $brand)
 
                                 <tr>
                                     <td>{{ $brand->id }}</td>
                                     <td class="pname">
                                         <div class="image">
-                                            <img src="{{ asset('storage/images/brands/') . '/' . $brand->image }}" alt="" class="image">
+                                            @if ($brand->getImageUrl())
+                                                <img src="{{ $brand->getImageUrl() }}" alt="" class="image">
+                                            @endif
                                         </div>
                                         <div class="name">
                                             <a href="#" class="body-title-2">{{ $brand->name }}</a>
                                         </div>
                                     </td>
                                     <td>{{ $brand->slug }}</td>
-                                    <td><a href="#" target="_blank">1</a></td>
+                                    <td>{{ $brand->products_count }}</td>
                                     <td>
                                         <div class="list-icon-function">
                                             <a href="{{ route('admin.brands.edit', ['id'=>$brand->id]) }}">
@@ -89,13 +91,17 @@
                                     </td>
                                 </tr>
 
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No brands found.</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                     <div class="divider"></div>
                     <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
-
+                        {{ $brands->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

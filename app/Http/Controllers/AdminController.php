@@ -20,6 +20,7 @@ use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\User;
 use App\Models\Banner;
+use App\Models\Brand;
 use App\Models\Slide;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -164,8 +165,9 @@ class AdminController extends Controller
         }
         $categories = Category::all();
         $segments = Segment::all();
+        $brands = Brand::active()->ordered()->get();
 
-        return view('admin.products-add', compact('categories', 'segments', 'product', 'segment_id'));
+        return view('admin.products-add', compact('categories', 'segments', 'product', 'segment_id', 'brands'));
     }
     public function productStore(Request $request)
     {
@@ -177,6 +179,7 @@ class AdminController extends Controller
             'quantity'     => 'required|integer',
             'image'        => 'nullable|string',
             'segment'      => 'required',
+            'brand_id'     => 'nullable|exists:brands,id',
         ]);
         $product = new products();
 
@@ -197,6 +200,7 @@ class AdminController extends Controller
         $product->redirect_url  = $request->redirect_url ?: null;
         $product->stock_status  = $request->stock_status;
         $product->quantity      = $request->quantity;
+        $product->brand_id      = $request->brand_id ?: null;
 
         if ($request->filled('image')) {
             $product->image = $request->image;
@@ -265,7 +269,8 @@ class AdminController extends Controller
         $product = products::find($id);
         $categories = Category::all();
         $segments = Segment::all();
-        return view('admin.products-edit', compact('product', 'categories', 'segments'));
+        $brands = Brand::active()->ordered()->get();
+        return view('admin.products-edit', compact('product', 'categories', 'segments', 'brands'));
     }
     public function productUpdate(Request $request)
     {
@@ -277,6 +282,7 @@ class AdminController extends Controller
             'featured'     => 'boolean',
             'quantity'     => 'required|integer',
             'image'        => 'nullable|string',
+            'brand_id'     => 'nullable|exists:brands,id',
         ]);
 
         $product = products::find($request->id);
@@ -302,6 +308,7 @@ class AdminController extends Controller
         $product->featured        = $request->featured ? true : false;
         $product->quantity        = $request->quantity;
         $product->status          = $request->has('status');
+        $product->brand_id        = $request->brand_id ?: null;
 
         if ($request->filled('image')) {
             $product->image = $request->image;
@@ -860,6 +867,78 @@ class AdminController extends Controller
 
         $banner->delete();
         return redirect()->route('admin.banners')->with('status', 'Banner Deleted Successfully');
+    }
+
+    //Brands
+    public function brands(Request $request)
+    {
+        $brands = Brand::withCount('products')
+            ->when($request->filled('name'), fn ($q) => $q->where('name', 'like', '%' . $request->name . '%'))
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.brands', compact('brands'));
+    }
+    public function brandsAdd()
+    {
+        return view('admin.brands-add');
+    }
+    public function brandStore(Request $request)
+    {
+        $validated = $this->validate($request, [
+            'name'       => ['required', 'string', 'max:255'],
+            'slug'       => ['required', 'string', 'max:255', 'unique:brands,slug'],
+            'image_id'   => ['required', 'exists:media,id'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+
+        $brand = new Brand();
+        $brand->name       = $request->name;
+        $brand->slug       = $request->slug;
+        $brand->image_id   = $request->image_id;
+        $brand->sort_order = $request->sort_order ?? 0;
+        $brand->save();
+
+        return redirect()->route('admin.brands')->with('status', 'Brand Added Successfully');
+    }
+    public function brandEdit($id)
+    {
+        $brand = Brand::find($id);
+        if (!$brand) { abort(404); }
+
+        return view('admin.brands-edit', compact('brand'));
+    }
+    public function brandUpdate(Request $request)
+    {
+        $brand = Brand::find($request->id);
+        if (!$brand) { abort(404); }
+
+        $this->validate($request, [
+            'name'       => ['required', 'string', 'max:255'],
+            'slug'       => ['required', 'string', 'max:255', 'unique:brands,slug,' . $brand->id],
+            'image_id'   => ['nullable', 'exists:media,id'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+
+        $brand->name       = $request->name;
+        $brand->slug       = $request->slug;
+        $brand->sort_order = $request->sort_order ?? 0;
+        if ($request->filled('image_id')) {
+            $brand->image_id = $request->image_id;
+        }
+        $brand->save();
+
+        return redirect()->route('admin.brands')->with('status', 'Brand Updated Successfully');
+    }
+    public function brandDelete($id)
+    {
+        $brand = Brand::find($id);
+        if (!$brand) { abort(404); }
+
+        $brand->delete();
+        return redirect()->route('admin.brands')->with('status', 'Brand Deleted Successfully');
     }
 
     //customers

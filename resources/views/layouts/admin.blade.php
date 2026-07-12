@@ -240,6 +240,12 @@
                                         <div class="text">Banners</div>
                                     </a>
                                 </li>
+                                <li class="menu-item {{ Request::is('admin/brands*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.brands') }}" class="">
+                                        <div class="icon"><i class="icon-tag"></i></div>
+                                        <div class="text">Brands</div>
+                                    </a>
+                                </li>
                                 <li class="menu-item {{ Request::is('admin/media*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.media.index') }}" class="">
                                         <div class="icon"><i class="icon-folder"></i></div>
