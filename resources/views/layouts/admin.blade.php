@@ -593,7 +593,7 @@
                     <div class="main-content">
                         @yield('content')
                         <div class="bottom-page">
-                            <div class="body-text">{{ $site['copyright_text'] ?? '© 2025 Seldom Fashion' }}</div>
+                            <div class="body-text">{{ $site['copyright_text'] ?? '© ' . date('Y') . ' Hex Code IT' }}</div>
                         </div>
                     </div>
 

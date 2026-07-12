@@ -7,6 +7,7 @@ use App\CAPI\ViewItemEvent;
 use App\Jobs\SendMetaCapiEventJob;
 use App\Meta\MetaBaseData;
 use App\Models\AreaKeyword;
+use App\Models\Brand;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Customer;
@@ -111,15 +112,13 @@ class HomeController extends Controller
 
     public function shop()
     {
-
         $products = Products::where('status', 1)->orderByDesc('featured') // featured first
             ->orderByDesc('created_at')               // newest first
             ->paginate(12);
-        $deliveryAreas = delivery_areas::all();
-        $slides = Slide::where('status', 1)->orderBy('sort_order')->get();
-        $analytics = Analytic::all();
-        $categories = Category::all();
-        return view('shop', compact('products', 'deliveryAreas', 'slides', 'analytics', 'categories'));
+        $categories = Category::withCount('products')->get();
+        $brands = Brand::withCount('products')->active()->ordered()->get();
+
+        return view('storefront.shop', compact('products', 'categories', 'brands'));
     }
     public function categoryShow(Request $request, $slug)
     {

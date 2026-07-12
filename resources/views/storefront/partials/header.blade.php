@@ -15,6 +15,20 @@
             </span>
         </a>
 
+        <div class="jtc-catmenu jtc-catmenu--desktop" @click.outside="categoriesMenuOpen = false">
+            <button type="button" class="jtc-catmenu__trigger" :class="categoriesMenuOpen && 'is-open'" @click="toggleCategoriesMenu()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                Categories
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <div class="jtc-catmenu__dropdown" :class="categoriesMenuOpen && 'is-open'" x-cloak>
+                @foreach ($categories as $cat)
+                    <a href="{{ route('category.show', $cat['slug']) }}" class="jtc-catmenu__link" @click="categoriesMenuOpen = false">{{ $cat['name'] }}</a>
+                @endforeach
+            </div>
+        </div>
+
         @livewire('website.storefront.header-search')
 
         <div class="jtc-actions">

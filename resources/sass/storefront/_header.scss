@@ -101,6 +101,82 @@
   }
 }
 
+// Desktop category menu ------------------------------------------------------
+// Persistent category-browsing entry point for desktop (>$bp-tablet). Mobile
+// and tablet already have this via the hamburger → off-canvas drawer, which
+// this deliberately does not replace — see .jtc-catmenu--desktop below.
+
+.jtc-catmenu {
+  order: 2;
+  position: relative;
+  flex: none;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: $radius-pill;
+    border: 1.5px solid $line;
+    background: #fff;
+    color: $ink-soft;
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+
+    svg:last-child { transition: transform 0.15s ease; }
+    &.is-open {
+      border-color: $blue;
+      color: $blue;
+      svg:last-child { transform: rotate(180deg); }
+    }
+    &:hover { border-color: $blue; color: $blue; }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 240px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: $radius;
+    box-shadow: $shadow-pop;
+    padding: 8px;
+    z-index: 75;
+    transition: opacity 0.2s, transform 0.2s;
+
+    // closed state
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    &.is-open { opacity: 1; visibility: visible; transform: none; }
+  }
+  &__link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: $radius;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: $ink-soft;
+    text-decoration: none;
+    &:hover { background: $surface-2; color: $blue; }
+  }
+
+  // Desktop-only: mobile/tablet already have category browsing via the
+  // hamburger → off-canvas drawer (see .jtc-hamburger / .jtc-offcanvas).
+  &--desktop { display: flex; }
+  @media (max-width: $bp-tablet) {
+    &--desktop { display: none; }
+  }
+}
+
 // Search -------------------------------------------------------------------
 
 .jtc-search {

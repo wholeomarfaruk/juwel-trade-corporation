@@ -16,7 +16,7 @@
 
             <div class="jtc-catcarousel">
                 <div class="jtc-catcarousel__track" :style="`transform:${catTransform};transition:${catTransition}`">
-                    <template x-for="(cat, i) in catItems" :key="i">
+                    <template x-for="(cat, i) in catItems" :key="cat.id ?? `${cat.name}-${i}`">
                         <a href="#" class="jtc-catcard" @click.prevent="selectCategory(cat.name)">
                             <div class="jtc-catcard__inner">
                                 <div class="jtc-catcard__img">

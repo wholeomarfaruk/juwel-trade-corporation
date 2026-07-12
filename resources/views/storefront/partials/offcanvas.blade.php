@@ -8,8 +8,7 @@
 
     <div class="jtc-offcanvas__label">Shop</div>
     <nav class="jtc-offcanvas__nav">
-        <a href="#" class="jtc-offcanvas__link jtc-offcanvas__link--sale">Sale</a>
-        <a href="#" class="jtc-offcanvas__link">Shop all</a>
+        <a href="{{ route('shop') }}" class="jtc-offcanvas__link">Shop all</a>
         <a href="#" class="jtc-offcanvas__link">Brands</a>
         <a href="#" class="jtc-offcanvas__link">New arrivals</a>
         <a href="#" class="jtc-offcanvas__link">Best sellers</a>

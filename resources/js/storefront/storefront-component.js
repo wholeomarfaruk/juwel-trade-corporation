@@ -30,9 +30,9 @@ export const storefront = (config = {}) => ({
     wishlist: {},
     heroIndex: 0,
     catIndex: 0,
-    catNoTransition: false,
     cartOpen: false,
     mmenuOpen: false,
+    categoriesMenuOpen: false,
     searchCatOpen: false,
     selectedCategory: null,
     searchModalOpen: false,
@@ -43,6 +43,7 @@ export const storefront = (config = {}) => ({
     authError: '',
     authLoading: false,
     supportOpen: false,
+    mobileFiltersOpen: false,
     user: config.user || null,
     toastMsg: 'Added to cart',
     toastShow: false,
@@ -67,7 +68,6 @@ export const storefront = (config = {}) => ({
     destroy() {
         clearInterval(this._heroTimer);
         clearInterval(this._catTimer);
-        clearTimeout(this._catSnap);
         clearTimeout(this._toastTimer);
         window.removeEventListener('keydown', this._onKey);
         window.removeEventListener('cart-updated', this._onCartUpdated);
@@ -86,36 +86,23 @@ export const storefront = (config = {}) => ({
         this._heroTimer = setInterval(() => this.heroGo(this.heroIndex + 1), 5500);
     },
 
-    // ---- category carousel (seamless loop over a doubled list) ----
-    get catItems() { return [...this.categories, ...this.categories]; },
+    // ---- category carousel ----
+    // Renders the real category list once — no doubled/duplicated array.
+    // catIndex wraps around the actual length via modulo, so "next" past
+    // the last item jumps straight back to the first (a hard cut, not a
+    // sliding illusion) instead of relying on a second copy of the list.
+    get catItems() { return this.categories; },
     get catTransform() { return `translateX(-${this.catIndex * CAT_STEP}px)`; },
-    get catTransition() { return this.catNoTransition ? 'none' : 'transform 0.7s cubic-bezier(.4,0,.2,1)'; },
+    get catTransition() { return 'transform 0.7s cubic-bezier(.4,0,.2,1)'; },
     catNext() {
         const len = this.categories.length;
-        this.catNoTransition = false;
-        this.catIndex += 1;
-        clearTimeout(this._catSnap);
-        this._catSnap = setTimeout(() => {
-            if (this.catIndex >= len) {
-                this.catNoTransition = true;
-                this.catIndex -= len;
-                requestAnimationFrame(() => requestAnimationFrame(() => { this.catNoTransition = false; }));
-            }
-        }, 720);
+        if (!len) return;
+        this.catIndex = (this.catIndex + 1) % len;
     },
     catPrev() {
         const len = this.categories.length;
-        if (this.catIndex === 0) {
-            this.catNoTransition = true;
-            this.catIndex = len;
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-                this.catNoTransition = false;
-                this.catIndex = len - 1;
-            }));
-        } else {
-            this.catNoTransition = false;
-            this.catIndex -= 1;
-        }
+        if (!len) return;
+        this.catIndex = (this.catIndex - 1 + len) % len;
         this._restartCat();
     },
     catNextManual() { this.catNext(); this._restartCat(); },
@@ -217,14 +204,21 @@ export const storefront = (config = {}) => ({
     openMenu() { this.closeAll(); this.mmenuOpen = true; },
     openSupport() { this.closeAll(); this.supportOpen = true; },
     openSearchModal() { this.closeAll(); this.searchModalOpen = true; },
+    toggleCategoriesMenu() {
+        const next = !this.categoriesMenuOpen;
+        this.closeAll();
+        this.categoriesMenuOpen = next;
+    },
     closeAll() {
         this.cartOpen = false;
         this.mmenuOpen = false;
+        this.categoriesMenuOpen = false;
         this.authOpen = false;
         this.supportOpen = false;
         this.searchCatOpen = false;
         this.searchModalOpen = false;
         this.searchModalCatOpen = false;
+        this.mobileFiltersOpen = false;
     },
 
     // ---- toast ----

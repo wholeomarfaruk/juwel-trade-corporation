@@ -19,6 +19,27 @@ class StorefrontController extends Controller
         return view('storefront.index', $this->storeData());
     }
 
+    /** Shop / catalogue page with client-side filter, search & sort (Alpine). */
+    public function shop(): View
+    {
+        $d = $this->storeData();
+
+        return view('storefront.shop', [
+            'products'   => $d['productsJson'],   // full decorated catalogue
+            'categories' => $d['categories'],
+            'brands'     => $this->brands(),
+        ]);
+    }
+
+    private function brands(): array
+    {
+        return [
+            ['name' => 'Tynor'], ['name' => 'Dr. Trust'], ['name' => 'Medicube'],
+            ['name' => 'ALPK2'], ['name' => 'Camry'], ['name' => 'Beurer'],
+            ['name' => 'Axon'], ['name' => 'Samson'], ['name' => 'Jumper'], ['name' => 'Tiger Balm'],
+        ];
+    }
+
     /** Tiny placeholder-image helper (swap for real product image URLs). */
     private function img(string $seed, int $size = 600): string
     {

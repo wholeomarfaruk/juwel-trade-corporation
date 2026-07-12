@@ -10,15 +10,17 @@ routes/web.php                                  # the route (copy into your web.
 public/images/jtc-logo.jpeg                     # logo (place in public/images/)
 resources/
   js/
-    app.js                     # bootstraps Alpine + registers the component
-    storefront-component.js    # the storefront() Alpine data component
+    app.js                     # bootstraps Alpine + registers both components
+    storefront-component.js    # the storefront() Alpine data component (homepage)
+    shop-component.js          # the shop() Alpine data component (filter/search/sort)
   sass/
     storefront.scss            # entry (@use of the partials below)
     _variables.scss            # brand palette + tokens (blue #1B7FC4 / green #3DA935)
-    _base.scss  _header.scss  _hero.scss  _product.scss  _footer.scss  _modals.scss
+    _base.scss  _header.scss  _hero.scss  _product.scss  _footer.scss  _modals.scss  _shop.scss
   views/
     layouts/app.blade.php
-    storefront/index.blade.php
+    storefront/index.blade.php # homepage
+    storefront/shop.blade.php  # shop / catalogue page
     storefront/partials/*.blade.php
 vite.config.js
 package.json
@@ -47,6 +49,11 @@ package.json
    php artisan serve
    ```
    Visit `/`.
+
+## Pages
+
+- **`/` — homepage** (`storefront/index.blade.php`, `storefront()` component): top bar, header, hero slider + banners, category carousel, deal/best-seller rails, promo grid, browse grid, trust strip, footer, cart drawer, auth + support modals.
+- **`/shop` — catalogue** (`storefront/shop.blade.php`, `shop()` component): sidebar filters (search, price min/max + slider up to ৳200,000, category, brand — each with live counts), toolbar with sort dropdown, removable active-filter chips, responsive product grid, numbered pagination, empty state, and a slide-in filter drawer on mobile. Fully client-side (no page reloads) via Alpine.
 
 ## Notes
 

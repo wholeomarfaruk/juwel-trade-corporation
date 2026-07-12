@@ -26,31 +26,25 @@
                         {{-- Avatar Preview --}}
                         <div class="mb-4 text-center">
                             <div class="upload-image" style="justify-content: center;">
-                                <div class="item" style="width:120px; height:120px; border-radius:50%; overflow:hidden; border:3px solid #e5e7eb; margin: 0 auto 12px;">
-                                    @if ($photo)
-                                        <img src="{{ $photo->temporaryUrl() }}" alt="Preview"
-                                            style="width:100%; height:100%; object-fit:cover;">
-                                    @else
-                                        <img src="{{ $user->getAvatarUrl() }}" alt="Avatar"
-                                            style="width:100%; height:100%; object-fit:cover;">
-                                    @endif
+                                <div class="item" id="avatar_preview_wrap" style="width:120px; height:120px; border-radius:50%; overflow:hidden; border:3px solid #e5e7eb; margin: 0 auto 12px;">
+                                    <img id="avatar_preview_img"
+                                        src="{{ $avatarMedia?->getThumbnailUrl() ?? $user->getAvatarUrl() }}"
+                                        alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
                                 </div>
                             </div>
 
-                            <div class="upload-image" style="justify-content: center;">
-                                <div class="item up-load" style="max-width:280px; margin: 0 auto;">
-                                    <label class="uploadfile" for="avatarFile" style="padding: 10px 16px; cursor:pointer;">
-                                        <span class="icon"><i class="icon-upload-cloud"></i></span>
-                                        <span class="body-text">
-                                            Click to upload avatar<br>
-                                            <span class="text-tiny text-muted">JPG, JPEG, PNG, WEBP — max 2MB</span>
-                                        </span>
-                                        <input wire:model="photo" type="file" id="avatarFile"
-                                            accept=".jpg,.jpeg,.png,.webp" style="display:none;">
-                                    </label>
-                                </div>
+                            <div class="upload-image d-flex gap-2" style="justify-content: center;">
+                                <button type="button" class="tf-button style-1" style="padding:10px 16px;"
+                                        onclick="Livewire.dispatch('open-media-picker', { multiple: false, callbackKey: 'admin_avatar' })">
+                                    <i class="icon-image"></i> Choose from Media Library
+                                </button>
+                                @if ($avatarMediaId)
+                                    <button type="button" id="avatar_remove_btn" class="tf-button style-1" style="padding:10px 16px;">
+                                        <i class="icon-x"></i> Remove
+                                    </button>
+                                @endif
                             </div>
-                            @error('photo')
+                            @error('avatarMediaId')
                                 <div class="text-danger mt-1 text-tiny">{{ $message }}</div>
                             @enderror
                         </div>
@@ -83,7 +77,7 @@
 
                         <div class="mt-4">
                             <button wire:click="updateProfile" class="tf-button style-1"
-                                wire:loading.attr="disabled" wire:target="updateProfile,photo">
+                                wire:loading.attr="disabled" wire:target="updateProfile">
                                 <span wire:loading wire:target="updateProfile" class="spinner-border spinner-border-sm me-1"></span>
                                 Save Profile
                             </button>
@@ -137,4 +131,27 @@
             </div>
         </div>
     </div>
+
+    @livewire('admin.media.media-picker')
 </div>
+
+@script
+<script>
+    window.addEventListener('media-picker-confirmed', e => {
+        const payload = e.detail[0] ?? e.detail;
+        if (payload.callbackKey !== 'admin_avatar') return;
+        const single = payload.single;
+        if (!single) return;
+
+        $wire.set('avatarMediaId', single.id);
+        document.getElementById('avatar_preview_img').src = single.thumbnail || single.url;
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('#avatar_remove_btn')) {
+            $wire.set('avatarMediaId', null);
+            document.getElementById('avatar_preview_img').src = @js($user->getAvatarUrl());
+        }
+    });
+</script>
+@endscript

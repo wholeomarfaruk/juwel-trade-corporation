@@ -23,13 +23,26 @@ class User extends Authenticatable
         'password',
         'role',
         'avatar',
+        'avatar_media_id',
     ];
+
+    public function avatarMedia()
+    {
+        return $this->belongsTo(Media::class, 'avatar_media_id');
+    }
 
     public function getAvatarUrl(): string
     {
+        if ($url = $this->avatarMedia?->getThumbnailUrl()) {
+            return $url;
+        }
+
+        // Legacy raw-upload avatars (pre Media Library) — kept working until
+        // every user re-uploads through the new picker.
         if ($this->avatar) {
             return asset('storage/images/user/' . $this->avatar);
         }
+
         return asset('admin-resource/images/avatar/user-1.png');
     }
 
