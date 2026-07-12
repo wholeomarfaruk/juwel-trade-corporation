@@ -158,6 +158,18 @@
         $slides       = $slides       ?? [];
         $heroBanners  = $heroBanners  ?? [];
 
+        // "Shop by category" carousel (Alpine `categories`/`catItems`) only —
+        // scoped to homepage_category = true, decorated to the {name, image}
+        // shape the carousel markup expects. Falls back to the full $categories
+        // list (already in that shape) when the homepage set isn't provided.
+        $carouselCategories = isset($homepageCategories)
+            ? $homepageCategories->map(fn ($cat) => [
+                'name'  => $cat->name,
+                'slug'  => $cat->slug,
+                'image' => $cat->getImageUrl() ?? asset('images/no-thumbnail.png'),
+            ])->values()->all()
+            : $categories;
+
         // Seed the header badge from the real DB cart (not the `_cart_count`
         // mirror cookie, which is only refreshed as a side effect of cart
         // mutations and is stale/absent on a plain page load).
@@ -173,7 +185,7 @@
             'products'    => $productsJson,
             'slides'      => $slides,
             'heroBanners' => $heroBanners,
-            'categories'  => $categories,
+            'categories'  => $carouselCategories,
             'cartCount'   => $initialCartCount,
         ]))"
     >

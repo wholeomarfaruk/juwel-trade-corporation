@@ -72,9 +72,16 @@ class HomeController extends Controller
         $categories = Category::where('is_active', 1)->get();
         $cat_isshowhome = $categories->where('is_homepage_show', 1)->sortBy('display_order')->values();
 
+        // "Shop by category" carousel: categories flagged homepage_category = true.
+        $homepageCategories = Category::where('is_active', 1)
+            ->where('homepage_category', 1)
+            ->orderBy('display_order')
+            ->get();
+
         return view('storefront.index', $this->storeData(),
         [
-           'cat_isshowhome' => $cat_isshowhome
+           'cat_isshowhome' => $cat_isshowhome,
+           'homepageCategories' => $homepageCategories,
         ]);
     }
 

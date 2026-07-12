@@ -126,7 +126,7 @@ class StorefrontData
         return [
             'id'             => $product->id,
             'name'           => $product->name ?? '',
-            'image'          => $product->getImageFullUrl() ?? asset('images/product.webp'),
+            'image'          => $product->getImageFullUrl() ?? asset('images/no-thumbnail.png'),
             'showNew'        => false,
             'showDealPct'    => $isCompare,
             'pctText'        => '-' . $pct . '%',
