@@ -69,6 +69,26 @@ form.form-style-1 fieldset.col-upload .filepond--root {
     margin-bottom: 0;
 }
 
+/* Sidebar menu scrollbar — theme hides it entirely (width: 0), which makes
+   the menu feel stuck once the item list grows past the viewport height.
+   Keep overflow-y: auto (already set) but restore a slim visible scrollbar. */
+.layout-wrap .section-menu-left {
+    scrollbar-width: thin; /* Firefox */
+}
+.layout-wrap .section-menu-left::-webkit-scrollbar {
+    width: 6px;
+}
+.layout-wrap .section-menu-left::-webkit-scrollbar-track {
+    background: transparent;
+}
+.layout-wrap .section-menu-left::-webkit-scrollbar-thumb {
+    background-color: #d5dbe3;
+    border-radius: 3px;
+}
+.layout-wrap .section-menu-left::-webkit-scrollbar-thumb:hover {
+    background-color: #b7c0cc;
+}
+
 /* SweetAlert2 confirm button (project uses SweetAlert2, not v1) */
 .swal2-confirm {
     background-color: #dc3545 !important;

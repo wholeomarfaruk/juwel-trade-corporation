@@ -23,7 +23,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css"
         integrity="sha512-A81ejcgve91dAWmCGseS60zjrAdohm7PTcAjjiDWtw3Tcj91PNMa1gJ/ImrhG+DbT5V+JQ5r26KT5+kgdVTb5w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/custom.css?v=1.0') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin-resource/css/custom.css?v=1.1') }}">
     {{-- FilePond --}}
     <link rel="stylesheet" href="{{ asset('admin-resource/lib/filepond/filepond.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-resource/lib/filepond/filepond-plugin-image-preview.min.css') }}">
