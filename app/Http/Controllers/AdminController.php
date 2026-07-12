@@ -21,6 +21,7 @@ use App\Models\delivery_areas;
 use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\User;
+use App\Models\Banner;
 use App\Models\Slide;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -719,7 +720,7 @@ class AdminController extends Controller
     //Slides
     public function slides()
     {
-        $slides = Slide::orderBy('id', 'desc')->paginate(10);
+        $slides = Slide::orderBy('sort_order')->orderBy('id', 'desc')->paginate(10);
         return view('admin.slides', compact('slides'));
     }
     public function slideAdd()
@@ -729,38 +730,22 @@ class AdminController extends Controller
     public function slideStore(Request $request)
     {
         $this->validate($request, [
-            'title'    => 'required',
-            'subtitle' => 'required',
-            'tagline'  => 'required',
-            'image'    => 'required|string',
+            'title'      => 'nullable|string',
+            'link'       => 'nullable|string|max:255',
+            'image_id'   => 'required|exists:media,id',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $slide = new Slide();
-        $slide->title    = $request->title;
-        $slide->subtitle = $request->subtitle;
-        $slide->tagline  = $request->tagline;
-        $slide->image    = $request->image;
+        $slide->title      = $request->title;
+        $slide->link       = $request->link;
+        $slide->image_id   = $request->image_id;
+        $slide->sort_order = $request->sort_order ?? 0;
         $slide->save();
 
         return redirect()->route('admin.slides')->with('status', 'Slide Added Successfully');
     }
 
-    public function GenerateSlideThumbnailImage($image, $imageName)
-    {
-        $thumbnail_path = public_path('storage/images/slides/thumbnails/');
-        $image_path = public_path('storage/images/slides/');
-        $image = Image::read($image->path());
-        $image->cover(602, 602, 'top');
-        $image->resize(602, 602, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save($image_path . $imageName);
-        $image->cover(202, 202, 'top');
-        $image->resize(202, 202, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save($thumbnail_path . $imageName);
-    }
     public function slideEdit($id)
     {
         $slide = Slide::find($id);
@@ -769,20 +754,20 @@ class AdminController extends Controller
     public function slideUpdate(Request $request, $id)
     {
         $this->validate($request, [
-            'title'    => 'required',
-            'subtitle' => 'required',
-            'tagline'  => 'required',
-            'image'    => 'required|string',
+            'title'      => 'nullable|string',
+            'link'       => 'nullable|string|max:255',
+            'image_id'   => 'nullable|exists:media,id',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $slide = Slide::find($id);
         if (!$slide) { abort(404); }
 
-        $slide->title    = $request->title;
-        $slide->subtitle = $request->subtitle;
-        $slide->tagline  = $request->tagline;
-        if ($request->filled('image')) {
-            $slide->image = $request->image;
+        $slide->title      = $request->title;
+        $slide->link       = $request->link;
+        $slide->sort_order = $request->sort_order ?? 0;
+        if ($request->filled('image_id')) {
+            $slide->image_id = $request->image_id;
         }
         $slide->save();
 
@@ -791,13 +776,94 @@ class AdminController extends Controller
     public function slideDelete($id)
     {
         $slide = Slide::find($id);
-        if (File::exists(public_path('storage/images/slides/thumbnails/' . $slide->image))) {
-            File::delete(public_path('storage/images/slides/thumbnails/' . $slide->image));
-            File::delete(public_path('storage/images/slides/' . $slide->image));
-        }
+        if (!$slide) { abort(404); }
+
         $slide->delete();
         return redirect()->route('admin.slides')->with('status', 'Slide Deleted Successfully');
     }
+
+    //Banners — single place to manage every static banner slot site-wide,
+    // filterable by zone (hero side banners, homepage promo strip, promo grid…).
+    public function banners(Request $request)
+    {
+        $banners = Banner::query()
+            ->when($request->filled('zone'), fn ($q) => $q->where('zone', $request->zone))
+            ->orderBy('zone')
+            ->orderBy('sort_order')
+            ->paginate(15)
+            ->withQueryString();
+
+        $zones = Banner::zones();
+
+        return view('admin.banners', compact('banners', 'zones'));
+    }
+    public function bannerAdd()
+    {
+        $zones = Banner::zones();
+        return view('admin.banners-add', compact('zones'));
+    }
+    public function bannerStore(Request $request)
+    {
+        $this->validate($request, [
+            'title'      => 'nullable|string',
+            'link'       => 'nullable|string|max:255',
+            'zone'       => 'required|string|in:' . implode(',', array_keys(Banner::zones())),
+            'image_id'   => 'required|exists:media,id',
+            'sort_order' => 'nullable|integer',
+        ]);
+
+        $banner = new Banner();
+        $banner->title      = $request->title;
+        $banner->link       = $request->link;
+        $banner->zone       = $request->zone;
+        $banner->image_id   = $request->image_id;
+        $banner->sort_order = $request->sort_order ?? 0;
+        $banner->save();
+
+        return redirect()->route('admin.banners')->with('status', 'Banner Added Successfully');
+    }
+    public function bannerEdit($id)
+    {
+        $banner = Banner::find($id);
+        if (!$banner) { abort(404); }
+
+        $zones = Banner::zones();
+
+        return view('admin.banners-edit', compact('banner', 'zones'));
+    }
+    public function bannerUpdate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title'      => 'nullable|string',
+            'link'       => 'nullable|string|max:255',
+            'zone'       => 'required|string|in:' . implode(',', array_keys(Banner::zones())),
+            'image_id'   => 'nullable|exists:media,id',
+            'sort_order' => 'nullable|integer',
+        ]);
+
+        $banner = Banner::find($id);
+        if (!$banner) { abort(404); }
+
+        $banner->title      = $request->title;
+        $banner->link       = $request->link;
+        $banner->zone       = $request->zone;
+        $banner->sort_order = $request->sort_order ?? 0;
+        if ($request->filled('image_id')) {
+            $banner->image_id = $request->image_id;
+        }
+        $banner->save();
+
+        return redirect()->route('admin.banners')->with('status', 'Banner Updated Successfully');
+    }
+    public function bannerDelete($id)
+    {
+        $banner = Banner::find($id);
+        if (!$banner) { abort(404); }
+
+        $banner->delete();
+        return redirect()->route('admin.banners')->with('status', 'Banner Deleted Successfully');
+    }
+
     //Analytics
     public function gAnalaytics()
     {

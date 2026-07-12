@@ -196,6 +196,14 @@ Route::prefix('admin')->group(function () {
         Route::put('/slides/{id}/update', [AdminController::class, 'slideUpdate'])->name('admin.slides.update');
         Route::delete('/slides/{id}/delete', [AdminController::class, 'slideDelete'])->name('admin.slides.delete');
 
+        // Banners
+        Route::get('/banners', [AdminController::class, 'banners'])->name('admin.banners');
+        Route::get('/banners/add', [AdminController::class, 'bannerAdd'])->name('admin.banners.add');
+        Route::post('/banners/store', [AdminController::class, 'bannerStore'])->name('admin.banners.store');
+        Route::get('/banners/{id}/edit', [AdminController::class, 'bannerEdit'])->name('admin.banners.edit');
+        Route::put('/banners/{id}/update', [AdminController::class, 'bannerUpdate'])->name('admin.banners.update');
+        Route::delete('/banners/{id}/delete', [AdminController::class, 'bannerDelete'])->name('admin.banners.delete');
+
         //Analytics
         Route::get('/analytics/report', [AdminController::class, 'analytics'])->name('admin.analytics.report');
         Route::get('/google-analytics', [AdminController::class, 'gAnalaytics'])->name('admin.google.analytics');

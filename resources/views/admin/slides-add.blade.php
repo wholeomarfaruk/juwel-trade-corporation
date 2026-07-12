@@ -26,31 +26,31 @@
                     @csrf
 
                     <fieldset class="name">
-                        <div class="body-title">Title <span class="tf-color-1">*</span></div>
+                        <div class="body-title">Title</div>
                         <input class="flex-grow @error('title') is-invalid @enderror"
-                               type="text" placeholder="Title" name="title"
-                               tabindex="0" value="{{ old('title') }}" required>
+                               type="text" placeholder="Title (optional)" name="title"
+                               tabindex="0" value="{{ old('title') }}">
                         @error('title')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
                     </fieldset>
 
                     <fieldset class="name">
-                        <div class="body-title">Sub Title <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow @error('subtitle') is-invalid @enderror"
-                               type="text" placeholder="Sub Title" name="subtitle"
-                               tabindex="0" value="{{ old('subtitle') }}" required>
-                        @error('subtitle')
+                        <div class="body-title">Link</div>
+                        <input class="flex-grow @error('link') is-invalid @enderror"
+                               type="text" placeholder="https:// (optional)" name="link"
+                               tabindex="0" value="{{ old('link') }}">
+                        @error('link')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
                     </fieldset>
 
                     <fieldset class="name">
-                        <div class="body-title">Tag Line <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow @error('tagline') is-invalid @enderror"
-                               type="text" placeholder="Tag Line" name="tagline"
-                               tabindex="0" value="{{ old('tagline') }}" required>
-                        @error('tagline')
+                        <div class="body-title">Sort Order</div>
+                        <input class="flex-grow @error('sort_order') is-invalid @enderror"
+                               type="number" placeholder="0" name="sort_order"
+                               tabindex="0" value="{{ old('sort_order', 0) }}">
+                        @error('sort_order')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
                     </fieldset>
@@ -58,16 +58,16 @@
                     <fieldset>
                         <div class="body-title mb-10">Slide Image <span class="tf-color-1">*</span></div>
 
-                        <input type="hidden" name="image" id="slide_image_url" value="{{ old('image') }}">
+                        <input type="hidden" name="image_id" id="slide_image_id" value="{{ old('image_id') }}">
 
-                        @error('image')
+                        @error('image_id')
                             <span class="invalid-feedback d-block mb-2" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
 
                         {{-- Preview --}}
-                        <div id="slide_preview" style="{{ old('image') ? '' : 'display:none;' }} margin-bottom:12px;">
+                        <div id="slide_preview" style="display:none; margin-bottom:12px;">
                             <img id="slide_preview_img"
-                                 src="{{ old('image') }}"
+                                 src=""
                                  alt="Preview"
                                  style="max-height:200px; border-radius:8px; border:1px solid #e5e7eb; object-fit:cover; display:block; margin-bottom:8px;">
                             <button type="button" id="slide_remove_btn"
@@ -80,7 +80,6 @@
                         {{-- Pick button --}}
                         <button type="button" id="slide_pick_btn"
                                 class="tf-button style-1"
-                                style="{{ old('image') ? 'display:none;' : '' }}"
                                 onclick="Livewire.dispatch('open-media-picker', { multiple: false, callbackKey: 'slide_image' })">
                             <i class="icon-image"></i> Choose from Media Library
                         </button>
@@ -106,14 +105,14 @@ window.addEventListener('media-picker-confirmed', e => {
     const single = payload.single;
     if (!single) return;
 
-    document.getElementById('slide_image_url').value    = single.url;
-    document.getElementById('slide_preview_img').src    = single.thumbnail || single.url;
+    document.getElementById('slide_image_id').value        = single.id;
+    document.getElementById('slide_preview_img').src       = single.thumbnail || single.url;
     document.getElementById('slide_preview').style.display = '';
     document.getElementById('slide_pick_btn').style.display = 'none';
 });
 
 document.getElementById('slide_remove_btn').addEventListener('click', () => {
-    document.getElementById('slide_image_url').value       = '';
+    document.getElementById('slide_image_id').value        = '';
     document.getElementById('slide_preview_img').src       = '';
     document.getElementById('slide_preview').style.display = 'none';
     document.getElementById('slide_pick_btn').style.display = '';

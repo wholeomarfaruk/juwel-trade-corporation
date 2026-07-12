@@ -73,7 +73,7 @@ class CartManager extends Component
 
         $this->updateCartTotals($cart);
 
-        $itemCount = $this->cart->items->count();
+        $itemCount = $this->cart->totalItems();
         setcookie('_cart_count', $itemCount, time() + (86400 * 30), "/");
         $this->dispatch('cart-updated', cartcount: $itemCount);
 
@@ -132,7 +132,7 @@ class CartManager extends Component
     {
         $this->cart->items()->delete();
         $this->updateCartTotals($this->cart);
-        $itemCount = $this->cart->items->count();
+        $itemCount = $this->cart->totalItems();
         setcookie('_cart_count', $itemCount, time() + (86400 * 30), "/");
         $this->dispatch('cart-updated', cartcount: $itemCount);
     }
@@ -147,7 +147,7 @@ class CartManager extends Component
 
         $cartItem->delete();
         $this->updateCartTotals($this->cart);
-        $itemCount = $this->cart->items->count();
+        $itemCount = $this->cart->totalItems();
         setcookie('_cart_count', $itemCount, time() + (86400 * 30), "/");
         $this->dispatch('cart-updated', cartcount: $itemCount);
     }
@@ -160,7 +160,7 @@ class CartManager extends Component
         $item->save();
 
         $this->updateCartTotals($item->cart);
-        $itemCount = $this->cart->items->count();
+        $itemCount = $this->cart->totalItems();
         setcookie('_cart_count', $itemCount, time() + (86400 * 30), "/");
         $this->dispatch('cart-updated', cartcount: $itemCount);
     }
@@ -178,6 +178,9 @@ class CartManager extends Component
         }
 
         $this->updateCartTotals($item->cart);
+        $itemCount = $this->cart->totalItems();
+        setcookie('_cart_count', $itemCount, time() + (86400 * 30), "/");
+        $this->dispatch('cart-updated', cartcount: $itemCount);
     }
 
     public function render()

@@ -233,6 +233,12 @@
                                         <div class="text">Slider</div>
                                     </a>
                                 </li>
+                                <li class="menu-item {{ Request::is('admin/banners*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.banners') }}" class="">
+                                        <div class="icon"><i class="icon-image"></i></div>
+                                        <div class="text">Banners</div>
+                                    </a>
+                                </li>
                                 <li class="menu-item {{ Request::is('admin/media*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.media.index') }}" class="">
                                         <div class="icon"><i class="icon-folder"></i></div>

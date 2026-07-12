@@ -20,7 +20,7 @@
                 <div class="col-md-8 order-info-box">
                     {{-- <div class="order-logo mt-4">
                     <a class="footer-brand text-decoration-none text-success fw-bolder fs-4" href="#">
-                        SELDOM FASHION</a>
+                        Juwel Trade Corporation</a>
                 </div> --}}
                     <div class="order-text-site mt-5">
                         <h6 class="thanks">অসংখ্য ধন্যবাদ!</h6>
@@ -96,7 +96,7 @@
                             <h5 class="some-titel">Delivery</h5>
                             <h6 class="delivery-type">ক্যাশ অন ডেলিভারী</h6>
                             <p class="delivery-notice">আপনার অর্ডারের জন্য আন্তরিক কৃতজ্ঞতা। ২৪ ঘণ্টার মধ্যে আমাদের টিম
-                                আপনার সাথে যোগাযোগ করবে এবং খুব শীঘ্রই আপনার অর্ডারটি প্রসেস করা হবে । Seldom এর সাথেই
+                                আপনার সাথে যোগাযোগ করবে এবং খুব শীঘ্রই আপনার অর্ডারটি প্রসেস করা হবে । Juwel Trade Corporation এর সাথেই
                                 থাকুন।</p>
                         </div>
                     </div>

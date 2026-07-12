@@ -1,82 +1,60 @@
 <div>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h6 class="mb-1">Your cart</h6>
-            <small class="text-muted">Items: <span data-cart-total-items>{{ $cart->items->count() }}</span></small>
+    <div class="jtc-scrim" :class="(cartOpen || mmenuOpen) && 'is-open'" @click="closeAll()" x-cloak></div>
+
+    <aside class="jtc-cart" :class="cartOpen && 'is-open'" aria-label="Shopping cart">
+        <div class="jtc-cart__head">
+            <h3>Your cart <span class="jtc-cart__count">({{ $cart->totalItems() }})</span></h3>
+            <button class="jtc-cart__close" aria-label="Close cart" @click="closeAll()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+            </button>
         </div>
-        <button type="button" class="btn btn-sm btn-outline-danger" data-clear-cart wire:click="clearCart">Clear</button>
-    </div>
 
-
-    <div data-mini-cart-items class="d-grid gap-3">
-        @forelse ($cart->items as $item)
-            <div class="d-flex gap-3 border rounded-3 p-3">
-                <img src="{{ $item->product->getImageFullUrl() ?? '' }}"
-                    alt="{{ $item->product->name ?? 'Product image' }}" width="64" height="64"
-                    class="rounded-3 object-fit-cover" style="width: 64px;">
-
-                <div class="flex-grow-1">
-                    <h3 class="h6 mb-1">{{ $item->product->name ?? 'Unnamed Product' }}</h3>
-                    <p class="small text-muted mb-1">Qty: {{ $item->quantity }}</p>
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <strong>{{ number_format($item->total, 2) }}</strong>
-                        <div class="d-flex align-items-center gap-2 mt-2">
-
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                wire:click="decreaseQty({{ $item->id }})">
-                                -
-                            </button>
-
-                            <span class="px-2">{{ $item->quantity }}</span>
-
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                wire:click="increaseQty({{ $item->id }})">
-                                +
-                            </button>
-
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger"
-                            wire:click="removeItem({{ $item->id }})">
-                            Remove
-                        </button>
-                    </div>
+        <div class="jtc-cart__body">
+            @if ($cart->items->isEmpty())
+                <div class="jtc-cart__empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="56" height="56"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2.5 3h2.2l2.1 12.1a1.8 1.8 0 0 0 1.8 1.5h9.1a1.8 1.8 0 0 0 1.8-1.4l1.6-7.2H6"></path></svg>
+                    <p>Your cart is empty.</p>
+                    <p>Add something to get started.</p>
                 </div>
-            </div>
-        @empty
-            <div class="text-center text-muted py-5 border rounded-3 bg-light">
-                Your cart is empty.
-            </div>
-        @endforelse
-    </div>
-    <div>
+            @else
+                @foreach ($cart->items as $item)
+                    <div class="jtc-cart__line" wire:key="cart-line-{{ $item->id }}">
+                        <img class="jtc-cart__thumb" src="{{ $item->product?->getImageFullUrl() ?? '' }}" alt="">
+                        <div>
+                            <div class="jtc-cart__name">{{ $item->product?->name ?? 'Unnamed product' }}</div>
+                            <div class="jtc-cart__meta">৳{{ number_format($item->price, 2) }} · SKU {{ $item->product?->sku ?? '—' }}</div>
+                            <div class="jtc-cart__qty">
+                                <button aria-label="Decrease" wire:click="decreaseQty({{ $item->id }})">−</button>
+                                <span>{{ $item->quantity }}</span>
+                                <button aria-label="Increase" wire:click="increaseQty({{ $item->id }})">+</button>
+                            </div>
+                        </div>
+                        <div class="jtc-cart__lineright">
+                            <span class="jtc-cart__linetotal">৳{{ number_format($item->total, 2) }}</span>
+                            <button class="jtc-cart__remove" wire:click="removeItem({{ $item->id }})">Remove</button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
 
-    </div>
-    <div class="cart-summary mt-4 border-top pt-3">
-        <div class="d-flex justify-content-between mb-2">
-            <span>Subtotal</span>
-            <strong data-cart-subtotal>৳{{ $cart->subTotal() ?? 0.0 }}</strong>
-        </div>
-        <div class="d-flex justify-content-between mb-3">
-            <span>Total items</span>
-            <strong data-cart-total-items>{{ $cart->totalItems() ?? 0 }}</strong>
-        </div>
-        <div class="d-grid gap-2">
-            <a href="{{ route('cart.view') }}" class="btn btn-outline-primary">View Cart</a>
-            <a href="{{ route('cart.checkout') }}" class="btn btn-danger">Checkout</a>
-        </div>
-    </div>
-
+        @if ($cart->items->isNotEmpty())
+            <div class="jtc-cart__foot">
+                <div class="jtc-cart__row"><span>Subtotal</span><span>৳{{ number_format($cart->sub_total, 2) }}</span></div>
+                <div class="jtc-cart__row"><span>Delivery</span><span>Calculated at checkout</span></div>
+                <div class="jtc-cart__total"><span>Total</span><span>৳{{ number_format($cart->sub_total, 2) }}</span></div>
+                <a href="{{ route('cart.checkout') }}" class="jtc-btn jtc-btn--primary jtc-btn--block" style="padding:14px">Proceed to checkout</a>
+                <p class="jtc-cart__note">Taxes &amp; delivery calculated at checkout</p>
+            </div>
+        @endif
+    </aside>
 </div>
 
 @push('scripts')
     <script>
-        // Listen for add-to-cart events and push the payload to the data layer
-
         document.addEventListener('livewire:init', () => {
             Livewire.on('add-to-cart-event', (event) => {
                 const payload = event.payload;
-                console.log('Add to Cart event payload:', payload);
                 if (payload) {
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push(payload);

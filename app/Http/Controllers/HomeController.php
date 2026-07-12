@@ -69,100 +69,36 @@ class HomeController extends Controller
         // Phase 1: render the JTC storefront design with demo data.
         // Phase 2 will map the real $products / $categories / $slides above
         // into the same array shape (see storeData()).
-        return view('storefront.index', $this->storeData());
+        $categories = Category::where('is_active', 1)->get();
+        $cat_isshowhome = $categories->where('is_homepage_show', 1)->sortBy('display_order')->values();
+
+        return view('storefront.index', $this->storeData(),
+        [
+           'cat_isshowhome' => $cat_isshowhome
+        ]);
     }
 
-    /** Tiny placeholder-image helper (swap for real product image URLs in Phase 2). */
-    private function img(string $seed, int $size = 600): string
-    {
-        return "https://picsum.photos/seed/{$seed}/{$size}/{$size}";
-    }
-
-    /** Demo catalogue data shaped for the JTC storefront design. */
+    /**
+     * Shared page-shell data for the JTC storefront layout (header search
+     * dropdown, off-canvas menu, footer, cart/wishlist Alpine state).
+     *
+     * Homepage sections below (deals, best sellers, browse-all, category…)
+     * no longer need this: they're lazy Livewire components that fetch their
+     * own data on render, so the shell can paint before any of that runs.
+     */
     private function storeData(): array
     {
-        $categories = \App\Support\StorefrontData::categories();
-
-        $products = [
-            ['id' => 1,  'name' => 'Tynor Knee Support Sportif Neoprene J09', 'sku' => 'J09',      'image' => asset('images/product.webp'),      'price' => 1195, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tynor',      'category' => 'orthopedic',       'badge' => null,   'tags' => ['best', 'browse']],
-            ['id' => 2,  'name' => 'ALPK2 Aneroid Sphygmomanometer',         'sku' => '32507329', 'image' => asset('images/product.webp'),        'price' => 1499, 'compare_at_price' => 1860, 'price_max' => null, 'brand' => 'ALPK2',      'category' => 'medical-devices',  'badge' => 'deal', 'tags' => ['deal', 'browse']],
-            ['id' => 3,  'name' => 'Adjustable Bed Backrest Support',         'sku' => '57600967', 'image' => asset('images/product.webp'),  'price' => 1895, 'compare_at_price' => 3025, 'price_max' => null, 'brand' => 'Samson',     'category' => 'orthopedic',       'badge' => 'deal', 'tags' => ['deal', 'best']],
-            ['id' => 4,  'name' => 'Fascia Gun Light Age 9-Head Massager',    'sku' => '16053546', 'image' => asset('images/product.webp'),'price' => 960,  'compare_at_price' => 1850, 'price_max' => null, 'brand' => 'Axon',       'category' => 'body-massager',    'badge' => 'deal', 'tags' => ['deal', 'best', 'browse']],
-            ['id' => 5,  'name' => 'Human Knee Joint Anatomical Model',       'sku' => '38433051', 'image' => asset('images/product.webp'),     'price' => 3100, 'compare_at_price' => 4695, 'price_max' => null, 'brand' => 'Samson',     'category' => 'anatomical-models','badge' => 'deal', 'tags' => ['deal']],
-            ['id' => 6,  'name' => 'Digital Scale Bravo XT SS-05',            'sku' => '01544711', 'image' => asset('images/product.webp'),     'price' => 1799, 'compare_at_price' => 2120, 'price_max' => null, 'brand' => 'Camry',      'category' => 'lifestyle',        'badge' => 'deal', 'tags' => ['deal', 'scale']],
-            ['id' => 7,  'name' => 'Infrared Rolling Massager',               'sku' => '70647533', 'image' => asset('images/product.webp'),  'price' => 2000, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Axon',       'category' => 'physiotherapy',    'badge' => null,   'tags' => ['massager', 'browse']],
-            ['id' => 8,  'name' => 'Jumper Digital Blood Pressure Machine',   'sku' => '03369693', 'image' => asset('images/product.webp'),       'price' => 2350, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Jumper',     'category' => 'medical-devices',  'badge' => 'new',  'tags' => ['new']],
-            ['id' => 9,  'name' => 'Procare Classic Steel Stethoscope',       'sku' => '03367755', 'image' => asset('images/product.webp'),     'price' => 1200, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Samson',     'category' => 'medical-devices',  'badge' => 'new',  'tags' => ['new', 'browse']],
-            ['id' => 10, 'name' => 'Tiger Balm White Ointment 10g',           'sku' => '40617006', 'image' => asset('images/product.webp'),      'price' => 300,  'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tiger Balm', 'category' => 'health-care',      'badge' => 'new',  'tags' => ['new', 'medicine']],
-            ['id' => 11, 'name' => 'Donut Pillow Seat Cushion',               'sku' => '03365844', 'image' => asset('images/product.webp'),    'price' => 420,  'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tynor',      'category' => 'orthopedic',       'badge' => 'new',  'tags' => ['new']],
-            ['id' => 12, 'name' => 'Portable Fingertip Pulse Oximeter LK87',  'sku' => '03352008', 'image' => asset('images/product.webp'),       'price' => 400,  'compare_at_price' => null, 'price_max' => null, 'brand' => 'Beurer',     'category' => 'medical-devices',  'badge' => 'new',  'tags' => ['new']],
-            ['id' => 13, 'name' => 'Tynor Wrist Brace With Thumb E06',        'sku' => '58705418', 'image' => asset('images/product.webp'),     'price' => 400,  'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tynor',      'category' => 'orthopedic',       'badge' => null,   'tags' => ['best', 'browse']],
-            ['id' => 14, 'name' => 'Therapy TENS Machine Gel Pad',            'sku' => 'KF5050',   'image' => asset('images/product.webp'),    'price' => 135,  'compare_at_price' => null, 'price_max' => 215,  'brand' => 'Axon',       'category' => 'physiotherapy',    'badge' => null,   'tags' => ['best', 'browse']],
-            ['id' => 15, 'name' => 'Heel Guard Pain Protector (Soft Gel)',    'sku' => '38553586', 'image' => asset('images/product.webp'),      'price' => 180,  'compare_at_price' => 350,  'price_max' => null, 'brand' => 'Tynor',      'category' => 'orthopedic',       'badge' => 'deal', 'tags' => ['deal', 'best']],
-            ['id' => 16, 'name' => 'Tynor Posture Corrector A33',             'sku' => 'A33',      'image' => asset('images/product.webp'),   'price' => 1195, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tynor',      'category' => 'orthopedic',       'badge' => null,   'tags' => ['browse', 'best']],
-            ['id' => 17, 'name' => 'Premium Slimming Belt Massager',          'sku' => '01610657', 'image' => asset('images/product.webp'),  'price' => 2400, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Axon',       'category' => 'body-massager',    'badge' => null,   'tags' => ['massager']],
-            ['id' => 18, 'name' => 'Premium Hand Massager',                   'sku' => '01607123', 'image' => asset('images/product.webp'),  'price' => 4000, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Axon',       'category' => 'body-massager',    'badge' => null,   'tags' => ['massager']],
-            ['id' => 19, 'name' => 'Human Anatomy Chart',                     'sku' => 'HAC',      'image' => asset('images/product.webp'),     'price' => 499,  'compare_at_price' => 760,  'price_max' => null, 'brand' => 'Samson',     'category' => 'anatomical-models','badge' => 'deal', 'tags' => ['deal', 'model']],
-            ['id' => 20, 'name' => 'Mini Human Skeleton Anatomy Model',       'sku' => '16559457', 'image' => asset('images/product.webp'),  'price' => 1850, 'compare_at_price' => 2255, 'price_max' => null, 'brand' => 'Samson',     'category' => 'anatomical-models','badge' => 'deal', 'tags' => ['deal', 'model']],
-            ['id' => 21, 'name' => 'Camry Weight Scale 7009',                 'sku' => '01410632', 'image' => asset('images/product.webp'),    'price' => 1300, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Camry',      'category' => 'lifestyle',        'badge' => null,   'tags' => ['scale', 'browse']],
-            ['id' => 22, 'name' => 'Beurer Scale PS 240',                     'sku' => '01540550', 'image' => asset('images/product.webp'),    'price' => 2900, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Beurer',     'category' => 'lifestyle',        'badge' => null,   'tags' => ['scale']],
-            ['id' => 23, 'name' => 'Kinesiology Elastic Muscle Tape',         'sku' => '01556198', 'image' => asset('images/product.webp'),      'price' => 470,  'compare_at_price' => null, 'price_max' => null, 'brand' => 'Tynor',      'category' => 'gym-sports',       'badge' => null,   'tags' => ['browse', 'best']],
-            ['id' => 24, 'name' => 'Nebulizer Machine Compact',               'sku' => '03361999', 'image' => asset('images/product.webp'),       'price' => 1650, 'compare_at_price' => null, 'price_max' => null, 'brand' => 'Dr. Trust',  'category' => 'medical-devices',  'badge' => null,   'tags' => ['browse']],
-        ];
-
-        $slides = [
-            ['image' => asset('images/banner.avif')],
-            ['image' => asset('images/banner.avif')],
-            ['image' => asset('images/banner.avif')],
-        ];
-
-        $promos = [
-            ['image' => asset('images/banner.avif')],
-            ['image' => asset('images/banner.avif')],
-            ['image' => asset('images/banner.avif')],
-        ];
-
-        // Decorate each product with the display fields the card needs.
-        $decorate = function (array $p): array {
-            $isRange   = ! empty($p['price_max']);
-            $isCompare = ! $isRange && ! empty($p['compare_at_price']);
-            $pct       = $p['compare_at_price'] ? (int) round((1 - $p['price'] / $p['compare_at_price']) * 100) : 0;
-            $money     = fn ($n) => '৳' . number_format((int) $n);
-
-            return array_merge($p, [
-                'showNew'        => $p['badge'] === 'new',
-                'showDealPct'    => $p['badge'] === 'deal' && ! empty($p['compare_at_price']),
-                'pctText'        => '-' . $pct . '%',
-                'priceIsRange'   => $isRange,
-                'priceIsCompare' => $isCompare,
-                'priceSingle'    => ! $isRange && ! $isCompare,
-                'priceText'      => $money($p['price']),
-                'compareText'    => $p['compare_at_price'] ? $money($p['compare_at_price']) : '',
-                'rangeText'      => $isRange ? $money($p['price']) . ' – ' . $money($p['price_max']) : '',
-            ]);
-        };
-
-        $byTag = fn (string $t) => array_values(array_map($decorate, array_filter($products, fn ($p) => in_array($t, $p['tags'], true))));
-
-        $discoverChips = [];
-        foreach ($categories as $c) {
-            foreach ($c['children'] as $child) {
-                $discoverChips[] = $child;
-            }
-        }
-        $discoverChips = array_slice($discoverChips, 0, 18);
+        $promos = \App\Support\StorefrontData::promos();
 
         return [
-            'categories'    => $categories,
-            'slides'        => $slides,
-            'promos'        => $promos,
-            'heroBanners'   => array_slice($promos, 0, 2),
-            'deals'         => $byTag('deal'),
-            'bestSellers'   => $byTag('best'),
-            'browseAll'     => array_values(array_map($decorate, array_slice($products, 0, 12))),
-            'discoverChips' => $discoverChips,
+            'categories'   => \App\Support\StorefrontData::categories(),
+            'slides'       => \App\Support\StorefrontData::slides(),
+            'heroBanners'  => array_slice($promos, 0, 2),
             // Full catalogue for Alpine (add-to-cart / wishlist lookups by id).
-            'productsJson'  => array_values(array_map($decorate, $products)),
+            'productsJson' => array_map(
+                fn (array $p) => \App\Support\StorefrontData::decorateProduct($p),
+                \App\Support\StorefrontData::products()
+            ),
         ];
     }
 
@@ -173,7 +109,7 @@ class HomeController extends Controller
             ->orderByDesc('created_at')               // newest first
             ->paginate(12);
         $deliveryAreas = delivery_areas::all();
-        $slides = Slide::all();
+        $slides = Slide::where('status', 1)->orderBy('sort_order')->get();
         $analytics = Analytic::all();
         $categories = Category::all();
         return view('shop', compact('products', 'deliveryAreas', 'slides', 'analytics', 'categories'));
@@ -763,7 +699,7 @@ class HomeController extends Controller
             if ($request->event_name == 'initiate_checkout') {
                 // Handle ViewContent event similarly
 
-                
+
 
                 $contents = [];
                 if (isset($data['ecommerce']['items']) && count($data['ecommerce']['items']) > 0) {

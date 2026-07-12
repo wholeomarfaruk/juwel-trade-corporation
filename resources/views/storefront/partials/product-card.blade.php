@@ -26,7 +26,7 @@
                 <span class="jtc-card__price">{{ $p['priceText'] }}</span>
             @endif
         </div>
-        <button class="jtc-btn jtc-btn--primary jtc-card__add" @click="addToCart({{ $p['id'] }})">
+        <button class="jtc-btn jtc-btn--primary jtc-card__add" @click="$dispatch('add-to-cart', { productId: {{ $p['id'] }} }); cartOpen = true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
             Add to cart
         </button>

@@ -157,6 +157,15 @@
         $productsJson = $productsJson ?? [];
         $slides       = $slides       ?? [];
         $heroBanners  = $heroBanners  ?? [];
+
+        // Seed the header badge from the real DB cart (not the `_cart_count`
+        // mirror cookie, which is only refreshed as a side effect of cart
+        // mutations and is stale/absent on a plain page load).
+        $initialCartDevice = \App\Models\Device::where('device_id', request()->cookie('_sfdid'))->first();
+        $initialCartCount  = \App\Models\Cart::where('customer_id', null)
+            ->where('device_id', $initialCartDevice?->id)
+            ->first()
+            ?->totalItems() ?? 0;
     @endphp
     <div
         class="jtc"
@@ -165,6 +174,7 @@
             'slides'      => $slides,
             'heroBanners' => $heroBanners,
             'categories'  => $categories,
+            'cartCount'   => $initialCartCount,
         ]))"
     >
         @include('storefront.partials.topbar')
@@ -178,7 +188,8 @@
         @include('storefront.partials.footer')
 
         {{-- Overlays --}}
-        @include('storefront.partials.cart-drawer')
+        @livewire('website.cart-manager')
+        @livewire('website.storefront.search-modal')
         @include('storefront.partials.offcanvas')
         @include('storefront.partials.auth-modal')
         @include('storefront.partials.support')

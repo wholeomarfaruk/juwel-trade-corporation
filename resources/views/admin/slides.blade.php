@@ -50,9 +50,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Image</th>
-                                <th>Tagline</th>
                                 <th>Title</th>
-                                <th>Subtitle</th>
+                                <th>Link</th>
+                                <th>Sort order</th>
 
                                 <th>Action</th>
                             </tr>
@@ -69,9 +69,9 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td>{{ $slide->tagline }}</td>
                                     <td>{{ $slide->title }}</td>
-                                    <td>{{ $slide->subtitle }}</td>
+                                    <td>{{ $slide->link }}</td>
+                                    <td>{{ $slide->sort_order }}</td>
                                     <td>
                                         <div class="list-icon-function">
                                             <a href="{{ route('admin.slides.edit',$slide->id) }}">

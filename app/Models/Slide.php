@@ -6,11 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slide extends Model
 {
+    protected $fillable = [
+        'title',
+        'link',
+        'image_id',
+        'status',
+        'sort_order',
+    ];
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class, 'image_id');
+    }
+
     public function getImageUrl(): ?string
     {
-        if (!$this->image) return null;
-        return (str_starts_with($this->image, 'http') || str_starts_with($this->image, '/'))
-            ? $this->image
-            : asset('storage/images/slides/' . $this->image);
+        return $this->media?->getUrl();
     }
 }

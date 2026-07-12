@@ -190,6 +190,46 @@
   &__scrim { position: fixed; inset: 0; z-index: 74; }
 }
 
+// Desktop live-search results dropdown (App\Livewire\Website\Storefront\HeaderSearch)
+.jtc-headersearch__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: $radius;
+  box-shadow: $shadow-pop;
+  padding: 10px 16px;
+  z-index: 76; // above .jtc-search__dropdown (75)
+
+  .jtc-search-results__hint,
+  .jtc-search-results__loading {
+    text-align: center;
+    color: $muted;
+    font-size: 0.88rem;
+    padding: 24px 10px;
+  }
+  .jtc-search-results__list { list-style: none; margin: 0; padding: 0; }
+  .jtc-search-results__seeall {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 10px;
+    padding: 11px;
+    border-radius: $radius;
+    border: 1px solid $line;
+    color: $blue;
+    font-weight: 600;
+    font-size: 0.86rem;
+    text-decoration: none;
+    &:hover { border-color: $blue; background: $blue-light; }
+  }
+}
+
 // Header actions -----------------------------------------------------------
 
 .jtc-actions {
@@ -214,6 +254,11 @@
   &--support { color: $green;   background: $green-light; }
   &--cart    { color: $blue-dark; background: $blue-light; }
   &--account { color: #fff; background: linear-gradient(150deg, $blue, $green); }
+  &--search  { color: $ink-soft; background: $surface-2; }
+
+  // Search trigger only exists for the ≤tablet layout, where the inline
+  // search bar is hidden (see the media query below).
+  &--search-trigger { display: none; }
 }
 
 .jtc-cart-badge {
@@ -232,7 +277,14 @@
   box-sizing: content-box;
 }
 
+@media (max-width: $bp-tablet) {
+  // Inline search bar is replaced by the round search-trigger button, which
+  // opens the full-screen search modal (see _modals.scss .jtc-modal--search).
+  .jtc-search:not(.jtc-search--modal) { display: none; }
+  .jtc-round-btn--search-trigger { display: grid; }
+}
+
 @media (max-width: $bp-mobile) {
   .jtc-hamburger { display: grid; }
-  .jtc-search { order: 3; flex-basis: 100%; max-width: none; }
+  .jtc-logo__text { display: none; } // keep just the mark to save space on phones
 }

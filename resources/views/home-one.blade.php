@@ -1,37 +1,43 @@
 @extends('layouts.app')
-@php $_sn = $site['site_name'] ?? 'Gramer Dokan'; $_og = !empty($site['favicon']) ? asset('storage/'.$site['favicon']) : asset('frontend/img/seldom-rounded.png'); @endphp
+@php
+    $_sn = $site['site_name'] ?? 'Gramer Dokan';
+    $_og = !empty($site['favicon']) ? asset('storage/' . $site['favicon']) : asset('frontend/img/seldom-rounded.png');
+@endphp
 @section('page_title', $_sn . ' | Premium Quality Clothing in Bangladesh')
 @push('meta')
-    <meta name="description" content="{{ $_sn }} - আপনার পছন্দের পোশাকের জন্য সেরা গন্তব্য। Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
+    <meta name="description"
+        content="{{ $_sn }} - আপনার পছন্দের পোশাকের জন্য সেরা গন্তব্য। Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url('/') }}">
 
-    <meta property="og:type"        content="website">
-    <meta property="og:title"       content="{{ $_sn }} | Premium Quality Clothing in Bangladesh">
-    <meta property="og:description" content="{{ $_sn }} - আপনার পছন্দের পোশাকের জন্য সেরা গন্তব্য। Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
-    <meta property="og:image"       content="{{ $_og }}">
-    <meta property="og:url"         content="{{ url('/') }}">
-    <meta property="og:site_name"   content="{{ $_sn }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $_sn }} | Premium Quality Clothing in Bangladesh">
+    <meta property="og:description"
+        content="{{ $_sn }} - আপনার পছন্দের পোশাকের জন্য সেরা গন্তব্য। Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
+    <meta property="og:image" content="{{ $_og }}">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:site_name" content="{{ $_sn }}">
 
-    <meta name="twitter:card"        content="summary_large_image">
-    <meta name="twitter:title"       content="{{ $_sn }} | Premium Quality Clothing in Bangladesh">
-    <meta name="twitter:description" content="Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
-    <meta name="twitter:image"       content="{{ $_og }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $_sn }} | Premium Quality Clothing in Bangladesh">
+    <meta name="twitter:description"
+        content="Shop premium quality sarees, ethnic wear, and fashion clothing at the best price in Bangladesh.">
+    <meta name="twitter:image" content="{{ $_og }}">
 @endpush
 
 @section('content')
 
-        <!--banner start-->
-        @if($slides->count() > 0)
+    <!--banner start-->
+    @if ($slides->count() > 0)
         <section class="hero-slider">
             <div id="heroCarousel" class="carousel slide carousel-fade container" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @foreach ($slides as $slide)
-                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                        <div class="d-block w-100 hero-slide">
-                            <img src="{{ $slide->getImageUrl() ?? '' }}" alt="{{ $slide->title ?? '' }}">
+                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                            <div class="d-block w-100 hero-slide">
+                                <img src="{{ $slide->getImageUrl() ?? '' }}" alt="{{ $slide->title ?? '' }}">
+                            </div>
                         </div>
-                    </div>
                     @endforeach
                     {{-- <div class="carousel-item">
                         <div class="d-block w-100 hero-slide"
@@ -46,20 +52,18 @@
                 </div>
 
                 <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
-                    data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
-                    data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </button>
             </div>
         </section>
-        @endif
-        <!--banner end-->
-        <!--our Category start-->
-        @if($homepage_categories->count() > 0)
+    @endif
+    <!--banner end-->
+    <!--our Category start-->
+    @if ($homepage_categories->count() > 0)
         <section class="our_category">
             <div class="container">
                 <div class="row">
@@ -70,28 +74,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach($homepage_categories as $cat)
-                    <div class="col-lg-2 col-6">
-                        <div class="category_box">
-                            <div class="category_box1">
-                                <a href="{{ route('category.show', $cat->slug) }}">
-                                    <img src="{{ $cat->getImageUrl() ?? asset('frontend/img/category/default.jpeg') }}"
-                                         class="w-100" alt="{{ $cat->name }}">
-                                </a>
-                            </div>
-                            <div class="category_box2">
-                                <a href="{{ route('category.show', $cat->slug) }}">
-                                    <p>{{ $cat->name }}</p>
-                                </a>
+                    @foreach ($homepage_categories as $cat)
+                        <div class="col-lg-2 col-6">
+                            <div class="category_box">
+                                <div class="category_box1">
+                                    <a href="{{ route('category.show', $cat->slug) }}">
+                                        <img src="{{ $cat->getImageUrl() ?? asset('frontend/img/category/default.jpeg') }}"
+                                            class="w-100" alt="{{ $cat->name }}">
+                                    </a>
+                                </div>
+                                <div class="category_box2">
+                                    <a href="{{ route('category.show', $cat->slug) }}">
+                                        <p>{{ $cat->name }}</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
         </section>
-        @endif
-        <!--our Category end-->
+    @endif
+    <!--our Category end-->
     <section class="sec-style-1 my-3">
         <div class="container">
 
@@ -155,9 +159,9 @@
             </div>
         </div>
     </section>
-    
 
-  @foreach ($categories->where('is_homepage_show', true) as $category)
+
+    @foreach ($categories->where('is_homepage_show', true) as $category)
         @if ($category->products?->where('status', 1)->count() > 0)
             <section class="sec-style-1 my-3">
                 <div class="container">
@@ -181,8 +185,7 @@
 
                                     <div class="p-img-box">
                                         <a href="{{ $product?->url }}">
-                                            <img src="{{ $product->getImageFullUrl() ?? '' }}"
-                                                alt="">
+                                            <img src="{{ $product->getImageFullUrl() ?? '' }}" alt="">
                                         </a>
                                     </div>
                                     <div class="p-info">
@@ -202,13 +205,13 @@
                                         </a>
 
                                     </div>
-                                   <div class="p-btn-group d-flex  gap-2">
-                                <a class="btn btn-primary w-100 d-block" href="{{ $product?->url }}">Buy Now</a>
-                                <button type="button" class="btn btn-primary w-100 d-block" x-data
-                                    x-on:click="$dispatch('add-to-cart', { productId: {{ $product->id }} })">
-                                    Add to Cart
-                                </button>
-                            </div>
+                                    <div class="p-btn-group d-flex  gap-2">
+                                        <a class="btn btn-primary w-100 d-block" href="{{ $product?->url }}">Buy Now</a>
+                                        <button type="button" class="btn btn-primary w-100 d-block" x-data
+                                            x-on:click="$dispatch('add-to-cart', { productId: {{ $product->id }} })">
+                                            Add to Cart
+                                        </button>
+                                    </div>
 
 
                                 </div>
@@ -279,77 +282,77 @@
             </ul>
         </div>
     </section>
-        <!--wholesale program start-->
-        <section class="d-block" >
-           <img style="width: 100%" src="{{ asset('frontend/img/banner/footer-banner.jpeg') }}" alt="">
-        </section>
-        <!--wholesale program end-->
-        <!--services Section Start-->
-        <section class="service">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-6">
-                        <div class="service_item">
+    <!--wholesale program start-->
+    <section class="d-block">
+        <img style="width: 100%" src="{{ asset('frontend/img/banner/footer-banner.jpeg') }}" alt="">
+    </section>
+    <!--wholesale program end-->
+    <!--services Section Start-->
+    <section class="service">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <div class="service_item">
 
-                            <!--icon-->
-                            <div class="service_icon">
-                               <i class="fa-solid fa-cart-shopping"></i>
-                            </div>
-
-                            <!--text-->
-                            <div class="service_text">
-                                <h2>Unique Products</h2>
-                                <p>Enjoy top quality items for less</p>
-                            </div>
-
+                        <!--icon-->
+                        <div class="service_icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
                         </div>
+
+                        <!--text-->
+                        <div class="service_text">
+                            <h2>Unique Products</h2>
+                            <p>Enjoy top quality items for less</p>
+                        </div>
+
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="service_item">
-                            <!--icon-->
-                            <div class="service_icon">
-                                <i class="fa-solid fa-headset"></i>
-                            </div>
-                            <!--text-->
-                            <div class="service_text">
-                                <h2>Online Support</h2>
-                                <p>24 hours a day, 7 days a week</p>
-                            </div>
-
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="service_item">
+                        <!--icon-->
+                        <div class="service_icon">
+                            <i class="fa-solid fa-headset"></i>
                         </div>
+                        <!--text-->
+                        <div class="service_text">
+                            <h2>Online Support</h2>
+                            <p>24 hours a day, 7 days a week</p>
+                        </div>
+
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="service_item">
-                            <!--icon-->
-                            <div class="service_icon">
-                                <i class="fa-solid fa-truck-fast"></i>
-                            </div>
-                            <!--text-->
-                            <div class="service_text">
-                                <h2>Free Shipping</h2>
-                                <p>Free Shipping for Over 500 taka order</p>
-                            </div>
-
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="service_item">
+                        <!--icon-->
+                        <div class="service_icon">
+                            <i class="fa-solid fa-truck-fast"></i>
                         </div>
+                        <!--text-->
+                        <div class="service_text">
+                            <h2>Free Shipping</h2>
+                            <p>Free Shipping for Over 500 taka order</p>
+                        </div>
+
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="service_item">
-                            <!--icon-->
-                            <div class="service_icon">
-                                <i class="fa-solid fa-lock"></i>
-                            </div>
-                            <!--text-->
-                            <div class="service_text">
-                                <h2>secure payment</h2>
-                                <p>Enjoy top quality items for less</p>
-                            </div>
-
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="service_item">
+                        <!--icon-->
+                        <div class="service_icon">
+                            <i class="fa-solid fa-lock"></i>
                         </div>
+                        <!--text-->
+                        <div class="service_text">
+                            <h2>secure payment</h2>
+                            <p>Enjoy top quality items for less</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </section>
-        <!--services Section end-->
+        </div>
+    </section>
+    <!--services Section end-->
 
 @endsection
 @push('scripts')

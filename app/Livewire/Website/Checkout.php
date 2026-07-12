@@ -32,8 +32,9 @@ class Checkout extends Component
             $this->redirectRoute('cart.view', navigate: true);
             return;
         }
-        $this->delivery_area = delivery_areas::orderBy('id', 'asc')->get()->first()->id;
-        $this->delivery_charge = delivery_areas::find($this->delivery_area)->charge;
+        $defaultDeliveryArea = delivery_areas::orderBy('id', 'asc')->first();
+        $this->delivery_area = $defaultDeliveryArea?->id;
+        $this->delivery_charge = $defaultDeliveryArea?->charge ?? 0;
         $this->cartData->delivery_charge = $this->delivery_charge;
         $this->calculateTotal();
         $this->cartData = $this->getCart();
@@ -198,7 +199,7 @@ class Checkout extends Component
     {
 
         $this->delivery_area = $areaId;
-        $this->delivery_charge = delivery_areas::find($areaId)->charge;
+        $this->delivery_charge = delivery_areas::find($areaId)?->charge ?? 0;
         $this->calculateTotal();
     }
     public function render()

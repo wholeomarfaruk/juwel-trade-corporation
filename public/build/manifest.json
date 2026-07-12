@@ -6,7 +6,7 @@
     "isEntry": true
   },
   "resources/js/storefront/app.js": {
-    "file": "assets/app-BzXqpWzK.js",
+    "file": "assets/app-BuA6k7a4.js",
     "name": "app",
     "src": "resources/js/storefront/app.js",
     "isEntry": true
@@ -17,7 +17,7 @@
     "isEntry": true
   },
   "resources/sass/storefront/storefront.scss": {
-    "file": "assets/storefront-CUU1XXdz.css",
+    "file": "assets/storefront-89jvhIUc.css",
     "src": "resources/sass/storefront/storefront.scss",
     "isEntry": true
   }

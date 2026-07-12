@@ -2,16 +2,18 @@
  * Storefront — the single Alpine component that powers the JTC homepage.
  *
  * Registered as `x-data="storefront(@js([...]))"` on the page root.
- * All server data (products, categories, slides…) is passed in from Blade;
- * the cart is persisted to localStorage.
+ * All server data (products, categories, slides…) is passed in from Blade.
+ *
+ * The cart itself is server-side (App\Livewire\Website\CartManager, backed by
+ * the carts/cart_items tables) — this component only tracks the header badge
+ * count and the drawer's open/closed state. `cartCount` is seeded from the
+ * `_cart_count` cookie on page load and kept live via the `cart-updated`
+ * browser event CartManager dispatches after every add/remove/qty change.
  *
  * NOTE: Alpine is provided by Livewire (@livewireScripts). We do NOT import or
  * start our own Alpine here — instead this factory is registered on Livewire's
  * Alpine via the `alpine:init` event (see resources/js/storefront/app.js).
  */
-
-const money = (n) => '৳' + Number(n).toLocaleString('en-US');
-const CART_KEY = 'jtc_cart_v1';
 
 // Fixed card + gap for the category carousel (180px card + 7px gap).
 const CAT_STEP = 187;
@@ -24,7 +26,7 @@ export const storefront = (config = {}) => ({
     categories: config.categories || [],
 
     // ---- ui state ----
-    cart: [],
+    cartCount: config.cartCount || 0,
     wishlist: {},
     heroIndex: 0,
     catIndex: 0,
@@ -33,6 +35,8 @@ export const storefront = (config = {}) => ({
     mmenuOpen: false,
     searchCatOpen: false,
     selectedCategory: null,
+    searchModalOpen: false,
+    searchModalCatOpen: false,
     authOpen: false,
     authMode: 'login',
     supportOpen: false,
@@ -42,8 +46,6 @@ export const storefront = (config = {}) => ({
 
     // ---- lifecycle ----
     init() {
-        try { this.cart = JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { this.cart = []; }
-
         this._heroTimer = setInterval(() => this.heroGo(this.heroIndex + 1), 5500);
         this._catTimer = setInterval(() => this.catNext(), 3800);
 
@@ -51,9 +53,12 @@ export const storefront = (config = {}) => ({
         this._onKey = (e) => { if (e.key === 'Escape') this.closeAll(); };
         window.addEventListener('keydown', this._onKey);
 
-        this.$watch('cart', () => {
-            try { localStorage.setItem(CART_KEY, JSON.stringify(this.cart)); } catch (e) {}
-        });
+        // CartManager (Livewire) dispatches this after every add/remove/qty change.
+        this._onCartUpdated = (e) => {
+            const payload = e.detail[0] ?? e.detail;
+            this.cartCount = payload?.cartcount ?? 0;
+        };
+        window.addEventListener('cart-updated', this._onCartUpdated);
     },
 
     destroy() {
@@ -62,6 +67,7 @@ export const storefront = (config = {}) => ({
         clearTimeout(this._catSnap);
         clearTimeout(this._toastTimer);
         window.removeEventListener('keydown', this._onKey);
+        window.removeEventListener('cart-updated', this._onCartUpdated);
     },
 
     // ---- hero slider ----
@@ -120,33 +126,6 @@ export const storefront = (config = {}) => ({
         this.showToast('Browsing ' + name);
     },
 
-    // ---- cart ----
-    findProduct(id) { return this.products.find((p) => p.id === id); },
-    addToCart(id) {
-        const p = this.findProduct(id);
-        if (!p) return;
-        const line = this.cart.find((l) => l.id === id);
-        if (line) {
-            line.qty += 1;
-        } else {
-            this.cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, sku: p.sku, qty: 1 });
-        }
-        this.cartOpen = true;
-        this.showToast('Added to cart');
-    },
-    setQty(id, delta) {
-        const line = this.cart.find((l) => l.id === id);
-        if (!line) return;
-        line.qty += delta;
-        if (line.qty <= 0) this.removeLine(id);
-    },
-    removeLine(id) { this.cart = this.cart.filter((l) => l.id !== id); },
-    lineTotal(l) { return money(l.price * l.qty); },
-    linePrice(l) { return money(l.price); },
-    get cartCount() { return this.cart.reduce((n, l) => n + l.qty, 0); },
-    get cartEmpty() { return this.cart.length === 0; },
-    get cartSubtotal() { return money(this.cart.reduce((s, l) => s + l.price * l.qty, 0)); },
-
     // ---- wishlist ----
     toggleWish(id) {
         const was = !!this.wishlist[id];
@@ -178,12 +157,15 @@ export const storefront = (config = {}) => ({
     openCart() { this.closeAll(); this.cartOpen = true; },
     openMenu() { this.closeAll(); this.mmenuOpen = true; },
     openSupport() { this.closeAll(); this.supportOpen = true; },
+    openSearchModal() { this.closeAll(); this.searchModalOpen = true; },
     closeAll() {
         this.cartOpen = false;
         this.mmenuOpen = false;
         this.authOpen = false;
         this.supportOpen = false;
         this.searchCatOpen = false;
+        this.searchModalOpen = false;
+        this.searchModalCatOpen = false;
     },
 
     // ---- toast ----

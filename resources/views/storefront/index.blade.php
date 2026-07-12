@@ -2,88 +2,54 @@
 
 {{-- The .jtc wrapper, x-data, topbar, header, footer and overlays live in
      layouts.app so every page shares the JTC shell. This page supplies only
-     the homepage sections. --}}
+     the homepage sections.
+
+     Sections below render as lazy Livewire components: the page shell (topbar,
+     header, footer, nav) paints immediately, and each section streams in with
+     its own DB query once it's ready — a shimmer skeleton holds its place
+     until then. Only "Shop by category" stays a plain Blade include, since it
+     shares live Alpine state (selectedCategory) with the header search
+     dropdown and off-canvas menu, and has no query to defer. --}}
 
 @section('content')
-    @include('storefront.partials.hero')
+
+    @livewire('website.storefront.hero-section')
+
     @include('storefront.partials.category-carousel')
 
-    {{-- Today's best deals --}}
-    <section class="jtc-section">
-        <div class="jtc-shell">
-            <div class="jtc-section-head">
-                <h2 class="jtc-h2">Today's best deals</h2>
-                <a href="#" class="jtc-seeall">See all deals @include('storefront.partials.icons.arrow')</a>
-            </div>
-            <div class="jtc-rail">
-                @foreach ($deals as $p)
-                    @include('storefront.partials.product-card', ['p' => $p, 'rail' => true])
-                @endforeach
-            </div>
-        </div>
-    </section>
+    {{-- Category sections: pass only category_id (+ optional style/limit/rail).
+         Name/link/products auto-resolve and the component is null-safe when a
+         category_id is missing or doesn't exist — it just renders nothing. --}}
+    @php $homeCategoryIds = ($cat_isshowhome ?? collect())->pluck('id'); @endphp
 
-    {{-- Full-width promo strip --}}
-    <section class="jtc-section jtc-section--strip">
-        <div class="jtc-shell">
-            <a href="#" class="jtc-promo" style="height:100px;min-height:0">
-                <img src="{{ asset('images/banner.avif') }}" alt="Promotional banner">
-            </a>
-        </div>
-    </section>
+    {{-- 1st homepage category: full-width banner (image + grid) --}}
+    @if ($homeCategoryIds->get(0))
+        @livewire('website.storefront.category-section', [
+            'category_id' => $homeCategoryIds->get(0),
+        ])
+    @endif
 
-    {{-- Best sellers --}}
-    <section class="jtc-section">
-        <div class="jtc-shell">
-            <div class="jtc-section-head">
-                <h2 class="jtc-h2">Best selling items</h2>
-                <a href="#" class="jtc-seeall">See all @include('storefront.partials.icons.arrow')</a>
-            </div>
-            <div class="jtc-rail">
-                @foreach ($bestSellers as $p)
-                    @include('storefront.partials.product-card', ['p' => $p, 'rail' => true])
-                @endforeach
-            </div>
-        </div>
-    </section>
+    @livewire('website.storefront.promo-strip-section')
 
-    {{-- Promos --}}
-    <section class="jtc-section jtc-section--tight">
-        <div class="jtc-shell">
-            <div class="jtc-promos">
-                @foreach ($promos as $i => $promo)
-                    <a href="#" class="jtc-promo">
-                        <img src="{{ $promo['image'] }}" alt="Promotion" loading="lazy">
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
-    {{-- Browse our products --}}
-    <section class="jtc-section">
-        <div class="jtc-shell">
-            <div class="jtc-section-head">
-                <h2 class="jtc-h2">Browse our products</h2>
-                <a href="#" class="jtc-seeall">See all @include('storefront.partials.icons.arrow')</a>
-            </div>
-            <div class="jtc-grid">
-                @foreach ($browseAll as $p)
-                    @include('storefront.partials.product-card', ['p' => $p, 'rail' => false])
-                @endforeach
-            </div>
-        </div>
-    </section>
 
-    {{-- Discover more --}}
-    <section class="jtc-section jtc-section--tight">
-        <div class="jtc-shell">
-            <div style="margin-bottom:26px"><h2 class="jtc-h2">Discover more</h2></div>
-            <div class="jtc-chips">
-                @foreach ($discoverChips as $chip)
-                    <a href="#" class="jtc-chip">{{ $chip }}</a>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    {{-- Next 3 homepage categories: compact rails --}}
+    @foreach ($homeCategoryIds->slice(1, 3) as $categoryId)
+        @livewire('website.storefront.category-section', [
+            'category_id' => $categoryId,
+        ], key('cat-section-' . $categoryId))
+    @endforeach
+
+    @livewire('website.storefront.promos-section')
+    @livewire('website.storefront.browse-all-section')
+
+    {{-- Remaining homepage categories (up to 5): default full-width grid --}}
+    @foreach ($homeCategoryIds->slice(4, 5) as $categoryId)
+        @livewire('website.storefront.category-section', [
+            'category_id' => $categoryId,
+            'rail'        => false,
+        ], key('cat-grid-' . $categoryId))
+    @endforeach
+
+    @livewire('website.storefront.discover-chips-section')
 @endsection

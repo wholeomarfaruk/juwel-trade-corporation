@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             AreaKeywordSeeder::class,
             SegmentSeeder::class,
             LandingPageSeeder::class,
+            BannerSeeder::class,
         ]);
     }
 }

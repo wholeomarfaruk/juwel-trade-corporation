@@ -121,11 +121,9 @@
                             @enderror
                         </fieldset>
                         <fieldset class="name">
-                            <div class="body-title mb-10">SKU <span class="tf-color-1">*</span>
-                            </div>
+                            <div class="body-title mb-10">SKU</div>
                             <input class="mb-10 @error('sku') is-invalid @enderror" type="text" placeholder="Enter SKU"
-                                name="sku" tabindex="0" value="{{ old('sku', $product?->sku) }}" aria-required="true"
-                                required="required">
+                                name="sku" tabindex="0" value="{{ old('sku', $product?->sku) }}">
                             @error('sku')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -134,9 +132,8 @@
                         </fieldset>
                     </div>
                     <fieldset class="name">
-                        <div class="body-title mb-10">Description <span class="tf-color-1">*</span></div>
-                        <textarea id="editor" class="mb-10 @error('description') is-invalid @enderror" name="description" tabindex="0"
-                            aria-required="true" required="required">{{ old('description', $product?->description) }}</textarea>
+                        <div class="body-title mb-10">Description</div>
+                        <textarea id="editor" class="mb-10 @error('description') is-invalid @enderror" name="description" tabindex="0">{{ old('description', $product?->description) }}</textarea>
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -144,9 +141,8 @@
                         @enderror
                     </fieldset>
                     <fieldset class="name">
-                        <div class="body-title mb-10">SEO Description <span class="tf-color-1">*</span></div>
-                        <textarea class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0"
-                            aria-required="true" required="required">{{ old('short_description', $product?->short_description) }}</textarea>
+                        <div class="body-title mb-10">SEO Description</div>
+                        <textarea class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0">{{ old('short_description', $product?->short_description) }}</textarea>
                         @error('short_description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -156,12 +152,10 @@
                     <div class="cols gap22">
 
                         <fieldset class="name">
-                            <div class="body-title mb-10">YT Video ID <span class="tf-color-1"></span>
-                            </div>
+                            <div class="body-title mb-10">YT Video ID</div>
                             <input class="mb-10 @error('yt_video_url') is-invalid @enderror" type="text"
                                 placeholder="Enter YT Video ID" name="yt_video_url" tabindex="0"
-                                value="{{ old('yt_video_url', $product?->yt_video_url) }}" aria-required="true"
-                                required="required">
+                                value="{{ old('yt_video_url', $product?->yt_video_url) }}">
                             @error('yt_video_url')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -255,7 +249,7 @@
                 <div class="wg-box">
                     {{-- Featured image --}}
                     <fieldset>
-                        <div class="body-title mb-10">Featured image <span class="tf-color-1">*</span></div>
+                        <div class="body-title mb-10">Featured image</div>
                         <input type="hidden" name="image" id="prod_image_url" value="{{ old('image') }}">
                         @error('image')
                             <span class="text-danger text-tiny d-block mb-2">{{ $message }}</span>
