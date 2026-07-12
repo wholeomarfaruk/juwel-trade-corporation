@@ -32,7 +32,6 @@ export const storefront = (config = {}) => ({
     catIndex: 0,
     cartOpen: false,
     mmenuOpen: false,
-    categoriesMenuOpen: false,
     searchCatOpen: false,
     selectedCategory: null,
     searchModalOpen: false,
@@ -204,15 +203,9 @@ export const storefront = (config = {}) => ({
     openMenu() { this.closeAll(); this.mmenuOpen = true; },
     openSupport() { this.closeAll(); this.supportOpen = true; },
     openSearchModal() { this.closeAll(); this.searchModalOpen = true; },
-    toggleCategoriesMenu() {
-        const next = !this.categoriesMenuOpen;
-        this.closeAll();
-        this.categoriesMenuOpen = next;
-    },
     closeAll() {
         this.cartOpen = false;
         this.mmenuOpen = false;
-        this.categoriesMenuOpen = false;
         this.authOpen = false;
         this.supportOpen = false;
         this.searchCatOpen = false;

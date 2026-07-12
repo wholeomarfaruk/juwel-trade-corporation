@@ -1,6 +1,9 @@
 {{-- UI only for now — inputs are visually present but not yet wired to a
      filter controller. Functionality lands in a later pass. --}}
-@php $bare = $bare ?? false; @endphp
+@php
+    $bare = $bare ?? false;
+    $activeCategoryId = $activeCategoryId ?? null;
+@endphp
 
 <div @class(['jtc-filters__card' => ! $bare])>
     @unless ($bare)
@@ -37,7 +40,7 @@
         <div class="jtc-filters__list">
             @forelse ($categories as $cat)
                 <label class="jtc-filters__check">
-                    <input type="checkbox">
+                    <input type="checkbox" @checked($cat->id === $activeCategoryId) @disabled($cat->id === $activeCategoryId)>
                     {{ $cat->name }} <span>({{ $cat->products_count }})</span>
                 </label>
             @empty

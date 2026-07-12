@@ -132,7 +132,10 @@ class HomeController extends Controller
             ->orderByDesc('created_at')               // newest first
             ->paginate(12);
         $segment = $category?->segments?->select('name')?->first() ? strtolower($category->segments->select('name')->first()['name']) : null;
-        return view('category-products', compact('category', 'products', 'segment'));
+        $categories = Category::withCount('products')->get();
+        $brands = Brand::withCount('products')->active()->ordered()->get();
+
+        return view('storefront.category', compact('category', 'products', 'segment', 'categories', 'brands'));
     }
     public function SubcategoryShow(Request $request, $slug, $subslug)
     {
@@ -145,7 +148,10 @@ class HomeController extends Controller
             ->orderByDesc('created_at')               // newest first
             ->paginate(12);
         $segment = $category?->segments?->select('name')?->first() ? strtolower($category->segments->select('name')->first()['name']) : null;
-        return view('category-products', compact('category', 'products', 'segment'));
+        $categories = Category::withCount('products')->get();
+        $brands = Brand::withCount('products')->active()->ordered()->get();
+
+        return view('storefront.category', compact('category', 'products', 'segment', 'categories', 'brands'));
     }
 
 

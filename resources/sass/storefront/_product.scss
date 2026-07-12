@@ -81,8 +81,15 @@
 
 .jtc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 7px;
+
+  @media (max-width: $bp-tablet) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: $bp-mobile) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .jtc-promos {

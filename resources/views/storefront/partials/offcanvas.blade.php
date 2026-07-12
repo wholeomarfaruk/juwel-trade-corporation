@@ -9,15 +9,15 @@
     <div class="jtc-offcanvas__label">Shop</div>
     <nav class="jtc-offcanvas__nav">
         <a href="{{ route('shop') }}" class="jtc-offcanvas__link">Shop all</a>
-        <a href="#" class="jtc-offcanvas__link">Brands</a>
+        {{-- <a href="#" class="jtc-offcanvas__link">Brands</a>
         <a href="#" class="jtc-offcanvas__link">New arrivals</a>
-        <a href="#" class="jtc-offcanvas__link">Best sellers</a>
+        <a href="#" class="jtc-offcanvas__link">Best sellers</a> --}}
     </nav>
 
     <div class="jtc-offcanvas__label">Categories</div>
     <nav class="jtc-offcanvas__nav" style="padding-bottom:10px">
         @foreach ($categories as $cat)
-            <a href="#" class="jtc-offcanvas__link" @click.prevent="selectCategory(@js($cat['name'])); closeAll()">{{ $cat['name'] }}</a>
+            <a href="{{ route('category.show', $cat['slug']) }}" class="jtc-offcanvas__link" @click="closeAll()">{{ $cat['name'] }}</a>
         @endforeach
     </nav>
 </div>
