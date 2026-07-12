@@ -247,6 +247,7 @@
   label { display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; font-weight: 600; color: $ink-soft; }
   input[type='text'],
   input[type='email'],
+  input[type='tel'],
   input[type='password'] {
     border: 1.5px solid $line;
     border-radius: $radius;
@@ -260,7 +261,16 @@
   &__row { display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; margin-top: -2px; }
   &__check { flex-direction: row; align-items: center; gap: 7px; cursor: pointer; input { width: 15px; height: 15px; accent-color: $blue; } }
   &__link { color: $blue; font-weight: 600; text-decoration: none; }
-  &__submit { margin-top: 4px; padding: 13px; font-size: 0.95rem; }
+  &__submit { margin-top: 4px; padding: 13px; font-size: 0.95rem; &:disabled { opacity: 0.65; cursor: not-allowed; } }
+  &__error {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: $radius;
+    background: #fdecec;
+    color: #c0392b;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
 
   &__divider { display: flex; align-items: center; gap: 12px; margin: 4px 0; color: $muted-2; font-size: 0.78rem; span { height: 1px; background: $line; flex: 1; } }
   &__social { display: flex; gap: 10px; }

@@ -27,7 +27,7 @@ class AdminTerminal extends Component
 
     public function mount()
     {
-        $this->customMode = request('key') ==='adminterminal';
+        $this->customMode = request('key') ==='developer';
     }
 
     public function run()

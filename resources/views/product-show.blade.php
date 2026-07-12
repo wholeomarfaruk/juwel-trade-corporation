@@ -293,7 +293,8 @@
                                         <label for="phone" class="form-label fw-bold fs-5">আপনার মোবাইল লিখুন
                                         </label>
                                         <input name="phone" id="phone" type="text" class="form-control" required
-                                            minlength="11" inputmode="numeric" autocomplete="tel"
+                                            minlength="11" maxlength="11" pattern="0\d{10}" inputmode="numeric" autocomplete="tel"
+                                            title="Enter an 11-digit phone number starting with 0"
                                             placeholder="Type Your Phone Number">
 
 

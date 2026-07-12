@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\OrderDraft;
 use App\Models\products;
+use App\Support\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Intervention\Image\Colors\Rgb\Channels\Red;
@@ -87,13 +88,18 @@ class Checkout extends Component
     public function place_order(Request $request)
     {
 
+        $this->phone = Phone::normalizeBd($this->phone) ?? $this->phone;
+
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'regex:/^0\d{10}$/'],
             'address' => ['required', 'string'],
             'delivery_area' => ['nullable', 'exists:delivery_areas,id'],
             'payment_method' => ['nullable', 'string'],
             'transaction_id' => ['nullable', 'string', 'max:100'],
+        ], [
+            'phone.required' => 'Enter an 11-digit phone number starting with 0.',
+            'phone.regex' => 'Phone number must be 11 digits and start with 0.',
         ]);
 
         if (! $this->cartData || $this->cartData->items->isEmpty()) {
@@ -103,11 +109,7 @@ class Checkout extends Component
             ]);
         }
 
-        $phone = preg_replace('/\D/', '', $this->phone);
-
-        if (str_starts_with($phone, '88') && strlen($phone) > 11) {
-            $phone = substr($phone, 2);
-        }
+        $phone = $this->phone;
 
         $deliveryArea = delivery_areas::findOrFail($this->delivery_area);
 
@@ -115,7 +117,7 @@ class Checkout extends Component
             \DB::transaction(function () use ($request, $phone, $deliveryArea, &$order) {
                 $order = new Order();
                 $order->name = $this->name;
-                $order->phone = $this->phone;
+                $order->phone = $phone;
                 $order->address = $this->address;
                 $order->delivery_area_id = $deliveryArea->id;
                 $order->cod_percentage = 0;

@@ -19,6 +19,7 @@ use App\Http\Middleware\AuthAdmin;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Website\CapiController;
 use App\Http\Controllers\Website\ProductController as WebsiteProductController;
+use App\Http\Controllers\Website\CustomerAuthController;
 
 
 Route::post('/cart/add/json', [CartController::class, 'add_json_to_cart'])->name('cart.add.json')->withoutMiddleware('auth');
@@ -81,6 +82,12 @@ Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.ch
 Route::get('/cart/checkout/place-order', [CartController::class, 'place_order'])->name('cart.checkout.order.place');
 
 Route::post('/device/register', [HomeController::class, 'deviceRegister'])->name('device.register');
+
+// Storefront customer auth (modal-driven, JSON responses) — shares the same
+// `web` guard/users table as admin login, distinguished by role = 'user'.
+Route::post('/account/register', [CustomerAuthController::class, 'register'])->name('account.register');
+Route::post('/account/login', [CustomerAuthController::class, 'login'])->name('account.login');
+Route::post('/account/logout', [CustomerAuthController::class, 'logout'])->name('account.logout');
 
 Route::post('/fb-pixel-capi', [CapiController::class, 'fbPixelCAPI'])->name('pixel.capi.track');
 Route::get('/test', [TestController::class, 'index'])->name('test');

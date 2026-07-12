@@ -275,19 +275,18 @@ class CartController extends Controller
     public function place_order(Request $request)
     {
 
+        $phone = \App\Support\Phone::normalizeBd($request->phone) ?? $request->phone;
+        $request->merge(['phone' => $phone]);
+
         $validated = $request->validate([
             'name' => 'required',
-            'phone' => 'required',
+            'phone' => ['required', 'regex:/^0\d{10}$/'],
             'address' => 'required',
             'delivery_area' => 'required',
+        ], [
+            'phone.required' => 'Enter an 11-digit phone number starting with 0.',
+            'phone.regex' => 'Phone number must be 11 digits and start with 0.',
         ]);
-        $phone = preg_replace('/\D/', '', $request->phone);
-        if (str_starts_with($phone, '88') && strlen($phone) > 11) {
-            $phone = substr($phone, 2);
-        }
-        if (str_starts_with($phone, '0') && strlen($phone) == 10) {
-            $phone = '0' . $phone;
-        }
 
         $extra_data = [];
         $extra_data['order_data'] = $request->all();

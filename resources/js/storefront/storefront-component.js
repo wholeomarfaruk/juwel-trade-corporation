@@ -39,8 +39,11 @@ export const storefront = (config = {}) => ({
     searchModalCatOpen: false,
     authOpen: false,
     authMode: 'login',
+    authForm: { name: '', email: '', phone: '', login: '', password: '', passwordConfirmation: '', remember: false },
+    authError: '',
+    authLoading: false,
     supportOpen: false,
-    user: null,
+    user: config.user || null,
     toastMsg: 'Added to cart',
     toastShow: false,
 
@@ -135,13 +138,69 @@ export const storefront = (config = {}) => ({
     isWished(id) { return !!this.wishlist[id]; },
 
     // ---- auth ----
-    openAuthModal() { this.closeAll(); this.authOpen = true; this.authMode = 'login'; },
-    toggleAuthMode() { this.authMode = this.authMode === 'login' ? 'signup' : 'login'; },
-    submitAuth(e) {
-        const name = (e.target.querySelector('input[type=text]') || {}).value || 'Member';
-        this.authOpen = false;
-        this.user = { name: this.authMode === 'signup' ? name : 'Account' };
-        this.showToast(this.authMode === 'signup' ? 'Account created — welcome!' : 'Signed in successfully');
+    openAuthModal() { this.closeAll(); this.authOpen = true; this.authMode = 'login'; this.authError = ''; },
+    toggleAuthMode() {
+        this.authMode = this.authMode === 'login' ? 'signup' : 'login';
+        this.authError = '';
+    },
+    async submitAuth() {
+        this.authError = '';
+        this.authLoading = true;
+
+        const isSignup = this.authMode === 'signup';
+        const url = isSignup ? '/account/register' : '/account/login';
+        const body = isSignup
+            ? {
+                name: this.authForm.name,
+                email: this.authForm.email,
+                phone: this.authForm.phone,
+                password: this.authForm.password,
+                password_confirmation: this.authForm.passwordConfirmation,
+            }
+            : {
+                login: this.authForm.login,
+                password: this.authForm.password,
+                remember: this.authForm.remember,
+            };
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify(body),
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                this.authError = data.message || 'Something went wrong. Please try again.';
+                return;
+            }
+
+            this.user = data.user;
+            this.authOpen = false;
+            this.authForm = { name: '', email: '', phone: '', login: '', password: '', passwordConfirmation: '', remember: false };
+            this.showToast(isSignup ? 'Account created — welcome!' : 'Signed in successfully');
+        } catch (e) {
+            this.authError = 'Network error. Please try again.';
+        } finally {
+            this.authLoading = false;
+        }
+    },
+    async logoutUser() {
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            await fetch('/account/logout', {
+                method: 'POST',
+                headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            });
+        } catch (e) {}
+        this.user = null;
+        this.showToast('Signed out successfully');
     },
     get authTitle() { return this.authMode === 'login' ? 'Welcome back' : 'Create your account'; },
     get authSubtitle() {

@@ -178,6 +178,13 @@
             ->where('device_id', $initialCartDevice?->id)
             ->first()
             ?->totalItems() ?? 0;
+
+        // Seed logged-in customer state (role = 'user') so a returning
+        // session shows the right header state immediately, not just after
+        // a fresh login/signup action within the same page load.
+        $initialAuthUser = (auth()->check() && auth()->user()->role === 'user')
+            ? ['id' => auth()->id(), 'name' => auth()->user()->name, 'email' => auth()->user()->email]
+            : null;
     @endphp
     <div
         class="jtc"
@@ -187,6 +194,7 @@
             'heroBanners' => $heroBanners,
             'categories'  => $carouselCategories,
             'cartCount'   => $initialCartCount,
+            'user'        => $initialAuthUser,
         ]))"
     >
         @include('storefront.partials.topbar')

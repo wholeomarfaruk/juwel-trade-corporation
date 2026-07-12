@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    protected $fillable = ['name', 'email', 'phone', 'address', 'street', 'city', 'state', 'country', 'zip_code'];
+    protected $fillable = [
+        'user_id', 'name', 'first_name', 'last_name', 'email', 'phone', 'role', 'verified',
+        'address', 'street', 'city', 'state', 'country', 'zip_code', 'gender',
+    ];
     public function devices()
     {
         return $this->hasMany(Device::class, 'customer_id');
