@@ -54,8 +54,8 @@
     </style>
 
     {{-- Legacy custom CSS (used by shop/product/cart Bootstrap markup) --}}
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css' . '?v=1.0.4') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style_new.css' . '?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css' . '?v=1.0.5') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style_new.css' . '?v=1.0.1') }}">
 
     {{-- JTC storefront design styles — loaded LAST so it overrides Bootstrap.
          (Alpine component registered via Livewire.) --}}
