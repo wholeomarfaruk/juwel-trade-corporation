@@ -12,10 +12,12 @@
         <button class="jtc-wish" aria-label="Save" :class="isWished({{ $p['id'] }}) && 'is-wished'" @click="toggleWish({{ $p['id'] }})">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"></path></svg>
         </button>
-        <img src="{{ $p['image'] }}" alt="{{ $p['name'] }}" loading="lazy">
+        <a href="{{ $p['url'] ?? '#' }}">
+            <img src="{{ $p['image'] }}" alt="{{ $p['name'] }}" loading="lazy">
+        </a>
     </div>
     <div class="jtc-card__body">
-        <a href="#" class="jtc-card__title">{{ $p['name'] }}</a>
+        <a href="{{ $p['url'] ?? '#' }}" class="jtc-card__title">{{ $p['name'] }}</a>
         <div class="jtc-card__prices">
             @if ($p['priceIsCompare'])
                 <span class="jtc-card__price jtc-card__price--sale">{{ $p['priceText'] }}</span>

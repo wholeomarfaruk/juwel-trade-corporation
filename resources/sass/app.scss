@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@100..900&display=swap');
 // Variables
 @import 'variables';
@@ -9,7 +9,7 @@
 
 
 body{
-    font-family: "Noto Sans Bengali", sans-serif;
+    font-family: "Open Sans", "Noto Sans Bengali", sans-serif;
     /* font-family: 'SolaimanLipi', Arial, Helvetica, sans-serif; */
 }
 *{
@@ -22,15 +22,15 @@ body{
     font-size: 15px;
 }
 .navbar-link:hover{
-    color:green
+    color: $accent;
 }
 .nav-button{
-    background: #03be44;
+    background: $accent;
     color:#fff;
 }
 .nav-button:hover{
     color: #fff;
-    background: #05a83e;
+    background: $accent-hover;
 }
 /* nav end */
 .titel{
@@ -53,11 +53,11 @@ body{
     font-size: 13px;
 }
 .btn-order{
-    background: #03be44;
+    background: $accent;
     color:#fff
 }
 .btn-order:hover{
-    background: #05a83e;
+    background: $accent-hover;
     color:#fff
 }
 .btn-whatsapp, .btn-tel{
@@ -145,7 +145,7 @@ ol, ul, menu {
     font-weight: 800;
 }
 .list-text-container img{
-    border:3px solid #03be44;
+    border:3px solid $accent;
 }
 .section{
     padding-top: 70px;
@@ -206,7 +206,7 @@ section {
     width: 100px;
     border-radius: 50%;
     padding: 3px;
-   background: #03be44;
+   background: $accent;
   }
   section .card .image img {
     height: 100%;
@@ -302,7 +302,7 @@ section {
   }
    .gallrey-pic{
     border-radius: 15px;
-    border:3px solid #03be44;
+    border:3px solid $accent;
    }
    .gallrey-pic:hover{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -348,7 +348,7 @@ section {
       margin-bottom: 0px;
 }
 .p-selected{
-    outline:2px solid #03be44;
+    outline:2px solid $accent;
 }
 .order-name{
     font-size: 15px;
@@ -381,7 +381,7 @@ section {
     color: #737e91;
 }
 .price-info h5{
-    color: #03be44;
+    color: $accent;
    font-size: 15px;
 }
 .price-info{
@@ -393,7 +393,7 @@ section {
     font-size: 18px;
 }
 .delete-btn:hover{
-    color: #03be44;
+    color: $accent;
 }
 .price-list{
     font-weight: bold;
@@ -408,7 +408,7 @@ section {
     color: #666;
 }
 .deli-price{
-    color: #03be44;
+    color: $accent;
     font-weight: bold;
 }
 .subtotal-price-info{
@@ -420,7 +420,7 @@ section {
     font-size: 15px;
 }
 .subtotal-text-green{
-    color: #03be44;
+    color: $accent;
     font-weight: bold;
 }
 .i-text{
@@ -472,7 +472,7 @@ section {
     padding-top: 10px;
 }
 .footer-text-contact:hover{
-    color: #03be44;
+    color: $accent;
 }
 .footer-titel{
     color: #c9cbd1;
@@ -517,7 +517,7 @@ section {
     border-radius: 10px;
 }
 .social-icon a:hover{
-    background: #03be44;
+    background: $accent;
     color: #fff;
 }
 @media screen and (max-width:768px){
@@ -631,7 +631,7 @@ section {
     border-color: transparent;
 }
 #custom-owl-dots .owl-dot.active{
-    border-color: #03be44;
+    border-color: $accent;
 }
 
 .hero-carousel{

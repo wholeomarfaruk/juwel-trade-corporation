@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             SegmentSeeder::class,
             LandingPageSeeder::class,
             BannerSeeder::class,
+            SiteSettingSeeder::class,
         ]);
     }
 }

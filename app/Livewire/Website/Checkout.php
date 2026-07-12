@@ -23,6 +23,7 @@ class Checkout extends Component
 {
     public $cartData;
     public $name, $phone, $address, $note, $delivery_area, $payment_method = 'cod', $transaction_id, $delivery_charge, $discount;
+    public ?int $selectedAddressId = null;
 
     public function mount()
     {
@@ -39,6 +40,69 @@ class Checkout extends Component
         $this->cartData->delivery_charge = $this->delivery_charge;
         $this->calculateTotal();
         $this->cartData = $this->getCart();
+
+        $this->autofillFromCustomer();
+    }
+
+    /** Logged-in customers get their name/phone/address pre-filled from their primary saved address (or Customer fields if none saved yet). */
+    protected function autofillFromCustomer(): void
+    {
+        if (! auth()->check() || auth()->user()->role !== 'user') {
+            return;
+        }
+
+        $customer = Customer::where('user_id', auth()->id())->first();
+
+        if (! $customer) {
+            return;
+        }
+
+        $primaryAddress = $customer->addresses()->where('is_primary', true)->first()
+            ?? $customer->addresses()->first();
+
+        if ($primaryAddress) {
+            $this->selectedAddressId = $primaryAddress->id;
+            $this->name    = $primaryAddress->name;
+            $this->phone   = $primaryAddress->phone;
+            $this->address = $this->formatAddress($primaryAddress);
+        } else {
+            $this->name    = $customer->name ?? trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? ''));
+            $this->phone   = $customer->phone;
+            $this->address = $customer->address;
+        }
+    }
+
+    public function getSavedAddressesProperty()
+    {
+        if (! auth()->check() || auth()->user()->role !== 'user') {
+            return collect();
+        }
+
+        $customer = Customer::where('user_id', auth()->id())->first();
+
+        return $customer ? $customer->addresses()->orderByDesc('is_primary')->get() : collect();
+    }
+
+    public function selectAddress(int $addressId): void
+    {
+        $address = $this->savedAddresses->firstWhere('id', $addressId);
+
+        if (! $address) {
+            return;
+        }
+
+        $this->selectedAddressId = $address->id;
+        $this->name    = $address->name;
+        $this->phone   = $address->phone;
+        $this->address = $this->formatAddress($address);
+    }
+
+    /** Folds a saved DAddress's separate address/state/zip_code fields into the single free-text address the checkout form and Order.address column use. */
+    protected function formatAddress(\App\Models\DAddress $address): string
+    {
+        return collect([$address->address, $address->state, $address->zip_code])
+            ->filter()
+            ->implode(', ');
     }
     public function calculateTotal()
     {
@@ -125,6 +189,7 @@ class Checkout extends Component
                 $order->subtotal = $this->cartData->subTotal() ?? 0;
                 $order->total = $this->cartData->total ?? 0;
                 $order->discount = $this->cartData->discount ?? 0;
+                $order->grand_total = $this->cartData->grand_total ?? $this->cartData->total ?? 0;
                 $order->fee = $deliveryArea->charge ?? 0;
                 $order->payment_method = $this->payment_method;
                 if ($this->payment_method == 'cod') {
@@ -206,7 +271,7 @@ class Checkout extends Component
     }
     public function render()
     {
-        $bkashNumber = '01682963493';
+        $bkashNumber = \App\Models\SiteSetting::get('bkash_number', '01682963493');
         $deliveryAreas = delivery_areas::orderBy('id', 'asc')->get();
 
         //initiate checkout
@@ -249,6 +314,7 @@ class Checkout extends Component
             'bkashNumber' => $bkashNumber,
             'deliveryAreas' => $deliveryAreas,
             'initiateCheckoutEventPayload' => $initiateCheckoutEventPayload,
+            'savedAddresses' => $this->savedAddresses,
         ]);
     }
 }

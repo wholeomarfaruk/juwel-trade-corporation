@@ -89,6 +89,11 @@ Route::post('/account/register', [CustomerAuthController::class, 'register'])->n
 Route::post('/account/login', [CustomerAuthController::class, 'login'])->name('account.login');
 Route::post('/account/logout', [CustomerAuthController::class, 'logout'])->name('account.logout');
 
+Route::middleware('customer.auth')->group(function () {
+    Route::view('/account', 'storefront.account')->name('account.show');
+    Route::view('/orders', 'storefront.orders')->name('orders.show');
+});
+
 Route::post('/fb-pixel-capi', [CapiController::class, 'fbPixelCAPI'])->name('pixel.capi.track');
 Route::get('/test', [TestController::class, 'index'])->name('test');
 

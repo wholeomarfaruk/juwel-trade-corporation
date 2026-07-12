@@ -5,11 +5,26 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
             </button>
             <span class="jtc-modal__logo"><img src="{{ asset('images/jtc-logo.jpeg') }}" alt=""></span>
-            <h3 x-text="authTitle"></h3>
-            <p x-text="authSubtitle"></p>
+            <template x-if="!authSuccess">
+                <div>
+                    <h3 x-text="authTitle"></h3>
+                    <p x-text="authSubtitle"></p>
+                </div>
+            </template>
+            <template x-if="authSuccess">
+                <div>
+                    <h3>Account created!</h3>
+                    <p>Your account has been created successfully. Please log in to continue.</p>
+                </div>
+            </template>
         </div>
 
-        <form class="jtc-form" @submit.prevent="submitAuth()">
+        <div class="jtc-form" x-show="authSuccess" x-cloak>
+            <button type="button" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
+                    @click="authSuccess = false; authMode = 'login'">Login</button>
+        </div>
+
+        <form class="jtc-form" @submit.prevent="submitAuth()" x-show="!authSuccess">
             <p class="jtc-form__error" x-show="authError" x-cloak x-text="authError"></p>
 
             <label x-show="authMode === 'signup'" x-cloak>Full name

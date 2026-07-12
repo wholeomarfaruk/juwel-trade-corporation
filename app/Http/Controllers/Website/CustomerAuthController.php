@@ -67,15 +67,8 @@ class CustomerAuthController extends Controller
             ]);
         }
 
-        Auth::login($user);
-
         return response()->json([
             'message' => 'Account created successfully.',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-            ],
         ]);
     }
 

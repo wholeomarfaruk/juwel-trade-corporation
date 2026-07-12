@@ -23,11 +23,11 @@
                         Juwel Trade Corporation</a>
                 </div> --}}
                     <div class="order-text-site mt-5">
-                        <h6 class="thanks">অসংখ্য ধন্যবাদ!</h6>
-                        <h2 class="titel text-start text-success">অর্ডার সাকসেসফুল</h2>
+                        <h6 class="thanks">Thank you so much!</h6>
+                        <h2 class="titel text-start text-success">Order Successful</h2>
                         <p class="order-some-text">
-                            আপনার অর্ডারের জন্য কৃতজ্ঞতা জানাচ্ছি, কিছুক্ষনের মধ্যে অর্ডারটি
-                            প্রসেস করা হবে। শীঘ্রই আমরা আপনার সাথে যোগাযোগ করব, সাথেই থাকুন।
+                            We appreciate your order and will begin processing it shortly.
+                            We'll be in touch with you soon, so stay tuned.
                         </p>
                     </div>
                     <div class="row date-id mt-4 mb-3">
@@ -55,7 +55,7 @@
                             </div>
                             <p class="order-product-price ms-auto">
                                 {{ $item->product->discount_price ?? $item->product->price }} x {{ $item->quantity }} =
-                                {{ $item->subtotal }} টাকা</p>
+                                {{ $item->subtotal }} Tk</p>
                         </div>
                         <hr class="m-0">
                     @endforeach
@@ -81,8 +81,8 @@
                         </div>
                     </div>
                     {{-- <p class="i-text" style="font-size: 12px;">
-                    <i>বিশেষ দ্রষ্টব্যঃ কাচা পণ্য হওয়ায় ওজনের তারতম্যের কারণে
-                        মূল্যমান কিছুটা কম অথবা বেশি হতে পারে।</i>
+                    <i>Please note: as these are fresh products, the price may vary
+                        slightly due to differences in weight.</i>
                 </p> --}}
                     <hr style="margin: 30px 0px;">
                     <div class="row person-information">
@@ -94,21 +94,21 @@
                         </div>
                         <div class="col-md-6">
                             <h5 class="some-titel">Delivery</h5>
-                            <h6 class="delivery-type">ক্যাশ অন ডেলিভারী</h6>
-                            <p class="delivery-notice">আপনার অর্ডারের জন্য আন্তরিক কৃতজ্ঞতা। ২৪ ঘণ্টার মধ্যে আমাদের টিম
-                                আপনার সাথে যোগাযোগ করবে এবং খুব শীঘ্রই আপনার অর্ডারটি প্রসেস করা হবে । Juwel Trade Corporation এর সাথেই
-                                থাকুন।</p>
+                            <h6 class="delivery-type">Cash on Delivery</h6>
+                            <p class="delivery-notice">Thank you sincerely for your order. Our team will contact you
+                                within 24 hours and your order will be processed shortly. Stay with Juwel Trade
+                                Corporation.</p>
                         </div>
                     </div>
                     {{-- <div class="buttom-notice mt-5">
-                    <p>সম্মানিত গ্রাহকদের রিভিউ এবং আমাদের এক্সক্লুসিভ ডিসকাউন্ট অফারগুলো পেতে এখনই জয়েন করুন:</p>
+                    <p>Join now to get reviews from our valued customers and our exclusive discount offers:</p>
                     <button class="btn btn-order justify-content-center"><i
-                            class="fa-solid fa-user-group me-2"></i>ইকোইটস ফেসবুক গ্রুপ</button>
+                            class="fa-solid fa-user-group me-2"></i>Ecoits Facebook Group</button>
                 </div> --}}
                 </div>
             @else
                 <div class="d-flex justify-content-center">
-                    <h1 class="text-danger">আপনার অর্ডার টি নেই</h1>
+                    <h1 class="text-danger">You have no order</h1>
                 </div>
             @endif
 

@@ -196,6 +196,7 @@
             'cartCount'   => $initialCartCount,
             'user'        => $initialAuthUser,
         ]))"
+        @toast.window="showToast(($event.detail[0] ?? $event.detail).message)"
     >
         @include('storefront.partials.topbar')
         @include('storefront.partials.header')

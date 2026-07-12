@@ -31,12 +31,27 @@
                 <span class="jtc-cart-badge" x-show="cartCount > 0" x-text="cartCount" x-cloak></span>
             </button>
 
-            <button class="jtc-round-btn jtc-round-btn--account"
-                    :aria-label="user ? `Sign out (${user.name})` : 'Login / Sign up'"
-                    :title="user ? `Sign out (${user.name})` : 'Login / Sign up'"
-                    @click="user ? logoutUser() : openAuthModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
-            </button>
+            <div class="jtc-accountmenu" x-data="{ accountMenuOpen: false }" @click.outside="accountMenuOpen = false">
+                <button type="button" class="jtc-round-btn jtc-round-btn--account"
+                        :aria-label="user ? `Account menu for ${user.name}` : 'Login / Sign up'"
+                        :title="user ? user.name : 'Login / Sign up'"
+                        @click="user ? (accountMenuOpen = !accountMenuOpen) : openAuthModal()">
+                    <template x-if="user && user.avatar">
+                        <img class="jtc-round-btn__avatar" :src="user.avatar" :alt="user.name">
+                    </template>
+                    <template x-if="!(user && user.avatar)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                    </template>
+                    <svg x-show="user" x-cloak class="jtc-accountmenu__caret" :class="accountMenuOpen && 'is-open'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <div class="jtc-accountmenu__dropdown" x-show="accountMenuOpen" x-cloak :class="accountMenuOpen && 'is-open'">
+                    <div class="jtc-accountmenu__head" x-text="user && user.name"></div>
+                    <a href="{{ route('account.show') }}" class="jtc-accountmenu__link" @click="accountMenuOpen = false">Account</a>
+                    <a href="{{ route('orders.show') }}" class="jtc-accountmenu__link" @click="accountMenuOpen = false">Orders</a>
+                    <button type="button" class="jtc-accountmenu__link jtc-accountmenu__link--logout" @click="accountMenuOpen = false; logoutUser()">Logout</button>
+                </div>
+            </div>
         </div>
     </div>
 </header>

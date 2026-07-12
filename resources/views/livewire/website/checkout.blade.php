@@ -8,12 +8,37 @@
                             <h1 class="h3 mb-1">Checkout</h1>
                             <p class="text-muted mb-4">Complete your shipping and payment details to place the order.</p>
 
+                            @if ($savedAddresses->isNotEmpty())
+                                <div class="mb-4">
+                                    <label class="form-label">Use a saved address</label>
+                                    <div class="d-flex flex-column gap-2">
+                                        @foreach ($savedAddresses as $saved)
+                                            <label class="border rounded-3 p-3 d-flex justify-content-between align-items-start gap-2" style="cursor:pointer">
+                                                <span>
+                                                    <strong>{{ $saved->name }}</strong>
+                                                    @if ($saved->is_primary)
+                                                        <span class="badge bg-primary-subtle text-primary ms-1">Primary</span>
+                                                    @endif
+                                                    <small class="d-block text-muted">{{ $saved->phone }}</small>
+                                                    <small class="d-block text-muted">{{ $saved->address }}</small>
+                                                </span>
+                                                <input type="radio"
+                                                    name="saved_address"
+                                                    class="form-check-input flex-shrink-0"
+                                                    wire:click="selectAddress({{ $saved->id }})"
+                                                    {{ $selectedAddressId === $saved->id ? 'checked' : '' }}>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             <form wire:submit.prevent="place_order" action="{{ route('cart.checkout.order.place') }}" method="POST" novalidate >
                                 @csrf
 
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label for="full_name" class="form-label">আপনার নাম লিখুন</label>
+                                        <label for="full_name" class="form-label">Enter your name</label>
                                         <input type="text"
                                         wire:model="name"
                                             id="full_name"
@@ -28,7 +53,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="phone" class="form-label">আপনার মোবাইল লিখুন</label>
+                                        <label for="phone" class="form-label">Enter your mobile number</label>
                                         <input type="text"
                                         wire:model="phone"
                                             id="phone"
@@ -44,7 +69,7 @@
 
 
                                     <div class="col-12">
-                                        <label for="address" class="form-label">আপনার ফুল ঠিকানা লিখুন</label>
+                                        <label for="address" class="form-label">Enter your full address</label>
                                         <textarea id="address"
                                         wire:model="address"
                                             name="address"
@@ -57,20 +82,19 @@
                                         @enderror
                                     </div>
                                     <div class="col-12">
-                                        <label for="address" class="form-label">আপনার নোট লিখুন (optional)</label>
+                                        <label for="note" class="form-label">Enter your note (optional)</label>
                                         <textarea id="note"
                                         wire:model="note"
                                             name="note"
                                             rows="3"
                                             placeholder="Enter your custom note"
-                                            class="form-control @error('address') is-invalid @enderror"
-                                            required>{{ old('note') }}</textarea>
+                                            class="form-control @error('address') is-invalid @enderror">{{ old('note') }}</textarea>
                                         @error('note')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                        <div class="col-12">
-                                        <label for="delivery_area_id" class="form-label">ডেলিভারি এরিয়া সিলেক্ট করুন</label>
+                                        <label for="delivery_area_id" class="form-label">Select delivery area</label>
                                         <select wire:model.live="delivery_area" name="delivery_area_id" id="delivery_area_id" class="form-control">
                                             @foreach ($deliveryAreas as $deliveryArea)
                                                 <option value="{{ $deliveryArea->id }}">{{ $deliveryArea->name }} - TK {{ $deliveryArea->charge }}</option>
@@ -119,11 +143,20 @@
                                         id="bkash-instructions-card">
                                         <div class="alert alert-warning mb-0">
                                             <h2 class="h6 fw-bold mb-3">bKash Payment Instructions</h2>
-                                            <p class="mb-2"><strong>Send money to this bKash number:</strong> {{ $bkashNumber }}</p>
+                                            <p class="mb-2 d-flex align-items-center gap-2">
+                                                <strong>Send money to this bKash number:</strong>
+                                                <span id="bkash-number-text">{{ $bkashNumber }}</span>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-secondary py-0 px-2"
+                                                    data-copy-bkash-number
+                                                    data-number="{{ $bkashNumber }}">
+                                                    <span data-copy-label>Copy</span>
+                                                </button>
+                                            </p>
                                             <ol class="mb-3 ps-3">
-                                                <li>এই নাম্বারে bKash থেকে Send Money করুন।</li>
-                                                <li>পেমেন্ট সম্পন্ন হলে নিচের ঘরে Transaction ID লিখুন।</li>
-                                                <li>আমরা পেমেন্ট যাচাই করে আপনার অর্ডার কনফার্ম করব।</li>
+                                                <li>Send Money to this number via bKash.</li>
+                                                <li>Once the payment is complete, enter the Transaction ID below.</li>
+                                                <li>We'll verify the payment and confirm your order.</li>
                                             </ol>
 
                                             <label for="transaction_id" class="form-label fw-semibold">Transaction ID</label>
@@ -150,7 +183,7 @@
                 </div>
 
                 <div class="col-lg-5">
-                    <div class="card border-0 shadow-sm sticky-top" style="top: 2rem;">
+                    <div class="card border-0 shadow-sm sticky-top z-1" style="top: 2rem;">
                         <div class="card-body p-4">
                             <h2 class="h5 mb-3">Order Summary</h2>
 
@@ -219,5 +252,21 @@
             @endif
         });
 
+        // Delegated on document so it keeps working after Livewire re-renders
+        // the bKash instructions card (e.g. when payment_method changes).
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('[data-copy-bkash-number]');
+            if (!btn) return;
+
+            var number = btn.getAttribute('data-number');
+            var label = btn.querySelector('[data-copy-label]');
+
+            navigator.clipboard.writeText(number).then(function () {
+                if (!label) return;
+                var original = label.textContent;
+                label.textContent = 'Copied!';
+                setTimeout(function () { label.textContent = original; }, 1500);
+            });
+        });
     </script>
 @endpush

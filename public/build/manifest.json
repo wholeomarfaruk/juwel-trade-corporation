@@ -6,18 +6,18 @@
     "isEntry": true
   },
   "resources/js/storefront/app.js": {
-    "file": "assets/app-57KijNzw.js",
+    "file": "assets/app-dCOtrHQ2.js",
     "name": "app",
     "src": "resources/js/storefront/app.js",
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-CgO1b2t6.css",
+    "file": "assets/app-BuzfAI55.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   },
   "resources/sass/storefront/storefront.scss": {
-    "file": "assets/storefront-BV81_5Rn.css",
+    "file": "assets/storefront-DiJYKte4.css",
     "src": "resources/sass/storefront/storefront.scss",
     "isEntry": true
   }

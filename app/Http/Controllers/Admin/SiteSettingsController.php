@@ -22,13 +22,14 @@ class SiteSettingsController extends Controller
             'site_tagline'       => 'nullable|string|max:255',
             'footer_description' => 'nullable|string|max:1000',
             'copyright_text'     => 'nullable|string|max:255',
+            'bkash_number'       => 'nullable|string|max:20',
             'favicon'            => 'nullable|image|mimes:png,jpg,jpeg,ico,webp|max:512',
             'header_logo'        => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'footer_logo'        => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
         ]);
 
         // Text fields
-        foreach (['site_name', 'site_tagline', 'footer_description', 'copyright_text'] as $key) {
+        foreach (['site_name', 'site_tagline', 'footer_description', 'copyright_text', 'bkash_number'] as $key) {
             SiteSetting::updateOrCreate(['key' => $key], [
                 'value' => $request->input($key, ''),
                 'type'  => 'text',

@@ -41,6 +41,7 @@ export const storefront = (config = {}) => ({
     authForm: { name: '', email: '', phone: '', login: '', password: '', passwordConfirmation: '', remember: false },
     authError: '',
     authLoading: false,
+    authSuccess: false,
     supportOpen: false,
     mobileFiltersOpen: false,
     user: config.user || null,
@@ -51,6 +52,16 @@ export const storefront = (config = {}) => ({
     init() {
         this._heroTimer = setInterval(() => this.heroGo(this.heroIndex + 1), 5500);
         this._catTimer = setInterval(() => this.catNext(), 3800);
+
+        // ?auth=1 (set by the customer.auth middleware when a guest hits a
+        // login-required page like /account or /orders) auto-opens the
+        // login modal instead of the scaffolded /login page.
+        if (new URLSearchParams(window.location.search).get('auth') === '1') {
+            this.openAuthModal();
+            const url = new URL(window.location.href);
+            url.searchParams.delete('auth');
+            window.history.replaceState({}, '', url);
+        }
 
         // close overlays with Escape
         this._onKey = (e) => { if (e.key === 'Escape') this.closeAll(); };
@@ -124,10 +135,11 @@ export const storefront = (config = {}) => ({
     isWished(id) { return !!this.wishlist[id]; },
 
     // ---- auth ----
-    openAuthModal() { this.closeAll(); this.authOpen = true; this.authMode = 'login'; this.authError = ''; },
+    openAuthModal() { this.closeAll(); this.authOpen = true; this.authMode = 'login'; this.authError = ''; this.authSuccess = false; },
     toggleAuthMode() {
         this.authMode = this.authMode === 'login' ? 'signup' : 'login';
         this.authError = '';
+        this.authSuccess = false;
     },
     async submitAuth() {
         this.authError = '';
@@ -167,10 +179,15 @@ export const storefront = (config = {}) => ({
                 return;
             }
 
-            this.user = data.user;
-            this.authOpen = false;
             this.authForm = { name: '', email: '', phone: '', login: '', password: '', passwordConfirmation: '', remember: false };
-            this.showToast(isSignup ? 'Account created — welcome!' : 'Signed in successfully');
+
+            if (isSignup) {
+                this.authSuccess = true;
+            } else {
+                this.user = data.user;
+                this.authOpen = false;
+                this.showToast('Signed in successfully');
+            }
         } catch (e) {
             this.authError = 'Network error. Please try again.';
         } finally {

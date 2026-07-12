@@ -123,6 +123,7 @@ class StorefrontData
         return [
             'id'             => $product->id,
             'name'           => $product->name ?? '',
+            'url'            => rescue(fn () => $product->url, '#', report: false),
             'image'          => $product->getImageFullUrl() ?? asset('images/no-thumbnail.png'),
             'showNew'        => false,
             'showDealPct'    => $isCompare,

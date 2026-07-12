@@ -26,8 +26,8 @@
 
 
 :root{
-  --primary-color: #02a53b;
-  --primary-accent-color: #047c2e;
+  --primary-color: #1B7FC4;
+  --primary-accent-color: #145E92;
    font-family: var(--Inclusive) !important;
 
     color: var(--black) !important;

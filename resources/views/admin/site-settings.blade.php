@@ -58,6 +58,23 @@
                 </fieldset>
             </div>
 
+            {{-- ── Payment ───────────────────────────────────────────────────── --}}
+            <div class="wg-box mb-4">
+                <h5 class="mb-3">Payment</h5>
+
+                <fieldset class="name">
+                    <div class="body-title">bKash Number</div>
+                    <input class="flex-grow @error('bkash_number') is-invalid @enderror"
+                        type="text" name="bkash_number"
+                        value="{{ old('bkash_number', $settings['bkash_number'] ?? '') }}"
+                        placeholder="e.g. 01XXXXXXXXX">
+                    <p class="text-tiny text-muted mt-1">Shown to customers at checkout for bKash payments.</p>
+                    @error('bkash_number')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </fieldset>
+            </div>
+
             {{-- ── Favicon ───────────────────────────────────────────────────── --}}
             <div class="wg-box mb-4">
                 <h5 class="mb-3">Favicon</h5>

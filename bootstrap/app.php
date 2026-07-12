@@ -28,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetConversionsApiUserData::class,
         ]);
 
+        $middleware->alias([
+            'customer.auth' => \App\Http\Middleware\EnsureCustomerLoggedIn::class,
+        ]);
+
         //  $middleware->append(\App\Http\Middleware\TrackVisits::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {

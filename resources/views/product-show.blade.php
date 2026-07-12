@@ -4,7 +4,7 @@
 @section('page_title', ($product->name ?? 'Product') . ' | ' . ($site['site_name'] ?? 'Gramer Dokan'))
 @push('meta')
     @php
-        $_sn       = $site['site_name'] ?? 'Gramer Dokan';
+        $_sn       = $site['site_name'] ?? 'Juwel Trade Corporation';
         $metaName  = $product->name ?? 'Product';
         $metaDesc  = $product->short_description ?? $product->description ?? 'Buy ' . $metaName . ' from ' . $_sn . '. Premium quality clothing at the best price.';
         $metaDesc  = \Illuminate\Support\Str::limit(strip_tags((string) $metaDesc), 155);
@@ -202,9 +202,8 @@
                     </div>
                     <hr>
                     <p class="fs-6 fw-bold">
-                        <strong class="text-danger ">বিদ্রঃ</strong> আপনার অর্ডার নিশ্চিত করতে নিচের ফর্মটি পূরণ করে
-                        অর্ডার
-                        বাটন ক্লিক করুন।
+                        <strong class="text-danger ">Note:</strong> To confirm your order, please fill out the form
+                        below and click the order button.
                     </p>
                     <hr>
                     <div class="order-form-box">
@@ -217,7 +216,7 @@
                             }
                         </style>
                         <h4 class="fw-bold fs-4 text-center mb-3 text-decoration-underline"
-                            style="text-underline-offset: 5px">অর্ডার ফর্ম</h4>
+                            style="text-underline-offset: 5px">Order Form</h4>
 
                         <form id="order-form" action="{{ route('cart.order.place') }}" method="post">
                             @csrf
@@ -231,7 +230,7 @@
                                 @if ($product?->sizes->count() > 0)
                                     <div class="col-12">
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold fs-5 d-block">সাইজ সিলেক্ট করুন</label>
+                                            <label class="form-label fw-bold fs-5 d-block">Select size</label>
                                             <style>
                                                 .size-option {
                                                     display: inline-block;
@@ -283,14 +282,14 @@
                                 @endif
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="name" class="form-label fw-bold fs-5">আপনার নাম লিখুন</label>
+                                        <label for="name" class="form-label fw-bold fs-5">Enter your name</label>
                                         <input id="name" type="text" name="name" autocomplete="name"
                                             class="form-control" required placeholder="Type Your Full Name">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="phone" class="form-label fw-bold fs-5">আপনার মোবাইল লিখুন
+                                        <label for="phone" class="form-label fw-bold fs-5">Enter your mobile number
                                         </label>
                                         <input name="phone" id="phone" type="text" class="form-control" required
                                             minlength="11" maxlength="11" pattern="0\d{10}" inputmode="numeric" autocomplete="tel"
@@ -302,17 +301,16 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-3">
-                                        <label for="address" class="form-label fw-bold fs-5">আপনার ফুল ঠিকানা
-                                            লিখুন</label>
+                                        <label for="address" class="form-label fw-bold fs-5">Enter your full
+                                            address</label>
                                         <textarea autocomplete="address" required name="address" class="form-control" id="address"
                                             placeholder="Type Your Full Delivery Address" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-3">
-                                        <label for="delivery_area" class="form-label fw-bold fs-5">ডেলিভারি এরিয়া
-                                            সিলেক্ট
-                                            করুন
+                                        <label for="delivery_area" class="form-label fw-bold fs-5">Select delivery
+                                            area
                                         </label>
                                         <select name="delivery_area" class="form-select" id="delivery_area"
                                             aria-label="Default select example">
@@ -328,7 +326,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold fs-5">পরিমাণ</label>
+                                        <label class="form-label fw-bold fs-5">Quantity</label>
                                         <div class="input-group w-auto justify-content-end align-items-center">
                                             <button type="button"
                                                 class="fs-2 button-minus border rounded-circle icon-shape icon-sm mx-1 lh-0"
@@ -350,7 +348,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold fs-5">মোট দাম</label>
+                                        <label class="form-label fw-bold fs-5">Total price</label>
                                         <p class="rounded border p-2 fw-bold fs-4" id="total">0</p>
                                         {{-- <input name="total" class="form-control fw-bold fs-5" type="text" value="1950"
                                             aria-label="Disabled input example" readonly> --}}
@@ -360,19 +358,17 @@
                                 <div class="col-sm-6">
                                     <button wire:click="submit" id="order-button" type="submit"
                                         {{ $product?->stock_status == 'out_of_stock' ? 'disabled' : '' }}
-                                        class="btn btn-primary bg-primary-color mb-3 w-100 fw-bold fs-5 py-2 ">অর্ডার
-                                        করতে
-                                        ক্লিক
-                                        করুন
-                                        {{ $product?->stock_status == 'out_of_stock' ? '(স্টক শেষ)' : '' }}</button>
+                                        class="btn btn-primary bg-primary-color mb-3 w-100 fw-bold fs-5 py-2 ">Click to
+                                        order
+                                        {{ $product?->stock_status == 'out_of_stock' ? '(Out of stock)' : '' }}</button>
                                 </div>
                                 <div class="col-sm-6">
                                     <buttont type="button"
                                         {{ $product?->stock_status == 'out_of_stock' ? 'disabled' : '' }}
                                         class="btn btn-primary bg-primary-color mb-3 w-100 fw-bold fs-5 py-2 " x-data
                                         x-on:click="$dispatch('add-to-cart', { productId: {{ $product->id }} })">
-                                        কার্টে যোগ
-                                        করুন{{ $product?->stock_status == 'out_of_stock' ? '(স্টক শেষ)' : '' }}
+                                        Add to Cart
+                                        {{ $product?->stock_status == 'out_of_stock' ? '(Out of stock)' : '' }}
                                     </buttont>
                                 </div>
 
@@ -390,7 +386,7 @@
                             <tbody class="fw-bold fs-6 ">
                                 @if ($deliveryAreas->isEmpty())
                                     <tr>
-                                        <td colspan="2" class="text-center">ডেলিভারি এরিয়া সেট করা নেই</td>
+                                        <td colspan="2" class="text-center">No delivery areas have been set</td>
                                     </tr>
                                 @else
                                     @foreach ($deliveryAreas as $deliveryArea)
@@ -414,7 +410,7 @@
         <section class="sec-style-2 my-3">
             <div class="container">
                 <div class="sec-header">
-                    <h2 class="sec-title text-primary-color">More Products - আরো দেখুন</h2>
+                    <h2 class="sec-title text-primary-color">More Products</h2>
                     <hr class="divider mt-0 text-primary-color bg-primary-color " style="height: 2px;">
                 </div>
                 <div class="sec-body">
@@ -443,14 +439,14 @@
                                     </a>
                                     <a href="{{ $pitem?->url }}">
                                         <p class="p-description">
-                                            বিস্তারিত দেখুন
+                                            View details
                                         </p>
                                     </a>
                                 </div>
                                 <div class="p-btn-group d-flex gap-2">
-                                    <a class="btn btn-primary w-100 d-block" href="{{ $product?->url }}">Buy Now</a>
+                                    <a class="btn btn-primary w-100 d-block" href="{{ $pitem?->url }}">Buy Now</a>
                                     <button type="button" class="btn btn-primary w-100 d-block" x-data
-                                        x-on:click="$dispatch('add-to-cart', { productId: {{ $product->id }} })">
+                                        x-on:click="$dispatch('add-to-cart', { productId: {{ $pitem->id }} })">
                                         Add to Cart
                                     </button>
                                 </div>
@@ -473,9 +469,9 @@
         <script>
             Swal.fire({
                 icon: "{{ session('status') == 'error' ? 'error' : 'success' }}",
-                title: "{{ session('status') == 'error' ? 'দুঃখিত!' : 'সফল!' }}",
+                title: "{{ session('status') == 'error' ? 'Sorry!' : 'Success!' }}",
                 text: "{{ session('message') }}",
-                confirmButtonText: 'ঠিক আছে',
+                confirmButtonText: 'OK',
                 timer: 4000, // Auto close after 4 seconds
                 timerProgressBar: true,
             });
@@ -717,9 +713,9 @@
 
                         Swal.fire({
                             icon: data.status,
-                            title: data.status === 'error' ? 'দুঃখিত!' : 'সফল!',
+                            title: data.status === 'error' ? 'Sorry!' : 'Success!',
                             text: data.message,
-                            confirmButtonText: 'ঠিক আছে',
+                            confirmButtonText: 'OK',
                             // timer: 4000, // Auto close after 4 seconds
                             timerProgressBar: true,
                         });
@@ -727,9 +723,9 @@
 
                         Swal.fire({
                             icon: data.status,
-                            title: data.status === 'error' ? 'দুঃখিত!' : 'সফল!',
+                            title: data.status === 'error' ? 'Sorry!' : 'Success!',
                             text: data.message,
-                            confirmButtonText: 'ঠিক আছে',
+                            confirmButtonText: 'OK',
                             timer: 4000, // Auto close after 4 seconds
                             timerProgressBar: true,
                         });

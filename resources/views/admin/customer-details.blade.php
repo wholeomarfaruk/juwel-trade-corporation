@@ -55,9 +55,9 @@
                             </tr>
                             <tr>
                                 <th>total Order</th>
-                                <td>{{ $customer->Orders->count() }}</td>
+                                <td>{{ $customer->orders->count() }}</td>
                                 <th>Total Delivered Order</th>
-                                <td>{{ $customer->Orders->where('status', 'delivered')->count() }}</td>
+                                <td>{{ $customer->orders->where('status', 'delivered')->count() }}</td>
                                 <th>Status</th>
                                 <td>{{ $customer->status }}</td>
                             </tr>
@@ -65,9 +65,9 @@
                                 <th>Order Date</th>
                                 <td>{{ $customer->created_at }}</td>
                                 <th>Last Order Date</th>
-                                <td>{{ $customer->Orders->last()->created_at }}</td>
+                                <td>{{ optional($customer->orders->last())->created_at ?? '—' }}</td>
                                 <th>Total Delivered orders</th>
-                                <td>{{ $customer->Orders->where('status', 'cancelled')->count() }}</td>
+                                <td>{{ $customer->orders->where('status', 'cancelled')->count() }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -252,18 +252,21 @@
                 </form>
 
             </div> --}}
-            <div class="wg-box mt-5">
-                <h5>Extra Data</h5>
-                <div class="my-account__address-item col-md-6">
-                    <div class="my-account__address-item__detail">
-                        <p>IP Address: {{ $order->ip_address }}</p>
-                        <p>User Agent: {{ $order->user_agent }}</p>
+            @php $latestOrder = $customer->orders->sortByDesc('created_at')->first(); @endphp
+            @if ($latestOrder)
+                <div class="wg-box mt-5">
+                    <h5>Extra Data <small class="text-muted">(latest order #{{ $latestOrder->id }})</small></h5>
+                    <div class="my-account__address-item col-md-6">
+                        <div class="my-account__address-item__detail">
+                            <p>IP Address: {{ $latestOrder->ip_address }}</p>
+                            <p>User Agent: {{ $latestOrder->user_agent }}</p>
 
-                        <pre> {{ json_encode($order->json_data, JSON_PRETTY_PRINT) }}</pre>
-                        <br>
+                            <pre> {{ json_encode($latestOrder->json_data, JSON_PRETTY_PRINT) }}</pre>
+                            <br>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
         </div>
     </div>
