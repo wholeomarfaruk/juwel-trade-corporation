@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\OrderExport;
 use Illuminate\Support\Facades\DB;
-use App\Models\Analytic;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\City;
@@ -12,7 +11,6 @@ use App\Models\Country;
 use App\Models\PoliceStation;
 use App\Models\Segment;
 use App\Models\Size;
-use App\Models\Visit;
 use App\Models\Zipcode;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -862,99 +860,6 @@ class AdminController extends Controller
 
         $banner->delete();
         return redirect()->route('admin.banners')->with('status', 'Banner Deleted Successfully');
-    }
-
-    //Analytics
-    public function gAnalaytics()
-    {
-        $google_analytics = Analytic::where('slug', 'google-analytics')->first();
-        return view('admin.google-analytics', compact('google_analytics'));
-    }
-    public function gAnalyticsUpdate(Request $request)
-    {
-
-        $google_analytics = Analytic::find($request->id);
-        $google_analytics->code = $request->code ?? '';
-        $google_analytics->save();
-        return redirect()->route('admin.google.analytics')->with('status', 'Google Analytics Code Updated Successfully');
-    }
-    public function fbPixels()
-    {
-        $facebook_pixels = Analytic::where('slug', 'facebook-pixels')->first();
-        return view('admin.facebook-pixels', compact('facebook_pixels'));
-    }
-    public function fbPixelsUpdate(Request $request)
-    {
-        $facebook_pixels = Analytic::find($request->id);
-        $facebook_pixels->code = $request->code ?? '';
-        $facebook_pixels->save();
-        return redirect()->route('admin.facebook.pixels')->with('status', 'Facebook Pixels Code Updated Successfully');
-    }
-
-    public function analytics()
-    {
-        // Total stats
-        $totalVisitors = Visit::distinct('ip_address')->count('ip_address');
-        $totalPageViews = Visit::count();
-
-        $todayVisitors = Visit::whereDate('created_at', today())
-            ->distinct('ip_address')->count('ip_address');
-        $todayPageViews = Visit::whereDate('created_at', today())->count();
-
-        // Device stats
-        $devices = Visit::select('device')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('device')
-            ->get();
-
-        // Referrers stats
-        $referrers = Visit::select('referrer')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('referrer')
-            ->orderByDesc('total')
-            ->take(5)
-            ->get();
-
-        // Pages stats
-        $pages = Visit::select('page_url')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('page_url')
-            ->orderByDesc('total')
-            ->take(10)
-            ->get();
-        // Pages stats
-        $todaypages = Visit::whereDate('created_at', today())
-            ->select('page_url')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('page_url')
-            ->orderByDesc('total')
-            ->get();
-
-        // Locations stats
-        $locations = Visit::select('country')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('country')
-            ->orderByDesc('total')
-            ->get();
-        // cities
-        $cities = Visit::select('city')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('city')
-            ->orderByDesc('total')
-            ->get();
-
-        return view('admin.analytics', compact(
-            'totalVisitors',
-            'totalPageViews',
-            'todayVisitors',
-            'todayPageViews',
-            'devices',
-            'referrers',
-            'pages',
-            'locations',
-            'cities',
-            'todaypages',
-        ));
     }
 
     //customers

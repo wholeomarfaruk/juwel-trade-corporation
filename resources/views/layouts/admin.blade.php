@@ -252,34 +252,6 @@
                                         <div class="text">Users</div>
                                     </a>
                                 </li>
-                                <li class="menu-item has-children">
-                                    <a href="javascript:void(0);" class="menu-item-button">
-                                        <div class="icon"><i class="icon-bar-chart"></i></div>
-                                        <div class="text">Analytics</div>
-                                    </a>
-                                    <ul class="sub-menu">
-                                        <li class="sub-menu-item">
-                                            <a href="{{ route('admin.analytics.report') }}" class="">
-                                                <div class="text">Reports</div>
-                                            </a>
-                                        </li>
-                                        {{-- <li class="sub-menu-item">
-                                            <a href="{{ route('admin.session.replays') }}" class="">
-                                                <div class="text">Session Replays</div>
-                                            </a>
-                                        </li> --}}
-                                        <li class="sub-menu-item">
-                                            <a href="{{ route('admin.google.analytics') }}" class="">
-                                                <div class="text">Google Analytics</div>
-                                            </a>
-                                        </li>
-                                        <li class="sub-menu-item">
-                                            <a href="{{ route('admin.facebook.pixels') }}" class="">
-                                                <div class="text">Facebook Pixels</div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
                                 @if (auth()->user()->role === 'admin')
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">

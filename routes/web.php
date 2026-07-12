@@ -204,12 +204,6 @@ Route::prefix('admin')->group(function () {
         Route::put('/banners/{id}/update', [AdminController::class, 'bannerUpdate'])->name('admin.banners.update');
         Route::delete('/banners/{id}/delete', [AdminController::class, 'bannerDelete'])->name('admin.banners.delete');
 
-        //Analytics
-        Route::get('/analytics/report', [AdminController::class, 'analytics'])->name('admin.analytics.report');
-        Route::get('/google-analytics', [AdminController::class, 'gAnalaytics'])->name('admin.google.analytics');
-        Route::put('/google-analytics/update', [AdminController::class, 'gAnalyticsUpdate'])->name('admin.google.analytics.update');
-        Route::get('/facebook-pixels', [AdminController::class, 'fbPixels'])->name('admin.facebook.pixels');
-        Route::put('/facebook-pixels/update', [AdminController::class, 'fbPixelsUpdate'])->name('admin.facebook.pixels.update');
         Route::get('/session-replays', [SessionRecordController::class, 'index'])->name('admin.session.replays');
         Route::get('/session-replays/{id}', [SessionRecordController::class, 'show'])->name('admin.session.replays.show');
 
