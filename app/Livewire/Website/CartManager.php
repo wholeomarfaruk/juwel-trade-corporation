@@ -35,7 +35,7 @@ class CartManager extends Component
     }
 
     #[On('add-to-cart')]
-    public function addToCart($productId)
+    public function addToCart($productId, $quantity = 1)
     {
 
     if($productId){
@@ -47,6 +47,7 @@ class CartManager extends Component
     }
 
         $product = products::findOrFail($productId);
+        $quantity = max(1, (int) $quantity);
 
         $cart = $this->getCart();
 
@@ -56,16 +57,16 @@ class CartManager extends Component
             ->first();
 
         if ($item) {
-            $item->quantity += 1;
+            $item->quantity += $quantity;
             $item->total = $item->quantity * $item->price;
             $item->save();
         } else {
            $item = CartItem::create([
                 'cart_id' => $cart->id,
                 'product_id' => $productId,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'price' => $product->discounted_price,
-                'total' => $product->discounted_price,
+                'total' => $product->discounted_price * $quantity,
             ]);
         }
 

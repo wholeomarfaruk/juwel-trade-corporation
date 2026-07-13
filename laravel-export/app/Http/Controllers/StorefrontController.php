@@ -40,6 +40,75 @@ class StorefrontController extends Controller
         ];
     }
 
+    /** Product single / details page. */
+    public function product(string $sku): View
+    {
+        $d = $this->storeData();
+        $all = $d['productsJson'];
+
+        $product = collect($all)->firstWhere('sku', $sku) ?? $all[0];
+        $catName = collect($d['categories'])->firstWhere('slug', $product['category'])['name'] ?? 'Products';
+
+        $others = collect($all)->reject(fn ($p) => $p['id'] === $product['id']);
+        $related = $others->where('category', $product['category'])->take(5)->values();
+        if ($related->count() < 5) {
+            $related = $related->merge($others->take(5 - $related->count()))->values();
+        }
+        $recommended = $others->sortByDesc('reviews')->take(8)->values();
+
+        // A short sample clip for the product video slot (replace with your own).
+        $video = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4';
+
+        return view('storefront.product', [
+            'product'      => $product,
+            'categoryName' => $catName,
+            'content'      => $this->productContent($product, $catName),
+            'gallery'      => [$product['image'], $product['image_hover'] ?? $product['image'], $product['image']],
+            'videoSrc'     => $video,
+            'related'      => $related,
+            'recommended'  => $recommended,
+        ]);
+    }
+
+    /** Auto-generated marketing copy for a product (swap for real CMS content). */
+    private function productContent(array $p, string $catName): array
+    {
+        $brand = $p['brand'];
+        $lc = strtolower($catName);
+
+        return [
+            'short' => "{$p['name']} by {$brand} — a clinically trusted pick from our {$lc} range, built for everyday comfort, durability and reliable performance you can count on.",
+            'highlights' => [
+                'Premium medical-grade materials, skin-friendly and breathable',
+                "Trusted {$brand} quality with nationwide warranty support",
+                'Ready to ship — delivered to your door in 24–72 hours',
+            ],
+            'paragraphs' => [
+                "The {$p['name']} is engineered to deliver dependable results for home and clinical use alike. Every unit is quality-checked before dispatch, so you receive gear that performs exactly as expected from day one.",
+                "Designed around real user needs, it balances comfort, precision and longevity. Whether for recovery, monitoring or daily wellness, this {$lc} product from {$brand} is a smart, long-lasting investment.",
+            ],
+            'features' => [
+                'Ergonomic, comfort-first design',
+                'Durable, easy-to-clean construction',
+                'Suitable for all-day use',
+                "Backed by {$brand} after-sales support",
+            ],
+            'specs' => [
+                ['k' => 'Brand', 'v' => $brand],
+                ['k' => 'Model / SKU', 'v' => $p['sku']],
+                ['k' => 'Category', 'v' => $catName],
+                ['k' => 'Warranty', 'v' => '1 year manufacturer warranty'],
+                ['k' => 'Country of origin', 'v' => 'Imported'],
+                ['k' => 'In the box', 'v' => "1 × {$p['name']}, user manual"],
+            ],
+            'reviews' => [
+                ['name' => 'Rahim H.', 'rating' => 5, 'text' => 'Exactly as described and arrived fast. Quality feels genuine — very happy with the purchase.'],
+                ['name' => 'Nusrat J.', 'rating' => 5, 'text' => 'Great value for the price. Works perfectly and the WhatsApp ordering was super convenient.'],
+                ['name' => 'Kamal A.', 'rating' => 4, 'text' => 'Solid product and good support from the team. Would recommend to friends and family.'],
+            ],
+        ];
+    }
+
     /** Tiny placeholder-image helper (swap for real product image URLs). */
     private function img(string $seed, int $size = 600): string
     {

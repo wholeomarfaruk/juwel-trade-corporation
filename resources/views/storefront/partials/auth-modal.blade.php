@@ -13,15 +13,21 @@
             </template>
             <template x-if="authSuccess">
                 <div>
-                    <h3>Account created!</h3>
-                    <p>Your account has been created successfully. Please log in to continue.</p>
+                    <h3 x-text="authSuccessTitle"></h3>
+                    <p x-text="authSuccessMessage"></p>
                 </div>
             </template>
         </div>
 
         <div class="jtc-form" x-show="authSuccess" x-cloak>
-            <button type="button" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
-                    @click="authSuccess = false; authMode = 'login'">Login</button>
+            <template x-if="authMode === 'login'">
+                <button type="button" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
+                        @click="authOpen = false; authSuccess = false">Continue shopping</button>
+            </template>
+            <template x-if="authMode === 'signup'">
+                <button type="button" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
+                        @click="authSuccess = false; authMode = 'login'">Login</button>
+            </template>
         </div>
 
         <form class="jtc-form" @submit.prevent="submitAuth()" x-show="!authSuccess">

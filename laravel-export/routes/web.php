@@ -8,3 +8,4 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', [StorefrontController::class, 'index'])->name('storefront.index');
 Route::get('/shop', [StorefrontController::class, 'shop'])->name('storefront.shop');
+Route::get('/product/{sku}', [StorefrontController::class, 'product'])->name('storefront.product');

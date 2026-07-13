@@ -185,7 +185,7 @@ export const storefront = (config = {}) => ({
                 this.authSuccess = true;
             } else {
                 this.user = data.user;
-                this.authOpen = false;
+                this.authSuccess = true;
                 this.showToast('Signed in successfully');
             }
         } catch (e) {
@@ -214,6 +214,12 @@ export const storefront = (config = {}) => ({
     get authSubmitText() { return this.authMode === 'login' ? 'Sign in' : 'Create account'; },
     get authSwitchPrompt() { return this.authMode === 'login' ? "Don't have an account?" : 'Already have an account?'; },
     get authSwitchAction() { return this.authMode === 'login' ? 'Sign up' : 'Sign in'; },
+    get authSuccessTitle() { return this.authMode === 'login' ? 'Login successful!' : 'Account created!'; },
+    get authSuccessMessage() {
+        return this.authMode === 'login'
+            ? 'You have logged in successfully.'
+            : 'Your account has been created successfully. Please log in to continue.';
+    },
 
     // ---- overlays ----
     openCart() { this.closeAll(); this.cartOpen = true; },

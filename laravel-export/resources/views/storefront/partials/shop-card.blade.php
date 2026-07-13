@@ -8,10 +8,10 @@
         <button class="jtc-wish" :class="isWished(p.id) && 'is-wished'" aria-label="Save" @click="toggleWish(p.id)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"></path></svg>
         </button>
-        <img :src="p.image" :alt="p.name" loading="lazy">
+        <img :src="p.image" :alt="p.name" loading="lazy" @click="window.location = '/product/' + p.sku" style="cursor:pointer">
     </div>
     <div class="jtc-card__body">
-        <a href="#" class="jtc-card__title" x-text="p.name"></a>
+        <a :href="'/product/' + p.sku" class="jtc-card__title" x-text="p.name"></a>
         <div class="jtc-card__prices">
             <template x-if="p.priceIsCompare">
                 <span class="jtc-card__price jtc-card__price--sale" x-text="p.priceText"></span>

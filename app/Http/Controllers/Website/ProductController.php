@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendMetaCapiEventJob;
 use App\Models\delivery_areas;
 use App\Models\products;
+use App\Support\StorefrontData;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -23,7 +24,20 @@ class ProductController extends Controller
         $product->increment('views');
 
         $deliveryAreas = delivery_areas::limit(5)->get();
-        $products = products::where('status', 1)->where('id', '!=', $product->id)->inRandomOrder()->limit(8)->get();
+
+        $gallery = array_values(array_filter(array_merge(
+            [$product->getImageFullUrl()],
+            $product->media->where('category', 'product_images')->map(fn ($m) => $m->getUrl())->all()
+        )));
+        $videoSrc = $product->yt_video_url ? 'https://www.youtube.com/shorts/' . $product->yt_video_url : null;
+
+        $related = products::where('status', 1)->where('id', '!=', $product->id)
+            ->inRandomOrder()->limit(8)->get()
+            ->map(fn ($p) => StorefrontData::decorateEloquentProduct($p));
+        $recommended = products::where('status', 1)->where('id', '!=', $product->id)
+            ->inRandomOrder()->limit(6)->get()
+            ->map(fn ($p) => StorefrontData::decorateEloquentProduct($p));
+
         $segment = $product?->segments?->select('name')?->first() ? strtolower($product->segments->select('name')->first()['name']) : null;
 
         $contents = [];
@@ -72,6 +86,6 @@ class ProductController extends Controller
         );
         $initiateCheckoutEventPayload = $IntiateCheckoutEvent->browserEventPayload();
         // return response()->json($capi->sendServerSide());
-        return view('product-show', compact('product', 'deliveryAreas', 'products', 'segment', 'viewItemEventPayload', 'initiateCheckoutEventPayload'));
+        return view('storefront.product', compact('product', 'deliveryAreas', 'gallery', 'videoSrc', 'related', 'recommended', 'segment', 'viewItemEventPayload', 'initiateCheckoutEventPayload'));
     }
 }
