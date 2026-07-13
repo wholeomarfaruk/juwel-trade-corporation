@@ -34,9 +34,6 @@ class ProductController extends Controller
         $related = products::where('status', 1)->where('id', '!=', $product->id)
             ->inRandomOrder()->limit(8)->get()
             ->map(fn ($p) => StorefrontData::decorateEloquentProduct($p));
-        $recommended = products::where('status', 1)->where('id', '!=', $product->id)
-            ->inRandomOrder()->limit(6)->get()
-            ->map(fn ($p) => StorefrontData::decorateEloquentProduct($p));
 
         $segment = $product?->segments?->select('name')?->first() ? strtolower($product->segments->select('name')->first()['name']) : null;
 
@@ -86,6 +83,6 @@ class ProductController extends Controller
         );
         $initiateCheckoutEventPayload = $IntiateCheckoutEvent->browserEventPayload();
         // return response()->json($capi->sendServerSide());
-        return view('storefront.product', compact('product', 'deliveryAreas', 'gallery', 'videoSrc', 'related', 'recommended', 'segment', 'viewItemEventPayload', 'initiateCheckoutEventPayload'));
+        return view('storefront.product', compact('product', 'deliveryAreas', 'gallery', 'videoSrc', 'related', 'segment', 'viewItemEventPayload', 'initiateCheckoutEventPayload'));
     }
 }

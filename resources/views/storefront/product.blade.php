@@ -137,7 +137,7 @@
             </div>
 
             @if ($product->short_description)
-                <p class="jtc-pd-info__short">{{ $product->short_description }}</p>
+                <div class="jtc-pd-info__short">{!! $product->short_description !!}</div>
             @endif
 
             @if ($product->sizes->count() > 0)
@@ -222,19 +222,6 @@
         </div>
     @endif
 
-    {{-- RECOMMENDED --}}
-    @if ($recommended->isNotEmpty())
-        <div class="jtc-relblock jtc-relblock--rec">
-            <div class="jtc-relblock__head">
-                <h2 class="jtc-relblock__title">Recommended for you</h2>
-            </div>
-            <div class="jtc-rail">
-                @foreach ($recommended as $p)
-                    @include('storefront.partials.product-card', ['p' => $p, 'rail' => true])
-                @endforeach
-            </div>
-        </div>
-    @endif
 </div>
 @endsection
 
