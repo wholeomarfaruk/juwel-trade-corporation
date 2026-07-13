@@ -41,10 +41,20 @@
     $money      = fn ($n) => '৳' . number_format((float) $n);
     $outOfStock = $product->stock_status === 'out_of_stock';
     $firstCategory = $product->categories->first();
+
+    $fancyItems = collect($gallery)->map(fn ($src) => ['src' => $src])
+        ->when($videoSrc, fn ($c) => $c->push(['src' => $videoSrc]))
+        ->values();
 @endphp
 
 @section('content')
-<div class="jtc-pd__shell" x-data="{ qty: 1, activeMedia: 0, inc() { this.qty += 1; }, dec() { this.qty = Math.max(1, this.qty - 1); },
+<div class="jtc-pd__shell" x-data="{ qty: 1, activeMedia: 0, items: @js($fancyItems),
+    inc() { this.qty += 1; }, dec() { this.qty = Math.max(1, this.qty - 1); },
+    openLightbox() {
+        if (window.Fancybox) {
+            Fancybox.show(this.items, { startIndex: this.activeMedia });
+        }
+    },
     buyNow(productId, quantity) {
         const onUpdate = () => { window.location.href = @js(route('cart.checkout')); window.removeEventListener('cart-updated', onUpdate); };
         window.addEventListener('cart-updated', onUpdate);
@@ -78,10 +88,13 @@
                 @endif
             </div>
 
-            <div class="jtc-gallery__viewer">
+            <div class="jtc-gallery__viewer" @click="openLightbox()">
                 @if ($videoSrc)
                     <template x-if="activeMedia === {{ count($gallery) }}">
-                        <video src="{{ $videoSrc }}" poster="{{ $gallery[0] ?? '' }}" controls playsinline></video>
+                        <div class="jtc-gallery__videoposter">
+                            <img src="{{ $gallery[0] ?? '' }}" alt="{{ $product->name }}">
+                            <span class="jtc-gallery__play jtc-gallery__play--lg"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M8 5v14l11-7z"></path></svg></span>
+                        </div>
                     </template>
                 @endif
                 @foreach ($gallery as $i => $src)
