@@ -51,10 +51,10 @@
                         @enderror
                     </fieldset>
                     <fieldset class="name">
-                        <div class="body-title mb-10">Slug <span class="tf-color-1">*</span></div>
+                        <div class="body-title mb-10">Slug</div>
                         <input class="mb-10 @error('slug') is-invalid @enderror" type="text" placeholder="Enter slug"
-                            name="slug" tabindex="0" value="{{ $product->slug }}" aria-required="true"
-                            required="required" onchange="stringtoSlug(this.value)" autofocus id="slug_input">
+                            name="slug" tabindex="0" value="{{ $product->slug }}"
+                            onchange="stringtoSlug(this.value)" autofocus id="slug_input">
                         @error('slug')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -133,11 +133,10 @@
                             @enderror
                         </fieldset>
                         <fieldset class="name">
-                            <div class="body-title mb-10">SKU <span class="tf-color-1">*</span>
+                            <div class="body-title mb-10">SKU
                             </div>
                             <input class="mb-10 @error('sku') is-invalid @enderror" type="text"
-                                placeholder="Enter SKU" name="sku" tabindex="0" value="{{ $product->sku }}"
-                                aria-required="true" required="required">
+                                placeholder="Enter SKU" name="sku" tabindex="0" value="{{ $product->sku }}">
                             @error('sku')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -146,9 +145,8 @@
                         </fieldset>
                     </div>
                     <fieldset class="name">
-                        <div class="body-title mb-10">Description <span class="tf-color-1">*</span></div>
-                        <textarea id="editor" class="mb-10 @error('description') is-invalid @enderror" name="description" tabindex="0"
-                            aria-required="true" required="required">{{ $product->description }}</textarea>
+                        <div class="body-title mb-10">Description</div>
+                        <textarea id="editor" class="mb-10 @error('description') is-invalid @enderror" name="description" tabindex="0">{{ $product->description }}</textarea>
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -156,9 +154,8 @@
                         @enderror
                     </fieldset>
                     <fieldset class="name">
-                        <div class="body-title mb-10">SEO Description <span class="tf-color-1">*</span></div>
-                        <textarea class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0"
-                            aria-required="true" required="required">{{ $product->short_description }}</textarea>
+                        <div class="body-title mb-10">Short description</div>
+                        <textarea id="editor-short" class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0">{{ $product->short_description }}</textarea>
                         @error('short_description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -172,7 +169,7 @@
                             </div>
                             <input class="mb-10 @error('yt_video_url') is-invalid @enderror" type="text"
                                 placeholder="Enter YT Video ID" name="yt_video_url" tabindex="0"
-                                value="{{ $product?->yt_video_url }}" aria-required="true" required="required">
+                                value="{{ $product?->yt_video_url }}">
                             @error('yt_video_url')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -500,7 +497,7 @@
 
     <script>
         tinymce.init({
-            selector: '#editor',
+            selector: '#editor, #editor-short',
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
 

@@ -141,8 +141,8 @@
                         @enderror
                     </fieldset>
                     <fieldset class="name">
-                        <div class="body-title mb-10">SEO Description</div>
-                        <textarea class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0">{{ old('short_description', $product?->short_description) }}</textarea>
+                        <div class="body-title mb-10">Short description</div>
+                        <textarea id="editor-short" class="mb-10 @error('short_description') is-invalid @enderror" name="short_description" tabindex="0">{{ old('short_description', $product?->short_description) }}</textarea>
                         @error('short_description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -376,7 +376,7 @@
 
     <script>
         tinymce.init({
-            selector: '#editor',
+            selector: '#editor, #editor-short',
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
 
