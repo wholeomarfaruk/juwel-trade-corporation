@@ -177,6 +177,7 @@ class AdminController extends Controller
             'price'        => 'required|numeric',
             'stock_status' => 'required|in:in_stock,out_of_stock',
             'quantity'     => 'required|integer',
+            'weight'       => 'nullable|numeric',
             'image'        => 'nullable|string',
             'segment'      => 'required',
             'brand_id'     => 'nullable|exists:brands,id',
@@ -186,6 +187,7 @@ class AdminController extends Controller
         $product->name           = $request->name;
         $product->price          = $request->price;
         $product->purchase_price = $request->purchase_price ?: null;
+        $product->weight         = $request->weight ?: null;
         if ($request->discount_price) {
             $product->discount_price = $request->discount_price;
         }
@@ -281,6 +283,7 @@ class AdminController extends Controller
             'stock_status' => 'required|in:in_stock,out_of_stock',
             'featured'     => 'boolean',
             'quantity'     => 'required|integer',
+            'weight'       => 'nullable|numeric',
             'image'        => 'nullable|string',
             'brand_id'     => 'nullable|exists:brands,id',
         ]);
@@ -291,6 +294,7 @@ class AdminController extends Controller
         $product->name           = $request->name;
         $product->price          = $request->price;
         $product->purchase_price = $request->purchase_price ?: null;
+        $product->weight         = $request->weight ?: null;
 
         if ($request->slug) {
             $slug = $request->slug;

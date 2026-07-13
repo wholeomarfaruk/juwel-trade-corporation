@@ -112,6 +112,17 @@
                                 </span>
                             @enderror
                         </fieldset>
+                        <fieldset class="name">
+                            <div class="body-title mb-10">Weight (kg)</div>
+                            <input class="mb-10 @error('weight') is-invalid @enderror" type="number" step="0.001" min="0"
+                                placeholder="Enter weight in kg" name="weight" tabindex="0"
+                                value="{{ old('weight', $product->weight) }}">
+                            @error('weight')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </fieldset>
                     </div>
 
                     <div class="cols gap22">
