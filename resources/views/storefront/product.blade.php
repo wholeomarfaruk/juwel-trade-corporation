@@ -145,7 +145,7 @@
                 <span class="jtc-pd-info__price-now">{{ $money($displayPrice) }}</span>
                 @if ($isCompare)
                     <span class="jtc-pd-info__price-was">{{ $money($product->price) }}</span>
-                    <span class="jtc-pd-info__save">Save {{ $pct }}%</span>
+                    <span class="jtc-pd-info__save">Save {{ $money($product->price - $displayPrice) }}</span>
                 @endif
             </div>
 
