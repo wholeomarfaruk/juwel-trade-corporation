@@ -136,4 +136,5 @@
   .jtc-pd__crumb { display: none; }
   .jtc-pd__shell { padding: 12px 14px 48px; }
   .jtc-gallery { grid-template-columns: 56px 1fr; gap: 10px; }
+  .jtc-relblock .jtc-shopgrid { grid-template-columns: repeat(2, 1fr); }
 }
