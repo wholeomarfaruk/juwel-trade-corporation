@@ -166,16 +166,14 @@ class StorefrontData
             ->map(fn ($product) => self::decorateEloquentProduct($product));
     }
 
-    /** Flattened subcategory chips for the "Discover more" section. */
+    /** Category name chips for the "Discover more" section (categories flagged homepage_category = true). */
     public static function discoverChips(int $limit = 18): array
     {
-        $chips = [];
-        foreach (self::categories() as $c) {
-            foreach ($c['children'] as $child) {
-                $chips[] = $child;
-            }
-        }
-
-        return array_slice($chips, 0, $limit);
+        return \App\Models\Category::where('is_active', 1)
+            ->where('homepage_category', 1)
+            ->orderBy('display_order')
+            ->limit($limit)
+            ->pluck('name')
+            ->all();
     }
 }
