@@ -92,31 +92,38 @@
                                     <td>{{ $product->featured == 1 ? 'Yes' : 'No' }}</td>
                                     <td>
                                         <div class="list-icon-function">
-
-                                            <a href="{{ route('admin.products.edit', ['id' => $product->id]) }}">
-                                                <div class="item edit">
-                                                    <i class="icon-edit-3"></i>
-                                                </div>
-                                            </a>
-                                            <form action="{{ route('admin.products.delete', ['id' => $product->id]) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <div class="item text-danger delete">
-                                                    <i class="icon-trash-2"></i>
-                                                </div>
-                                            </form>
                                             <!-- Default dropstart button -->
                                             <div class="btn-group dropstart">
                                                 <button type="button" class="btn btn-secondary dropdown-toggle"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                                    More
+                                                    Actions
                                                 </button>
                                                 <ul class="dropdown-menu">
+                                                    <li>
+                                                        <button type="button" class="dropdown-item"
+                                                            onclick="Livewire.dispatch('open-product-quick-view', { productId: {{ $product->id }} })">Quick
+                                                            view</button>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.products.edit', ['id' => $product->id]) }}">Edit</a>
+                                                    </li>
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.products.copy', ['id' => $product->id]) }}">Copy
                                                             Product</a>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('admin.products.delete', ['id' => $product->id]) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button"
+                                                                class="dropdown-item text-danger delete">Delete</button>
+                                                        </form>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -137,6 +144,7 @@
             </div>
         </div>
     </div>
+    @livewire('admin.products.product-quick-view')
     <!-- content area end -->
 @endsection
 @push('scripts')
