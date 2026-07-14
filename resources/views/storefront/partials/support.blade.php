@@ -29,15 +29,7 @@
                 <svg class="jtc-support__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
 
-            @if (!empty($site['phone_second']))
-                <a href="tel:+{{ $site['phone_second'] }}" class="jtc-support__item">
-                    <span class="jtc-support__icon jtc-support__icon--phone">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="21" height="21"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1 .37 1.94.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.87.35 1.81.59 2.81.72A2 2 0 0 1 22 16.92z"></path></svg>
-                    </span>
-                    <span style="flex:1"><span class="jtc-support__title">Call us (alt)</span><span class="jtc-support__desc">+{{ $site['phone_second'] }}</span></span>
-                    <svg class="jtc-support__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-            @endif
+
 
             <a href="https://wa.me/{{ $supportWhatsapp }}" target="_blank" rel="noopener" class="jtc-support__item">
                 <span class="jtc-support__icon jtc-support__icon--wa">
@@ -55,15 +47,7 @@
                 <svg class="jtc-support__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
 
-            @if (!empty($site['email']))
-                <a href="mailto:{{ $site['email'] }}" class="jtc-support__item">
-                    <span class="jtc-support__icon jtc-support__icon--phone">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="21" height="21"><path d="M3 7l9 6 9-6"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect></svg>
-                    </span>
-                    <span style="flex:1"><span class="jtc-support__title">Email</span><span class="jtc-support__desc">{{ $site['email'] }}</span></span>
-                    <svg class="jtc-support__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-            @endif
+
         </div>
 
         @if (!empty($site['facebook']) || !empty($site['instagram']) || !empty($site['youtube']) || !empty($site['tiktok']))
