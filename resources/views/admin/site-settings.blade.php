@@ -1,42 +1,5 @@
 @extends('layouts.admin')
 
-@push('styles')
-<style>
-    .settings-tabs-layout {
-        display: flex;
-        gap: 24px;
-        align-items: flex-start;
-    }
-    .settings-tabs-nav {
-        flex: 0 0 200px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    .settings-tabs-nav .nav-link {
-        text-align: left;
-        border-radius: 8px;
-        padding: 10px 14px;
-        font-weight: 600;
-        color: #4b5563;
-        background: transparent;
-    }
-    .settings-tabs-nav .nav-link:hover { background: #f3f4f6; }
-    .settings-tabs-nav .nav-link.active { background: #eef2ff; color: #3b5bfd; }
-    .settings-tabs-content {
-        flex: 1;
-        min-width: 0;
-        border-left: 1px solid #eceef1;
-        padding-left: 24px;
-    }
-    @media (max-width: 768px) {
-        .settings-tabs-layout { flex-direction: column; }
-        .settings-tabs-nav { flex-direction: row; flex-wrap: wrap; flex: none; width: 100%; }
-        .settings-tabs-content { border-left: none; padding-left: 0; border-top: 1px solid #eceef1; padding-top: 20px; margin-top: 4px; }
-    }
-</style>
-@endpush
-
 @section('content')
 <div class="main-content-inner">
     <div class="main-content-wrap">
@@ -54,27 +17,35 @@
             <div class="alert alert-success mb-3">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('admin.site.settings.update') }}" method="POST" enctype="multipart/form-data" class="form-style-1">
-            @csrf
+        <div class="row">
 
-            <div class="wg-box mb-4">
-                <div class="settings-tabs-layout">
-                    <ul class="nav nav-pills settings-tabs-nav" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="tab-general-btn" data-bs-toggle="tab" data-bs-target="#tab-general" type="button" role="tab">General</button>
+            {{-- Nav sidebar --}}
+            <div class="col-lg-3">
+                <div class="wg-box p-3">
+                    <ul class="nav nav-pills flex-column gap-2" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active w-100 text-start fw-bold" id="tab-general-btn" data-bs-toggle="tab" data-bs-target="#tab-general" type="button" role="tab">General</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-payment-btn" data-bs-toggle="tab" data-bs-target="#tab-payment" type="button" role="tab">Payment</button>
+                        <li class="nav-item">
+                            <button class="nav-link w-100 text-start fw-bold" id="tab-payment-btn" data-bs-toggle="tab" data-bs-target="#tab-payment" type="button" role="tab">Payment</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-social-btn" data-bs-toggle="tab" data-bs-target="#tab-social" type="button" role="tab">Social</button>
+                        <li class="nav-item">
+                            <button class="nav-link w-100 text-start fw-bold" id="tab-social-btn" data-bs-toggle="tab" data-bs-target="#tab-social" type="button" role="tab">Social</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-contact-btn" data-bs-toggle="tab" data-bs-target="#tab-contact" type="button" role="tab">Contact</button>
+                        <li class="nav-item">
+                            <button class="nav-link w-100 text-start fw-bold" id="tab-contact-btn" data-bs-toggle="tab" data-bs-target="#tab-contact" type="button" role="tab">Contact</button>
                         </li>
                     </ul>
+                </div>
+            </div>
 
-                    <div class="tab-content settings-tabs-content">
+            {{-- Content --}}
+            <div class="col-lg-9">
+                <form action="{{ route('admin.site.settings.update') }}" method="POST" enctype="multipart/form-data" class="form-style-1">
+                    @csrf
+
+                    <div class="wg-box mb-4">
+                        <div class="tab-content">
 
                     {{-- ── General (site info + favicon + logos) ─────────────────── --}}
                     <div class="tab-pane fade show active" id="tab-general" role="tabpanel">
@@ -311,18 +282,18 @@
                         </fieldset>
                     </div>
 
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="wg-box">
-                <div class="bot">
-                    <div></div>
-                    <button class="tf-button w208" type="submit">Save Settings</button>
-                </div>
+                    <div class="wg-box">
+                        <div class="bot">
+                            <div></div>
+                            <button class="tf-button w208" type="submit">Save Settings</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-
-        </form>
+        </div>
     </div>
 </div>
 @endsection
