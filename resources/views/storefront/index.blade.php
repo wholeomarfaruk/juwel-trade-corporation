@@ -33,12 +33,12 @@
 
 
 
-    {{-- Next 2 homepage categories: compact rails --}}
-    @foreach ($homeCategoryIds->get(1) as $categoryId)
+    {{-- 1st homepage category: full-width banner (image + grid) --}}
+    @if ($homeCategoryIds->get(1))
         @livewire('website.storefront.category-section', [
-            'category_id' => $categoryId,
-        ], key('cat-section-' . $categoryId))
-    @endforeach
+            'category_id' => $homeCategoryIds->get(1),
+        ], key('cat-grid-' . $homeCategoryIds->get(1)))
+    @endif
 
     @livewire('website.storefront.promos-section')
     @livewire('website.storefront.browse-all-section')
