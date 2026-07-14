@@ -23,13 +23,26 @@ class SiteSettingsController extends Controller
             'footer_description' => 'nullable|string|max:1000',
             'copyright_text'     => 'nullable|string|max:255',
             'bkash_number'       => 'nullable|string|max:20',
+            'facebook'           => 'nullable|url|max:255',
+            'instagram'          => 'nullable|url|max:255',
+            'youtube'            => 'nullable|url|max:255',
+            'tiktok'             => 'nullable|url|max:255',
+            'whatsapp'           => 'nullable|string|max:20',
+            'messenger'          => 'nullable|url|max:255',
+            'phone'              => 'nullable|string|max:20',
+            'phone_second'       => 'nullable|string|max:20',
+            'email'              => 'nullable|email|max:255',
             'favicon'            => 'nullable|image|mimes:png,jpg,jpeg,ico,webp|max:512',
             'header_logo'        => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'footer_logo'        => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
         ]);
 
         // Text fields
-        foreach (['site_name', 'site_tagline', 'footer_description', 'copyright_text', 'bkash_number'] as $key) {
+        foreach ([
+            'site_name', 'site_tagline', 'footer_description', 'copyright_text', 'bkash_number',
+            'facebook', 'instagram', 'youtube', 'tiktok',
+            'whatsapp', 'messenger', 'phone', 'phone_second', 'email',
+        ] as $key) {
             SiteSetting::updateOrCreate(['key' => $key], [
                 'value' => $request->input($key, ''),
                 'type'  => 'text',
