@@ -21,7 +21,7 @@ class CategoryController extends Controller
             ->with('childrenRecursive')
             ->withCount('products')
             ->orderBy('display_order')
-            ->orderBy('name')
+
             ->get();
 
         $totalCount = Category::count();
@@ -67,6 +67,10 @@ class CategoryController extends Controller
         if (Category::where('slug', $slug)->exists()) {
             $slug .= '-' . time();
         }
+        $displayOrder = $request->input('display_order', 0);
+        if($displayOrder < 1){
+            $displayOrder = Category::max('display_order') + 1;
+        }
 
         $category = new Category();
         $category->name             = $request->name;
@@ -78,7 +82,7 @@ class CategoryController extends Controller
         $category->is_homepage_show  = $request->is_homepage_show ?? 0;
         $category->homepage_category = $request->homepage_category ?? 0;
         $category->is_show_in_menu   = $request->is_show_in_menu ?? 0;
-        $category->display_order     = $request->display_order ?? 0;
+        $category->display_order     = $displayOrder;
         $category->save();
 
         return redirect()->route('admin.categories')->with('success', 'Category added successfully');
