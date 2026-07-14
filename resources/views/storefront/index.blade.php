@@ -33,8 +33,8 @@
 
 
 
-    {{-- Next 3 homepage categories: compact rails --}}
-    @foreach ($homeCategoryIds->slice(1, 3) as $categoryId)
+    {{-- Next 2 homepage categories: compact rails --}}
+    @foreach ($homeCategoryIds->slice(1, 2) as $categoryId)
         @livewire('website.storefront.category-section', [
             'category_id' => $categoryId,
         ], key('cat-section-' . $categoryId))
@@ -44,7 +44,7 @@
     @livewire('website.storefront.browse-all-section')
 
     {{-- Remaining homepage categories (up to 5): default full-width grid --}}
-    @foreach ($homeCategoryIds->slice(4, 5) as $categoryId)
+    @foreach ($homeCategoryIds->slice(3, 5) as $categoryId)
         @livewire('website.storefront.category-section', [
             'category_id' => $categoryId,
             'rail'        => false,
