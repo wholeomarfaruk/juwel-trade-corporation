@@ -201,7 +201,7 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   .is-open & { transform: translateY(0) scale(1); }
 
-  &--support { width: min(560px, 100%); }
+  &--support { width: min(420px, 100%); }
 
   &__head { position: relative; padding: 26px 28px 0; }
   &__head--brand {
@@ -422,76 +422,35 @@
 // ---- Support contact rows -------------------------------------------------
 
 .jtc-support {
-  display: flex;
-  min-height: 320px;
-  max-height: min(70vh, 480px);
-
-  // ---- left: nav rail ----
-  &__nav {
-    flex: 0 0 152px;
-    background: $surface-2;
-    border-right: 1px solid $line;
-    padding: 12px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    overflow-y: auto;
-  }
-  &__navitem {
+  &__list { padding: 18px 22px 10px; display: flex; flex-direction: column; gap: 10px; }
+  &__item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 14px;
+    padding: 14px;
     border-radius: $radius;
-    border: none;
-    background: transparent;
-    text-align: left;
-    cursor: pointer;
-    color: $ink-soft;
-    &:hover { background: rgba(255, 255, 255, 0.7); }
-    &.is-active { background: #fff; color: $ink; box-shadow: $shadow-sm; }
+    border: 1px solid $line;
+    text-decoration: none;
+    color: $ink;
+    &:hover { border-color: $blue; }
   }
-  &__navicon {
-    width: 32px; height: 32px;
+  &__icon {
+    width: 44px; height: 44px;
     border-radius: 50%;
     flex: none;
     display: grid;
     place-items: center;
-    &--phone  { background: $blue-light; color: $blue; }
-    &--wa     { background: #e7f8ee; color: #25D366; }
-    &--msg    { background: #eaf1ff; color: #0084FF; }
-    &--mail   { background: $blue-light; color: $blue; }
-    &--social { background: $surface-2; color: $ink-soft; border: 1px solid $line; }
+    &--phone { background: $blue-light; color: $blue; }
+    &--wa    { background: #e7f8ee; color: #25D366; }
+    &--msg   { background: #eaf1ff; color: #0084FF; }
   }
-  &__navlabel { font-size: 0.82rem; font-weight: 600; line-height: 1.25; }
+  &__title { display: block; font-weight: 600; font-size: 0.92rem; }
+  &__desc  { display: block; font-size: 0.84rem; color: $muted; }
+  &__chev  { color: $muted-2; }
 
-  // ---- right: content pane ----
-  &__content {
-    flex: 1;
-    padding: 26px 24px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-  &__pane { display: flex; flex-direction: column; align-items: flex-start; }
-  &__paneicon {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    margin-bottom: 14px;
-    &--phone  { background: $blue-light; color: $blue; }
-    &--wa     { background: #e7f8ee; color: #25D366; }
-    &--msg    { background: #eaf1ff; color: #0084FF; }
-    &--mail   { background: $blue-light; color: $blue; }
-    &--social { background: $surface-2; color: $ink-soft; border: 1px solid $line; }
-  }
-  &__panetitle { font-family: $font-display; font-weight: 700; font-size: 1.15rem; margin: 0 0 6px; color: $ink; }
-  &__panedesc  { font-size: 0.88rem; color: $muted; margin: 0 0 14px; }
-  &__panevalue { font-size: 1rem; font-weight: 600; color: $ink; margin-bottom: 18px; }
-  &__paneaction { padding: 12px 22px; font-size: 0.9rem; text-decoration: none; }
-
-  &__socials { display: flex; gap: 10px; margin-top: 4px; }
+  &__social-wrap { padding: 8px 22px 24px; }
+  &__social-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: $muted-2; margin: 8px 0 12px; }
+  &__socials { display: flex; gap: 10px; }
   &__social {
     width: 44px; height: 44px;
     border-radius: 50%;
@@ -502,21 +461,7 @@
     &--fb { color: #1877F2; }
     &--ig { color: #E4405F; }
     &--yt { color: #FF0000; }
-    &--tt { color: $ink; }
-  }
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    max-height: min(80vh, 560px);
-    &__nav {
-      flex: none;
-      flex-direction: row;
-      overflow-x: auto;
-      border-right: none;
-      border-bottom: 1px solid $line;
-    }
-    &__navitem { flex-direction: column; gap: 6px; padding: 8px 10px; flex: none; }
-    &__navlabel { font-size: 0.72rem; white-space: nowrap; }
+    &--li { color: #0A66C2; }
   }
 }
 
