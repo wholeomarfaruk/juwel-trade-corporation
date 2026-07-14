@@ -34,7 +34,7 @@
 
 
     {{-- Next 2 homepage categories: compact rails --}}
-    @foreach ($homeCategoryIds->slice(1) as $categoryId)
+    @foreach ($homeCategoryIds->get(1) as $categoryId)
         @livewire('website.storefront.category-section', [
             'category_id' => $categoryId,
         ], key('cat-section-' . $categoryId))
