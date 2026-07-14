@@ -35,6 +35,9 @@
                         <li class="nav-item">
                             <button class="nav-link w-100 text-start fw-bold" data-settings-tab="contact" type="button">Contact</button>
                         </li>
+                        <li class="nav-item">
+                            <button class="nav-link w-100 text-start fw-bold" data-settings-tab="sms" type="button">SMS Gateway</button>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -270,6 +273,38 @@
                             value="{{ old('email', $settings['email'] ?? '') }}"
                             placeholder="support@example.com">
                         @error('email')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </fieldset>
+
+                    {{-- ── SMS Gateway ────────────────────────────────────────────── --}}
+                    <h5 class="settings-pane" data-settings-pane="sms" hidden>SMS Gateway</h5>
+                    <p class="text-tiny text-muted settings-pane" data-settings-pane="sms" hidden>Used to send OTP verification codes for phone sign-in.</p>
+
+                    <fieldset class="name settings-pane" data-settings-pane="sms" hidden>
+                        <div class="body-title">Gateway</div>
+                        <div class="select flex-grow">
+                            <select class="@error('sms_gateway') is-invalid @enderror" name="sms_gateway">
+                                <option value="alpha" {{ old('sms_gateway', $settings['sms_gateway'] ?? 'alpha') == 'alpha' ? 'selected' : '' }}>Alpha SMS (sms.net.bd)</option>
+                            </select>
+                        </div>
+                        @error('sms_gateway')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </fieldset>
+
+                    <fieldset class="name settings-pane" data-settings-pane="sms" hidden>
+                        <div class="body-title">Alpha SMS API Key</div>
+                        <input class="flex-grow @error('alpha_sms_api_key') is-invalid @enderror"
+                            type="text" name="alpha_sms_api_key"
+                            value="{{ old('alpha_sms_api_key', $settings['alpha_sms_api_key'] ?? '') }}"
+                            placeholder="API key from sms.net.bd">
+                        @error('alpha_sms_api_key')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </fieldset>
+
+                    <fieldset class="name settings-pane" data-settings-pane="sms" hidden>
+                        <div class="body-title">Alpha SMS Sender ID</div>
+                        <input class="flex-grow @error('alpha_sms_sender_id') is-invalid @enderror"
+                            type="text" name="alpha_sms_sender_id"
+                            value="{{ old('alpha_sms_sender_id', $settings['alpha_sms_sender_id'] ?? '') }}"
+                            placeholder="e.g. 8809...">
+                        @error('alpha_sms_sender_id')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </fieldset>
 
                     </div>

@@ -272,6 +272,8 @@
     font-weight: 600;
   }
 
+  &__desc { font-size: 0.86rem; color: $ink-soft; margin: 0 0 6px; strong { color: $ink; } }
+
   &__divider { display: flex; align-items: center; gap: 12px; margin: 4px 0; color: $muted-2; font-size: 0.78rem; span { height: 1px; background: $line; flex: 1; } }
   &__social { display: flex; gap: 10px; }
   &__oauth {

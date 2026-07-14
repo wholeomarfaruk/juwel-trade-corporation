@@ -39,6 +39,8 @@ export const storefront = (config = {}) => ({
     authOpen: false,
     authMode: 'login',
     authForm: { name: '', email: '', phone: '', login: '', password: '', passwordConfirmation: '', remember: false },
+    authOtpForm: { phone: '', code: '' },
+    authOtpSent: false,
     authError: '',
     authLoading: false,
     authSuccess: false,
@@ -135,11 +137,72 @@ export const storefront = (config = {}) => ({
     isWished(id) { return !!this.wishlist[id]; },
 
     // ---- auth ----
-    openAuthModal() { this.closeAll(); this.authOpen = true; this.authMode = 'login'; this.authError = ''; this.authSuccess = false; },
+    openAuthModal(options = {}) {
+        this.closeAll();
+        this.authOpen = true;
+        this.authMode = options.mode || 'login';
+        this.authError = '';
+        this.authSuccess = false;
+        this.authOtpSent = false;
+        this.authOtpForm = { phone: options.phone || '', code: '' };
+    },
     toggleAuthMode() {
         this.authMode = this.authMode === 'login' ? 'signup' : 'login';
         this.authError = '';
         this.authSuccess = false;
+    },
+    switchToOtpMode() {
+        this.authMode = 'otp';
+        this.authError = '';
+        this.authOtpSent = false;
+        this.authOtpForm = { phone: '', code: '' };
+    },
+    async sendAuthOtp() {
+        this.authError = '';
+        this.authLoading = true;
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch('/account/otp/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                body: JSON.stringify({ phone: this.authOtpForm.phone }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                this.authError = data.message || 'Could not send code. Please try again.';
+                return;
+            }
+            this.authOtpSent = true;
+            this.showToast('Verification code sent');
+        } catch (e) {
+            this.authError = 'Network error. Please try again.';
+        } finally {
+            this.authLoading = false;
+        }
+    },
+    async verifyAuthOtp() {
+        this.authError = '';
+        this.authLoading = true;
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch('/account/otp/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                body: JSON.stringify({ phone: this.authOtpForm.phone, code: this.authOtpForm.code }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                this.authError = data.message || 'Invalid or expired code.';
+                return;
+            }
+            this.user = data.user;
+            this.authSuccess = true;
+            this.showToast('Signed in successfully');
+        } catch (e) {
+            this.authError = 'Network error. Please try again.';
+        } finally {
+            this.authLoading = false;
+        }
     },
     async submitAuth() {
         this.authError = '';
@@ -205,8 +268,16 @@ export const storefront = (config = {}) => ({
         this.user = null;
         this.showToast('Signed out successfully');
     },
-    get authTitle() { return this.authMode === 'login' ? 'Welcome back' : 'Create your account'; },
+    get authTitle() {
+        if (this.authMode === 'otp') return 'Sign in with phone';
+        return this.authMode === 'login' ? 'Welcome back' : 'Create your account';
+    },
     get authSubtitle() {
+        if (this.authMode === 'otp') {
+            return this.authOtpSent
+                ? 'Enter the 6-digit code we sent to your phone.'
+                : "We'll text you a one-time code to sign in.";
+        }
         return this.authMode === 'login'
             ? 'Sign in to track orders and check out faster.'
             : 'Join Juwel Trade Corporation to shop and track orders.';
@@ -214,11 +285,12 @@ export const storefront = (config = {}) => ({
     get authSubmitText() { return this.authMode === 'login' ? 'Sign in' : 'Create account'; },
     get authSwitchPrompt() { return this.authMode === 'login' ? "Don't have an account?" : 'Already have an account?'; },
     get authSwitchAction() { return this.authMode === 'login' ? 'Sign up' : 'Sign in'; },
-    get authSuccessTitle() { return this.authMode === 'login' ? 'Login successful!' : 'Account created!'; },
+    get authSuccessTitle() { return this.authMode === 'login' || this.authMode === 'otp' ? 'Login successful!' : 'Account created!'; },
     get authSuccessMessage() {
-        return this.authMode === 'login'
-            ? 'You have logged in successfully.'
-            : 'Your account has been created successfully. Please log in to continue.';
+        if (this.authMode === 'signup') {
+            return 'Your account has been created successfully. Please log in to continue.';
+        }
+        return 'You have logged in successfully.';
     },
 
     // ---- overlays ----

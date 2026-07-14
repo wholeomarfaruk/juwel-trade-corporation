@@ -93,6 +93,12 @@ button { font-family: inherit; }
     color: #fff;
     &:hover { background: $blue-dark; }
   }
+  &--outline {
+    background: #fff;
+    color: $blue;
+    border: 1.5px solid $blue;
+    &:hover { background: $blue-light; }
+  }
   &--block { width: 100%; }
 }
 

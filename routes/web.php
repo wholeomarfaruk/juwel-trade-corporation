@@ -20,6 +20,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Website\CapiController;
 use App\Http\Controllers\Website\ProductController as WebsiteProductController;
 use App\Http\Controllers\Website\CustomerAuthController;
+use App\Http\Controllers\Website\TrackOrderController;
 
 
 Route::post('/cart/add/json', [CartController::class, 'add_json_to_cart'])->name('cart.add.json')->withoutMiddleware('auth');
@@ -88,11 +89,18 @@ Route::post('/device/register', [HomeController::class, 'deviceRegister'])->name
 Route::post('/account/register', [CustomerAuthController::class, 'register'])->name('account.register');
 Route::post('/account/login', [CustomerAuthController::class, 'login'])->name('account.login');
 Route::post('/account/logout', [CustomerAuthController::class, 'logout'])->name('account.logout');
+Route::post('/account/otp/send', [CustomerAuthController::class, 'sendOtp'])->name('account.otp.send');
+Route::post('/account/otp/login', [CustomerAuthController::class, 'loginWithOtp'])->name('account.otp.login');
 
 Route::middleware('customer.auth')->group(function () {
     Route::view('/account', 'storefront.account')->name('account.show');
     Route::view('/orders', 'storefront.orders')->name('orders.show');
 });
+
+// Guest order tracking — Order ID + phone match, no account required.
+Route::get('/track-order', [TrackOrderController::class, 'search'])->name('track.order.search');
+Route::post('/track-order', [TrackOrderController::class, 'lookup'])->name('track.order.lookup');
+Route::get('/track-order/{order}', [TrackOrderController::class, 'show'])->name('track.order.show');
 
 Route::post('/fb-pixel-capi', [CapiController::class, 'fbPixelCAPI'])->name('pixel.capi.track');
 Route::get('/test', [TestController::class, 'index'])->name('test');

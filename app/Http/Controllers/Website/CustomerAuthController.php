@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\User;
+use App\Support\Otp;
 use App\Support\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Str;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerAuthController extends Controller
@@ -129,6 +131,80 @@ class CustomerAuthController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+
+        return response()->json([
+            'message' => 'Signed in successfully.',
+            'user'    => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ],
+        ]);
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $phone = Phone::normalizeBd($request->input('phone'));
+
+        if (!$phone) {
+            return response()->json([
+                'message' => 'Enter a valid 11-digit phone number starting with 0.',
+            ], 422);
+        }
+
+        if (!Otp::generateAndSend($phone)) {
+            return response()->json([
+                'message' => 'A code was already sent recently. Please wait a minute and try again.',
+            ], 429);
+        }
+
+        return response()->json([
+            'message' => 'Verification code sent.',
+        ]);
+    }
+
+    public function loginWithOtp(Request $request)
+    {
+        $phone = Phone::normalizeBd($request->input('phone'));
+        $code = trim((string) $request->input('code'));
+
+        if (!$phone || $code === '') {
+            return response()->json([
+                'message' => 'Enter the phone number and the 6-digit code.',
+            ], 422);
+        }
+
+        if (!Otp::verify($phone, $code)) {
+            return response()->json([
+                'message' => 'Invalid or expired code.',
+            ], 422);
+        }
+
+        $customer = Customer::where('phone', $phone)->first();
+
+        if (!$customer) {
+            $customer = Customer::create([
+                'phone' => $phone,
+                'role'  => 'user',
+            ]);
+        }
+
+        if (!$customer->user_id) {
+            $user = User::create([
+                'name'     => $customer->first_name ?: ('Customer ' . $phone),
+                'email'    => $customer->email ?: ($phone . '+' . Str::random(6) . '@otp.local'),
+                'password' => Hash::make(Str::random(32)),
+                'role'     => 'user',
+            ]);
+
+            $customer->user_id = $user->id;
+            $customer->save();
+        } else {
+            $user = User::find($customer->user_id);
+        }
+
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
 
         return response()->json([
             'message' => 'Signed in successfully.',

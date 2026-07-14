@@ -27,7 +27,7 @@
                     <li><a href="#">Brands</a></li>
                     <li><a href="#">About us</a></li>
                     <li><a href="#">All products</a></li>
-                    <li><a href="#">Track order</a></li>
+                    <li><a href="{{ route('track.order.search') }}">Track order</a></li>
                 </ul>
             </div>
             <div>

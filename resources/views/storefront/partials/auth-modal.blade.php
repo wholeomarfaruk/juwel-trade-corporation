@@ -20,7 +20,7 @@
         </div>
 
         <div class="jtc-form" x-show="authSuccess" x-cloak>
-            <template x-if="authMode === 'login'">
+            <template x-if="authMode === 'login' || authMode === 'otp'">
                 <button type="button" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
                         @click="authOpen = false; authSuccess = false">Continue shopping</button>
             </template>
@@ -30,7 +30,7 @@
             </template>
         </div>
 
-        <form class="jtc-form" @submit.prevent="submitAuth()" x-show="!authSuccess">
+        <form class="jtc-form" @submit.prevent="submitAuth()" x-show="!authSuccess && authMode !== 'otp'">
             <p class="jtc-form__error" x-show="authError" x-cloak x-text="authError"></p>
 
             <label x-show="authMode === 'signup'" x-cloak>Full name
@@ -62,11 +62,42 @@
             <button type="submit" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
                     :disabled="authLoading" x-text="authLoading ? 'Please wait…' : authSubmitText"></button>
 
-
+            <p class="jtc-form__switch" x-show="authMode === 'login'" x-cloak>
+                <a href="#" @click.prevent="switchToOtpMode()">Sign in with phone (OTP)</a>
+            </p>
 
             <p class="jtc-form__switch">
                 <span x-text="authSwitchPrompt"></span>
                 <a href="#" @click.prevent="toggleAuthMode()" x-text="authSwitchAction"></a>
+            </p>
+        </form>
+
+        <form class="jtc-form" @submit.prevent="authOtpSent ? verifyAuthOtp() : sendAuthOtp()" x-show="!authSuccess && authMode === 'otp'" x-cloak>
+            <p class="jtc-form__error" x-show="authError" x-cloak x-text="authError"></p>
+
+            <label x-show="!authOtpSent">Phone
+                <input type="tel" placeholder="01XXXXXXXXX" x-model="authOtpForm.phone">
+            </label>
+
+            <template x-if="authOtpSent">
+                <div>
+                    <p class="jtc-form__desc">Code sent to <strong x-text="authOtpForm.phone"></strong></p>
+                    <label>Verification code
+                        <input type="text" inputmode="numeric" maxlength="6" placeholder="••••••" x-model="authOtpForm.code">
+                    </label>
+                </div>
+            </template>
+
+            <button type="submit" class="jtc-btn jtc-btn--primary jtc-btn--block jtc-form__submit"
+                    :disabled="authLoading"
+                    x-text="authLoading ? 'Please wait…' : (authOtpSent ? 'Verify & sign in' : 'Send code')"></button>
+
+            <p class="jtc-form__switch" x-show="authOtpSent" x-cloak>
+                <a href="#" @click.prevent="authOtpSent = false; authOtpForm.code = ''">Use a different number</a>
+            </p>
+
+            <p class="jtc-form__switch">
+                <a href="#" @click.prevent="authMode = 'login'; authError = ''">Back to password sign in</a>
             </p>
         </form>
     </div>
