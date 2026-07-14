@@ -70,18 +70,23 @@
             {{-- Data — shown once loaded --}}
             <div wire:loading.remove wire:target="open">
                 @if ($this->product)
-                    @php $p = $this->product; @endphp
+                    @php
+                        $p = $this->product;
+                        $na = '<span style="color:#9ca3af;">N/A</span>';
+                    @endphp
 
                     @if ($p->getImageThumbUrl())
                         <img src="{{ $p->getImageThumbUrl() }}" alt="{{ $p->name }}"
                             style="width:100%;max-height:260px;object-fit:contain;background:#f7faf8;border-radius:8px;margin-bottom:16px;">
+                    @else
+                        <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#f7faf8;border-radius:8px;margin-bottom:16px;color:#9ca3af;">N/A</div>
                     @endif
 
                     <div class="body-title" style="font-size:18px;margin-bottom:4px;">{{ $p->name }}</div>
                     <div class="text-tiny" style="color:#6b7280;margin-bottom:14px;">
                         {{ $p->slug }}
-                        @if ($p->sku) &nbsp;·&nbsp; SKU: {{ $p->sku }} @endif
-                        @if ($p->brand?->name) &nbsp;·&nbsp; {{ $p->brand->name }} @endif
+                        &nbsp;·&nbsp; SKU: {!! $p->sku ?: $na !!}
+                        &nbsp;·&nbsp; Brand: {!! $p->brand?->name ?: $na !!}
                     </div>
 
                     <div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:16px;">
@@ -90,56 +95,58 @@
                             @if ($p->discount_price && $p->discount_price > 0)
                                 <div><del style="color:#9ca3af;">{{ $p->price }}</del> <strong>{{ $p->discount_price }}</strong></div>
                             @else
-                                <div><strong>{{ $p->price }}</strong></div>
+                                <div><strong>{{ $p->price ?? 'N/A' }}</strong></div>
                             @endif
                         </div>
                         <div>
+                            <div class="text-tiny" style="color:#9ca3af;">Purchase price</div>
+                            <div>{!! $p->purchase_price !== null ? $p->purchase_price : $na !!}</div>
+                        </div>
+                        <div>
                             <div class="text-tiny" style="color:#9ca3af;">Stock</div>
-                            <div>{{ $p->stock_status === 'in_stock' ? 'In stock' : 'Out of stock' }}</div>
+                            <div>{{ $p->stock_status === 'in_stock' ? 'In stock' : ($p->stock_status === 'out_of_stock' ? 'Out of stock' : 'N/A') }}</div>
                         </div>
                         <div>
                             <div class="text-tiny" style="color:#9ca3af;">Quantity</div>
-                            <div>{{ $p->quantity }}</div>
+                            <div>{{ $p->quantity ?? 'N/A' }}</div>
                         </div>
-                        @if ($p->weight)
-                            <div>
-                                <div class="text-tiny" style="color:#9ca3af;">Weight</div>
-                                <div>{{ $p->weight }} kg</div>
-                            </div>
-                        @endif
+                        <div>
+                            <div class="text-tiny" style="color:#9ca3af;">Weight</div>
+                            <div>{!! $p->weight !== null ? $p->weight . ' kg' : $na !!}</div>
+                        </div>
+                        <div>
+                            <div class="text-tiny" style="color:#9ca3af;">Views</div>
+                            <div>{{ $p->views ?? 'N/A' }}</div>
+                        </div>
                         <div>
                             <div class="text-tiny" style="color:#9ca3af;">Featured</div>
                             <div>{{ $p->featured ? 'Yes' : 'No' }}</div>
                         </div>
+                        <div>
+                            <div class="text-tiny" style="color:#9ca3af;">Status</div>
+                            <div>{{ $p->status ? 'Active' : 'Inactive' }}</div>
+                        </div>
                     </div>
 
-                    @if ($p->categories->isNotEmpty())
-                        <div style="margin-bottom:12px;">
-                            <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Categories</div>
-                            <div>{{ $p->categories->pluck('name')->join(', ') }}</div>
-                        </div>
-                    @endif
+                    <div style="margin-bottom:12px;">
+                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Categories</div>
+                        <div>{!! $p->categories->isNotEmpty() ? $p->categories->pluck('name')->join(', ') : $na !!}</div>
+                    </div>
 
-                    @if ($p->sizes->isNotEmpty())
-                        <div style="margin-bottom:12px;">
-                            <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Sizes</div>
-                            <div>{{ $p->sizes->pluck('name')->join(', ') }}</div>
-                        </div>
-                    @endif
+                    <div style="margin-bottom:12px;">
+                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Sizes</div>
+                        <div>{!! $p->sizes->isNotEmpty() ? $p->sizes->pluck('name')->join(', ') : $na !!}</div>
+                    </div>
 
-                    @if ($p->short_description)
-                        <div style="margin-bottom:12px;">
-                            <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Short description</div>
-                            <div>{!! $p->short_description !!}</div>
-                        </div>
-                    @endif
+                    <div style="margin-bottom:12px;">
+                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Short description</div>
+                        <div>{!! $p->short_description ?: $na !!}</div>
+                    </div>
 
-                    @if ($p->description)
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Description</div>
-                            <div style="max-height:180px;overflow-y:auto;">{!! $p->description !!}</div>
-                        </div>
-                    @endif
+                    <div>
+                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Description</div>
+                        <div style="max-height:180px;overflow-y:auto;">{!! $p->description ?: $na !!}</div>
+                    </div>
                 @endif
             </div>
         </div>
