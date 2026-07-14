@@ -16,6 +16,19 @@ class SiteSettingSeeder extends Seeder
     {
         $defaults = [
             'bkash_number' => '01682963493',
+
+            // Contact
+            'phone'        => '8801329732724',
+            'whatsapp'     => '8801329732724',
+            'phone_second' => '',
+            'messenger'    => '',
+            'email'        => '',
+
+            // Social
+            'facebook'  => '',
+            'instagram' => '',
+            'youtube'   => '',
+            'tiktok'    => '',
         ];
 
         foreach ($defaults as $key => $value) {
