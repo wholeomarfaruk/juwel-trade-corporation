@@ -16,6 +16,7 @@ class SiteSettingSeeder extends Seeder
     {
         $defaults = [
             'bkash_number' => '01682963493',
+            'footer_description' => '<p>Medical, physiotherapy and wellness equipment delivered across Bangladesh — quality gear from brands you trust.</p>',
 
             // Contact
             'phone'        => '8801329732724',

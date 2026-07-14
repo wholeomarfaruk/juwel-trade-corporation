@@ -64,7 +64,10 @@
   &__name { display: block; font-family: $font-display; font-weight: 700; font-size: 1.28rem; color: #fff; }
   &__sub  { display: block; font-size: 0.68rem; color: #7f918a; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 3px; }
 
-  &__blurb { font-size: 0.86rem; line-height: 1.7; margin: 16px 0; max-width: 34ch; }
+  &__blurb {
+    font-size: 0.86rem; line-height: 1.7; margin: 16px 0; max-width: 34ch;
+    p { margin: 0 0 10px; &:last-child { margin-bottom: 0; } }
+  }
   &__contact { font-size: 0.82rem; line-height: 1.9; margin: 0; strong { color: #dbe6e1; font-weight: 600; } }
 
   h4 {

@@ -9,11 +9,17 @@
                         <span class="jtc-footer__sub">Corporation</span>
                     </span>
                 </a>
-                <p class="jtc-footer__blurb">Medical, physiotherapy and wellness equipment delivered across Bangladesh — quality gear from brands you trust.</p>
-                <p class="jtc-footer__contact">
+                <div class="jtc-footer__blurb">
+                    @if (!empty($site['footer_description']))
+                        {!! $site['footer_description'] !!}
+                    @else
+                        Medical, physiotherapy and wellness equipment delivered across Bangladesh — quality gear from brands you trust.
+                    @endif
+                </div>
+                {{-- <p class="jtc-footer__contact">
                     <strong>Call:</strong> 013 2973 2724<br>
                     <strong>Address:</strong> House 37, Road 4, Sector 4,<br>Uttara, Dhaka-1215, Bangladesh
-                </p>
+                </p> --}}
             </div>
             <div>
                 <h4>Useful links</h4>

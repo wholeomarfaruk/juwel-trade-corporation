@@ -70,7 +70,7 @@
 
                     <fieldset class="name settings-pane" data-settings-pane="general">
                         <div class="body-title">Footer Description</div>
-                        <textarea class="flex-grow" name="footer_description" rows="3"
+                        <textarea id="editor-footer-description" class="flex-grow" name="footer_description" rows="3"
                             placeholder="Short description shown in the footer">{{ old('footer_description', $settings['footer_description'] ?? '') }}</textarea>
                     </fieldset>
 
@@ -288,6 +288,17 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.tiny.cloud/1/hkkbs6irhd8pjbxo4xgcyy5o1lvtjcx4p843koiprxzql6dh/tinymce/8/tinymce.min.js"
+    referrerpolicy="origin" crossorigin="anonymous"></script>
+
+<script>
+    tinymce.init({
+        selector: '#editor-footer-description',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
+</script>
+
 <script>
 function previewImage(input, previewId) {
     const preview = document.getElementById(previewId);
