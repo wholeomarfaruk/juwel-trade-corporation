@@ -73,6 +73,29 @@
                     @php
                         $p = $this->product;
                         $na = '<span style="color:#9ca3af;">N/A</span>';
+
+                        $price = $p->discount_price && $p->discount_price > 0
+                            ? '<del style="color:#9ca3af;">' . e($p->price) . '</del> <strong>' . e($p->discount_price) . '</strong>'
+                            : '<strong>' . e($p->price ?? 'N/A') . '</strong>';
+
+                        $rows = [
+                            'Name'               => e($p->name),
+                            'Slug'               => e($p->slug),
+                            'SKU'                => $p->sku ? e($p->sku) : $na,
+                            'Brand'              => $p->brand?->name ? e($p->brand->name) : $na,
+                            'Price'              => $price,
+                            'Purchase price'     => $p->purchase_price !== null ? e($p->purchase_price) : $na,
+                            'Stock'              => $p->stock_status === 'in_stock' ? 'In stock' : ($p->stock_status === 'out_of_stock' ? 'Out of stock' : 'N/A'),
+                            'Quantity'           => $p->quantity ?? 'N/A',
+                            'Weight'             => $p->weight !== null ? e($p->weight) . ' kg' : $na,
+                            'Views'              => $p->views ?? 'N/A',
+                            'Featured'           => $p->featured ? 'Yes' : 'No',
+                            'Status'             => $p->status ? 'Active' : 'Inactive',
+                            'Categories'         => $p->categories->isNotEmpty() ? e($p->categories->pluck('name')->join(', ')) : $na,
+                            'Sizes'              => $p->sizes->isNotEmpty() ? e($p->sizes->pluck('name')->join(', ')) : $na,
+                            'Short description'  => $p->short_description ?: $na,
+                            'Description'        => $p->description ?: $na,
+                        ];
                     @endphp
 
                     @if ($p->getImageThumbUrl())
@@ -82,71 +105,16 @@
                         <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#f7faf8;border-radius:8px;margin-bottom:16px;color:#9ca3af;">N/A</div>
                     @endif
 
-                    <div class="body-title" style="font-size:18px;margin-bottom:4px;">{{ $p->name }}</div>
-                    <div class="text-tiny" style="color:#6b7280;margin-bottom:14px;">
-                        {{ $p->slug }}
-                        &nbsp;·&nbsp; SKU: {!! $p->sku ?: $na !!}
-                        &nbsp;·&nbsp; Brand: {!! $p->brand?->name ?: $na !!}
-                    </div>
-
-                    <div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:16px;">
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Price</div>
-                            @if ($p->discount_price && $p->discount_price > 0)
-                                <div><del style="color:#9ca3af;">{{ $p->price }}</del> <strong>{{ $p->discount_price }}</strong></div>
-                            @else
-                                <div><strong>{{ $p->price ?? 'N/A' }}</strong></div>
-                            @endif
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Purchase price</div>
-                            <div>{!! $p->purchase_price !== null ? $p->purchase_price : $na !!}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Stock</div>
-                            <div>{{ $p->stock_status === 'in_stock' ? 'In stock' : ($p->stock_status === 'out_of_stock' ? 'Out of stock' : 'N/A') }}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Quantity</div>
-                            <div>{{ $p->quantity ?? 'N/A' }}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Weight</div>
-                            <div>{!! $p->weight !== null ? $p->weight . ' kg' : $na !!}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Views</div>
-                            <div>{{ $p->views ?? 'N/A' }}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Featured</div>
-                            <div>{{ $p->featured ? 'Yes' : 'No' }}</div>
-                        </div>
-                        <div>
-                            <div class="text-tiny" style="color:#9ca3af;">Status</div>
-                            <div>{{ $p->status ? 'Active' : 'Inactive' }}</div>
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom:12px;">
-                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Categories</div>
-                        <div>{!! $p->categories->isNotEmpty() ? $p->categories->pluck('name')->join(', ') : $na !!}</div>
-                    </div>
-
-                    <div style="margin-bottom:12px;">
-                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Sizes</div>
-                        <div>{!! $p->sizes->isNotEmpty() ? $p->sizes->pluck('name')->join(', ') : $na !!}</div>
-                    </div>
-
-                    <div style="margin-bottom:12px;">
-                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Short description</div>
-                        <div>{!! $p->short_description ?: $na !!}</div>
-                    </div>
-
-                    <div>
-                        <div class="text-tiny" style="color:#9ca3af;margin-bottom:4px;">Description</div>
-                        <div style="max-height:180px;overflow-y:auto;">{!! $p->description ?: $na !!}</div>
-                    </div>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <tbody>
+                            @foreach ($rows as $label => $value)
+                                <tr style="border-bottom:1px solid #f0f1f3;">
+                                    <td style="padding:9px 12px 9px 0;color:#9ca3af;font-size:12.5px;white-space:nowrap;vertical-align:top;width:160px;">{{ $label }}</td>
+                                    <td style="padding:9px 0;font-size:13.5px;color:#111827;{{ in_array($label, ['Short description', 'Description']) ? 'max-height:160px;overflow-y:auto;display:block;' : '' }}">{!! $value !!}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
         </div>
