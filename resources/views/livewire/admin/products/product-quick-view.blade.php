@@ -74,16 +74,13 @@
                         $p = $this->product;
                         $na = '<span style="color:#9ca3af;">N/A</span>';
 
-                        $price = $p->discount_price && $p->discount_price > 0
-                            ? '<del style="color:#9ca3af;">' . e($p->price) . '</del> <strong>' . e($p->discount_price) . '</strong>'
-                            : '<strong>' . e($p->price ?? 'N/A') . '</strong>';
-
                         $rows = [
                             'Name'               => e($p->name),
                             'Slug'               => e($p->slug),
                             'SKU'                => $p->sku ? e($p->sku) : $na,
                             'Brand'              => $p->brand?->name ? e($p->brand->name) : $na,
-                            'Price'              => $price,
+                            'Price'              => $p->price !== null ? e($p->price) : $na,
+                            'Discount price'     => $p->discount_price && $p->discount_price > 0 ? e($p->discount_price) : $na,
                             'Purchase price'     => $p->purchase_price !== null ? e($p->purchase_price) : $na,
                             'Stock'              => $p->stock_status === 'in_stock' ? 'In stock' : ($p->stock_status === 'out_of_stock' ? 'Out of stock' : 'N/A'),
                             'Quantity'           => $p->quantity ?? 'N/A',
