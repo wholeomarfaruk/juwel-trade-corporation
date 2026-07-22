@@ -108,11 +108,16 @@
 
 @media (max-width: 400px) {
   .jtc-promos { grid-template-columns: 1fr; gap: 14px; }
-  .jtc-promo {
+  .jtc-promos .jtc-promo {
     min-height: unset;
     height: auto;
     aspect-ratio: 16 / 9;
     img { position: static; width: 100%; height: 100%; }
+  }
+
+  .jtc-carousel-nav {
+    gap: 6px;
+    button { width: 36px; height: 36px; }
   }
 }
 

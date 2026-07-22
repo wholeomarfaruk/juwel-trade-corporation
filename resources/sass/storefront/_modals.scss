@@ -492,6 +492,11 @@
     padding: 14px;
     span { display: none; } // icon-only on phones
   }
+  @media (max-width: 400px) {
+    padding: 12px;
+    right: 16px;
+    bottom: 18px;
+  }
 }
 
 // ---- narrow-phone tune-ups (<400px) ----------------------------------------
