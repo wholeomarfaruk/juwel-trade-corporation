@@ -494,6 +494,23 @@
   }
 }
 
+// ---- narrow-phone tune-ups (<400px) ----------------------------------------
+
+@media (max-width: 400px) {
+  .jtc-modal__head        { padding: 20px 18px 0; }
+  .jtc-modal__head--brand { padding: 20px 18px 18px; }
+  .jtc-modal__close       { top: 12px; right: 12px; width: 32px; height: 32px; }
+
+  .jtc-form {
+    padding: 18px 18px 22px;
+    &__social { flex-direction: column; }
+  }
+
+  .jtc-searchresult__prices {
+    flex-wrap: wrap;
+  }
+}
+
 // ---- Toast ----------------------------------------------------------------
 
 .jtc-toast {

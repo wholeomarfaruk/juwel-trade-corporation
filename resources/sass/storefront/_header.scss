@@ -355,3 +355,26 @@
 @media (max-width: $bp-mobile) {
   .jtc-logo__text { display: none; } // keep just the mark to save space on phones
 }
+
+@media (max-width: 400px) {
+  .jtc-header__inner {
+    flex-wrap: nowrap;
+    gap: 6px 8px;
+    padding-block: 8px;
+  }
+
+  .jtc-hamburger {
+    width: 34px; height: 34px;
+    svg { width: 17px; height: 17px; }
+  }
+
+  .jtc-logo { gap: 6px; }
+  .jtc-logo__mark { width: 34px; height: 34px; }
+
+  .jtc-actions { gap: 3px; }
+
+  .jtc-round-btn {
+    width: 34px; height: 34px;
+    svg { width: 15px; height: 15px; }
+  }
+}

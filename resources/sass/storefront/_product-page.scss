@@ -138,3 +138,14 @@
   .jtc-gallery { grid-template-columns: 56px 1fr; gap: 10px; }
   .jtc-relblock .jtc-shopgrid { grid-template-columns: repeat(2, 1fr); }
 }
+
+@media (max-width: 400px) {
+  .jtc-pd__shell { padding: 10px 12px 40px; }
+  .jtc-gallery { grid-template-columns: 44px 1fr; gap: 8px; }
+
+  .jtc-pd-info__price { gap: 8px; }
+  .jtc-pd-info__price-now { font-size: 1.6rem; }
+
+  .jtc-pd-actions__cart { min-width: 0; flex: 1 1 100%; }
+  .jtc-pd-actions__order { grid-template-columns: 1fr; }
+}
