@@ -101,3 +101,26 @@
 @media (max-height: 600px) and (max-width: $bp-mobile) {
   .jtc-hero__slider { aspect-ratio: 16 / 9; max-height: 45vh; }
 }
+
+@media (max-width: 400px) {
+  .jtc-hero__slider { aspect-ratio: 4 / 2; max-height: 50vh; }
+
+  .jtc-hero__dots {
+    left: 12px;
+    bottom: 12px;
+    gap: 6px;
+  }
+  .jtc-hero__dot {
+    width: 7px; height: 7px;
+    &.is-active { width: 18px; }
+  }
+
+  .jtc-hero__nav {
+    bottom: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+  .jtc-hero__arrow {
+    width: 32px; height: 32px;
+  }
+}
