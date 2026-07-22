@@ -18,6 +18,8 @@ class Category extends Model
         'is_show_in_menu',
         'is_active',
     ];
+    protected $appends = ['url'];
+
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id');
@@ -54,5 +56,9 @@ class Category extends Model
             ? $this->image
             : asset('images/category/' . $this->image);
     }
+    public function getUrlAttribute()
+{
+    return route('category.show', $this->slug);
+}
 
 }

@@ -166,6 +166,7 @@
             ? $homepageCategories->map(fn ($cat) => [
                 'name'  => $cat->name,
                 'slug'  => $cat->slug,
+                'url'   => route('category.show', $cat->slug),
                 'image' => $cat->getImageUrl() ?? asset('images/no-thumbnail.png'),
             ])->values()->all()
             : $categories;

@@ -78,6 +78,7 @@ class HomeController extends Controller
             ->where('homepage_category', 1)
             ->orderBy('display_order')
             ->get();
+            // dd($homepageCategories->toArray());
 
         return view('storefront.index', $this->storeData(),
         [
