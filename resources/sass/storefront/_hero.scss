@@ -85,6 +85,19 @@
 }
 
 @media (max-width: $bp-mobile) {
-  .jtc-hero__slider { min-height: 300px; }
-  .jtc-hero__side   { display: none; }
+  .jtc-hero__slider {
+    min-height: unset;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: 60vh;
+  }
+  .jtc-hero__side { display: none; }
+}
+
+@media (max-width: 480px) {
+  .jtc-hero__slider { aspect-ratio: 1 / 1; }
+}
+
+@media (max-height: 600px) and (max-width: $bp-mobile) {
+  .jtc-hero__slider { aspect-ratio: 16 / 9; max-height: 45vh; }
 }
