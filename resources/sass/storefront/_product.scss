@@ -106,6 +106,16 @@
   img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 }
 
+@media (max-width: 400px) {
+  .jtc-promos { grid-template-columns: 1fr; gap: 14px; }
+  .jtc-promo {
+    min-height: unset;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    img { position: static; width: 100%; height: 100%; }
+  }
+}
+
 // ---- Category banner section (CategorySection style="banner") -------------
 
 .jtc-catbanner {
