@@ -172,6 +172,14 @@
     &:hover { background: $surface-2; }
     &--sale { color: $green; }
   }
+
+  @media (max-width: $bp-mobile) {
+    inset: 0;
+
+    &__head span { font-size: 1rem; }
+    &__label { font-size: 0.68rem; }
+    &__link { font-size: 0.88rem; padding: 11px 14px; }
+  }
 }
 
 // ---- Modals (auth + support) ----------------------------------------------
