@@ -45,7 +45,13 @@ button { font-family: inherit; }
   &--strip { padding: 6px 0 10px; }
 }
 
-.jtc-shell { @include container; }
+.jtc-shell {
+  @include container;
+
+  @media (max-width: 400px) {
+    padding-inline: 8px;
+  }
+}
 
 .jtc-section-head {
   display: flex;

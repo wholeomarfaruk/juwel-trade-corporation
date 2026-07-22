@@ -116,7 +116,7 @@
   }
 
   .jtc-card__title { font-size: 0.82rem; }
-  .jtc-card__body { padding: 10px 11px 12px; gap: 4px; }
+  .jtc-card__body { padding: 10px 6px 10px; gap: 4px; }
 }
 
 // ---- Category banner section (CategorySection style="banner") -------------
@@ -195,9 +195,9 @@
     line-height: 1.35;
     color: $ink;
     text-decoration: none;
-    height: 2.4em;
+    height: 3.65em;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     &:hover { color: $blue; }
