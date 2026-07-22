@@ -85,7 +85,7 @@ button { font-family: inherit; }
   border: none;
   cursor: pointer;
   font-weight: 600;
-  border-radius: $radius-pill;
+  border-radius: $radius;
   transition: background 0.15s ease, color 0.15s ease;
 
   &--primary {
@@ -111,6 +111,6 @@ button { font-family: inherit; }
   color: $ink-soft;
   width: 46px;
   height: 46px;
-  border-radius: $radius;
+  border-radius: $radius-pill;
   flex: none;
 }
