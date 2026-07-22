@@ -88,9 +88,10 @@
   .jtc-hero__slider {
     min-height: unset;
     height: auto;
-    aspect-ratio: 4 / 2;
+    aspect-ratio: 4 / 3;
     max-height: 60vh;
   }
+  .jtc-hero__slide img { object-fit: contain; }
   .jtc-hero__side { display: none; }
 }
 
@@ -103,7 +104,7 @@
 }
 
 @media (max-width: 400px) {
-  .jtc-hero__slider { aspect-ratio: 4 / 2; max-height: 50vh; }
+  .jtc-hero__slider { aspect-ratio: 4 / 3; max-height: 50vh; }
 
   .jtc-hero__dots {
     left: 12px;
