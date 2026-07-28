@@ -100,21 +100,32 @@ export const storefront = (config = {}) => ({
 
     // ---- category carousel ----
     // Renders the real category list once — no doubled/duplicated array.
-    // catIndex wraps around the actual length via modulo, so "next" past
-    // the last item jumps straight back to the first (a hard cut, not a
-    // sliding illusion) instead of relying on a second copy of the list.
+    // catIndex is clamped to [0, len - visibleCount] so the track never
+    // scrolls past the last card (which would leave blank space on the
+    // right); "next" past that ceiling wraps straight back to 0.
     get catItems() { return this.categories; },
     get catTransform() { return `translateX(-${this.catIndex * CAT_STEP}px)`; },
     get catTransition() { return 'transform 0.7s cubic-bezier(.4,0,.2,1)'; },
+    _catVisibleCount() {
+        const viewport = this.$refs?.catViewport;
+        const width = viewport?.clientWidth || 0;
+        return Math.max(1, Math.floor(width / CAT_STEP));
+    },
+    _catMaxIndex() {
+        const len = this.categories.length;
+        return Math.max(0, len - this._catVisibleCount());
+    },
     catNext() {
         const len = this.categories.length;
         if (!len) return;
-        this.catIndex = (this.catIndex + 1) % len;
+        const maxIndex = this._catMaxIndex();
+        this.catIndex = this.catIndex >= maxIndex ? 0 : this.catIndex + 1;
     },
     catPrev() {
         const len = this.categories.length;
         if (!len) return;
-        this.catIndex = (this.catIndex - 1 + len) % len;
+        const maxIndex = this._catMaxIndex();
+        this.catIndex = this.catIndex <= 0 ? maxIndex : this.catIndex - 1;
         this._restartCat();
     },
     catNextManual() { this.catNext(); this._restartCat(); },

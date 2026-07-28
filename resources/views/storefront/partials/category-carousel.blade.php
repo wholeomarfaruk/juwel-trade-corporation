@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <div class="jtc-catcarousel">
+            <div class="jtc-catcarousel" x-ref="catViewport">
                 <div class="jtc-catcarousel__track" :style="`transform:${catTransform};transition:${catTransition}`">
                     <template x-for="(cat, i) in catItems" :key="cat.id ?? `${cat.name}-${i}`">
                         <a :href="cat.url" class="jtc-catcard" >
