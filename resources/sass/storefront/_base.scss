@@ -51,15 +51,10 @@ button { font-family: inherit; }
   @media (max-width: 400px) {
     padding-inline: 8px;
   }
-}
 
-// Wider variant for big screens — same gutters/centering as .jtc-shell,
-// but caps at $container-wide (1536px) instead of $container (1240px).
-.jtc-shell--wide {
-  @include container($container-wide);
-
-  @media (max-width: 400px) {
-    padding-inline: 8px;
+  // Grow the cap to $container-wide (1536px) on big screens.
+  @media (min-width: $bp-wide) {
+    max-width: $container-wide;
   }
 }
 
