@@ -26,6 +26,9 @@ class CategoryProducts extends Component
 
         $products = $category->products()->paginate(20);
 
+        // See App\Livewire\Admin\Products::render() for why this is forced.
+        $products->withPath(route('admin.categories.manage.products', ['id' => $this->categoryId], false));
+
         return view('livewire.admin.category-products', compact('category', 'products'));
     }
 

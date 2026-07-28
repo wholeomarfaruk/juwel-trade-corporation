@@ -35,6 +35,11 @@ class Products extends Component
             ->orderByDesc('id')
             ->paginate(20);
 
+        // Force pagination links to build from the named route rather than the
+        // ambient request URL, so a misconfigured document root / proxy prefix
+        // on the live server can't get doubled into page links (e.g. /admin/admin/products).
+        $products->withPath(route('admin.products', [], false));
+
         return view('livewire.admin.products', compact('products'));
     }
 
