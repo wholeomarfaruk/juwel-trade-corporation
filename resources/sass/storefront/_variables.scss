@@ -35,15 +35,16 @@ $shadow-pop: 0 24px 60px -20px rgba(20, 32, 28, 0.28);
 $shadow-modal: 0 30px 80px -20px rgba(20, 32, 28, 0.4);
 
 // Layout
-$container: 1240px;
-$gutter:    20px;
+$container:      1240px;
+$container-wide: 1536px;
+$gutter:         20px;
 
 // Breakpoints
 $bp-tablet: 1100px;
 $bp-mobile: 768px;
 
-@mixin container {
-  max-width: $container;
+@mixin container($max-width: $container) {
+  max-width: $max-width;
   margin-inline: auto;
   padding-inline: $gutter;
 }

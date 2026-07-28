@@ -53,6 +53,16 @@ button { font-family: inherit; }
   }
 }
 
+// Wider variant for big screens — same gutters/centering as .jtc-shell,
+// but caps at $container-wide (1536px) instead of $container (1240px).
+.jtc-shell--wide {
+  @include container($container-wide);
+
+  @media (max-width: 400px) {
+    padding-inline: 8px;
+  }
+}
+
 .jtc-section-head {
   display: flex;
   align-items: flex-end;
