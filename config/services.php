@@ -2,13 +2,20 @@
 
 return [
     'pathao' => [
-    'base_url' => env('PATHAO_BASE_URL', 'https://api-hermes.pathao.com'),
-    'client_id' => env('PATHAO_CLIENT_ID'),
-    'client_secret' => env('PATHAO_CLIENT_SECRET'),
-    'username' => env('PATHAO_USERNAME'),
-    'password' => env('PATHAO_PASSWORD'),
-    'webhook_secret' => env('PATHAO_WEBHOOK_SECRET'),
-],
+        'base_url' => env('PATHAO_BASE_URL', 'https://api-hermes.pathao.com'),
+        'client_id' => env('PATHAO_CLIENT_ID'),
+        'client_secret' => env('PATHAO_CLIENT_SECRET'),
+        'username' => env('PATHAO_USERNAME'),
+        'password' => env('PATHAO_PASSWORD'),
+        'webhook_secret' => env('PATHAO_WEBHOOK_SECRET'),
+
+    ],
+
+
+    // TinyMCE Api
+    'tinymce' => [
+        'api_key' => env('TINYMCE_API_KEY','yu8mao5ubzdfin0rse7m2tzjipudongs88o4w6gswsm3sfr6'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
