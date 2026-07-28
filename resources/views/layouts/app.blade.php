@@ -164,7 +164,7 @@
         // list (already in that shape) when the homepage set isn't provided.
         $carouselCategories = isset($homepageCategories)
             ? $homepageCategories->map(fn ($cat) => [
-                'name'  => $cat->name,
+                'name'  => \Illuminate\Support\Str::limit($cat->name, 28),
                 'slug'  => $cat->slug,
                 'url'   => route('category.show', $cat->slug),
                 'image' => $cat->getImageUrl() ?? asset('images/no-thumbnail.png'),

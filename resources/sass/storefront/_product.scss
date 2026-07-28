@@ -45,11 +45,12 @@
     font-size: 0.92rem;
     line-height: 1.3;
     color: $ink;
-    height: 2.6em; // keep all cards equal height (2 lines)
+    min-height: 2.9em; // keep all cards roughly equal height (2 lines) without clipping descenders
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
