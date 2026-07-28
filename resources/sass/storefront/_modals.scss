@@ -123,7 +123,9 @@
 
 .jtc-offcanvas {
   position: fixed;
-  inset: 0 30% 0 0;
+  inset: 0 auto 0 0;
+  width: 320px;
+  max-width: 70vw;
   background: #fff;
   z-index: 100;
   transform: translateX(-100%);
@@ -162,8 +164,10 @@
   }
   &__nav { padding: 0 10px; display: flex; flex-direction: column; }
   &__link {
-    display: block;
-    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
     border-radius: $radius;
     font-weight: 500;
     font-size: 0.95rem;
@@ -172,13 +176,57 @@
     &:hover { background: $surface-2; }
     &--sale { color: $green; }
   }
+  &__link-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex: none;
+    background: $surface-2;
+  }
+  &__group { display: flex; flex-direction: column; }
+  &__row {
+    display: flex;
+    align-items: center;
+    .jtc-offcanvas__link { flex: 1; min-width: 0; }
+  }
+  &__toggle {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: $ink-soft;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.15s ease;
+    &:hover { background: $surface-2; }
+    &.is-open { transform: rotate(45deg); }
+  }
+  &__submenu {
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+  }
+  &__submenu-enter { transition: opacity 0.15s ease; }
+  &__submenu-leave { transition: opacity 0.1s ease; }
+  &__link--sub {
+    font-size: 0.88rem;
+    font-weight: 400;
+    padding-block: 8px;
+  }
 
   @media (max-width: $bp-mobile) {
-    inset: 0;
+    width: 84vw;
+    max-width: 320px;
 
     &__head span { font-size: 1rem; }
     &__label { font-size: 0.68rem; }
-    &__link { font-size: 0.88rem; padding: 11px 14px; }
+    &__link { font-size: 0.88rem; padding: 9px 14px; }
+    &__link-img { width: 26px; height: 26px; }
   }
 }
 

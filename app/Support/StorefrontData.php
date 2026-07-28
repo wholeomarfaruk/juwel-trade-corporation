@@ -20,12 +20,21 @@ class StorefrontData
         return \App\Models\Category::where('is_active', 1)
             ->where('is_show_in_menu', 1)
             ->whereNull('parent_id')
+            ->with(['children' => function ($query) {
+                $query->where('is_active', 1)
+                    ->where('is_show_in_menu', 1)
+                    ->orderBy('display_order');
+            }])
             ->orderBy('display_order')
             ->get()
             ->map(fn ($cat) => [
-                'name'  => $cat->name,
-                'slug'  => $cat->slug,
-                'image' => $cat->getImageUrl() ?? asset('images/category.avif'),
+                'name'     => $cat->name,
+                'slug'     => $cat->slug,
+                'image'    => $cat->getImageUrl() ?? asset('images/category.avif'),
+                'children' => $cat->children->map(fn ($child) => [
+                    'name' => $child->name,
+                    'slug' => $child->slug,
+                ])->all(),
             ])
             ->all();
     }
