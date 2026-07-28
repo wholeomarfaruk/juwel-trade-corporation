@@ -113,8 +113,9 @@ class HomeController extends Controller
 
     public function shop()
     {
-        $products = Products::where('status', 1)->orderByDesc('featured') // featured first
-            ->orderByDesc('created_at')               // newest first
+        $products = Products::where('status', 1)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
             ->paginate(12);
         $categories = Category::withCount('products')->get();
         $brands = Brand::withCount('products')->active()->ordered()->get();
@@ -129,9 +130,7 @@ class HomeController extends Controller
             abort(404);
         }
 
-        $products = $category->products()->where('status', 1)->orderByDesc('featured') // featured first
-            ->orderByDesc('created_at')               // newest first
-            ->paginate(12);
+        $products = $category->products()->where('status', 1)->paginate(12);
         $segment = $category?->segments?->select('name')?->first() ? strtolower($category->segments->select('name')->first()['name']) : null;
         $categories = Category::withCount('products')->get();
         $brands = Brand::withCount('products')->active()->ordered()->get();
@@ -145,9 +144,7 @@ class HomeController extends Controller
             abort(404);
         }
 
-        $products = $category->products()->orderByDesc('featured') // featured first
-            ->orderByDesc('created_at')               // newest first
-            ->paginate(12);
+        $products = $category->products()->where('status', 1)->paginate(12);
         $segment = $category?->segments?->select('name')?->first() ? strtolower($category->segments->select('name')->first()['name']) : null;
         $categories = Category::withCount('products')->get();
         $brands = Brand::withCount('products')->active()->ordered()->get();

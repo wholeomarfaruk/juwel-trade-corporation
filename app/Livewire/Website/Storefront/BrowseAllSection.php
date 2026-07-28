@@ -20,8 +20,8 @@ class BrowseAllSection extends Component
     public function render()
     {
         $browseAll = products::where('status', 1)
-            ->orderByDesc('featured')
-            ->orderByDesc('created_at')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
             ->take($this->limit)
             ->get()
             ->map(fn ($product) => StorefrontData::decorateEloquentProduct($product));

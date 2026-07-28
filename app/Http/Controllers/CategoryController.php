@@ -201,16 +201,20 @@ class CategoryController extends Controller
     public function manageProducts($id){
 
         $category = Category::find($id);
-        $Categoryproducts = $category->products ?? collect();
-        $ids = $Categoryproducts?->pluck('id')->toArray() ?? [];
+        $ids = $category->products()->pluck('products.id')->toArray();
         $products = products::all()->except($ids);
-        return view('admin.category.manage-products', compact('category', 'products', 'Categoryproducts'));
+        return view('admin.category.manage-products', compact('category', 'products'));
     }
 
     public function assignProducts(Request $request, $id){
 
         $category = Category::find($id);
-        $category->products()->attach($request->products);
+        $nextOrder = (int) \DB::table('product_category')->where('category_id', $id)->max('sort_order');
+        $attach = [];
+        foreach ((array) $request->products as $productId) {
+            $attach[$productId] = ['sort_order' => ++$nextOrder];
+        }
+        $category->products()->attach($attach);
         return redirect()->back()->with('status', 'Product added successfully');
     }
     public function unassignProducts(Request $request, $id){

@@ -38,7 +38,9 @@ class Category extends Model
     }
     public function products()
     {
-        return $this->belongsToMany(products::class, 'product_category');
+        return $this->belongsToMany(products::class, 'product_category')
+            ->withPivot('sort_order')
+            ->orderBy('product_category.sort_order');
     }
     public function segment()
     {

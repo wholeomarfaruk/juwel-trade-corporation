@@ -117,74 +117,7 @@
                     </div>
                 </form>
             </div>
-            <div class="wg-box">
-                <div class="wg-table table-responsive">
-                    @if (Session::has('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ Session::get('status') }}
-                        </div>
-                    @endif
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>SKU</th>
-                                <th>Stock</th>
-                                <th>Quantity</th>
-                                <th>Featured</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($Categoryproducts) > 0)
-                                @foreach ($Categoryproducts as $pitem)
-                                    <tr>
-                                        <td>{{ $pitem->id }}</td>
-                                        <td class="pname">
-                                            <div class="image">
-                                                <img src="{{ $pitem->getImageThumbUrl() ?? '' }}"
-                                                    alt="{{ $pitem->name }}" class="image">
-                                            </div>
-                                            <div class="name">
-                                                <a target="_blank" href="{{ route('product.show', ['slug' => $pitem->slug, 'segment' => $pitem->segment->slug]) }}"
-                                                    class="body-title-2">{{ $pitem->name }}</a>
-                                                <div class="text-tiny mt-3">{{ $pitem->slug }}</div>
-                                            </div>
-                                        </td>
-                                        <td>{{ $pitem->price }}</td>
-                                        <td>{{ $pitem->sku }}</td>
-                                        <td>{{ $pitem->stock_status }}</td>
-                                        <td>{{ $pitem->quantity }}</td>
-                                        <td>{{ $pitem->featured == 1 ? 'Yes' : 'No' }}</td>
-                                        <td>
-                                            <div class="list-icon-function">
-
-
-                                                <form
-                                                    action="{{ route('admin.categories.unassign.products', ['id' => $category->id]) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden" name="products" value="{{ $pitem->id }}">
-                                                    <div class="item text-danger delete">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="8" class="text-center">No products found</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            @livewire('admin.category-products', ['categoryId' => $category->id])
         </div>
         </div>
     </div>

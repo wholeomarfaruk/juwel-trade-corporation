@@ -35,8 +35,6 @@ class CategorySection extends Component
 
         $products = $category->products()
             ->where('status', 1)
-            ->orderByDesc('featured')
-            ->orderByDesc('created_at')
             ->take($this->limit)
             ->get();
 
